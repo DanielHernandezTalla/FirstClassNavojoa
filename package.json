@@ -9,7 +9,9 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "electron": "^17.0.1",
-        "electron-reload": "^2.0.0-alpha.1"
+        "electron": "^8.5.5",
+        "electron-reload": "^2.0.0-alpha.1",
+        "express": "^4.17.3",
+        "promise-mysql": "^5.1.0"
     }
 }

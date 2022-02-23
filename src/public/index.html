@@ -9,7 +9,33 @@
 </head>
 
 <body>
-    <h1>Hola mundo!!</h1>
+    <h1>Hola mundo desde la casita 🏘!!</h1>
+
+    <button id="personal">Personal</button>
+    <button id="puestos">Puestos</button>
+
+    <script>
+        const {
+            remote
+        } = require('electron');
+
+        const main = remote.require('./main');
+
+        const btnPersonal = document.getElementById('personal');
+        const btnPuestos = document.getElementById('puestos');
+
+        btnPersonal.addEventListener('click', e => {
+            console.log("Hello");
+            main.showNewWindow(1)
+        })
+
+        btnPuestos.addEventListener('click', e => {
+            console.log("Hello");
+            main.showNewWindow(2)
+        })
+
+    </script>
+
 </body>
 
 </html>
