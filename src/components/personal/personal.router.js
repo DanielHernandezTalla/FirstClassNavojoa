@@ -14,4 +14,26 @@ router.get('/', (req, res) => {
         });
 });
 
+router.get('/:id', (req, res) => {
+    console.log(req.params.id);
+});
+
+router.post('/', (req, res) => {
+    console.log(req.body);
+    res.send(req.body);
+});
+
+router.patch('/:id', (req, res) => {
+    console.log(req.params.id);
+    console.log(req.body);
+
+    res.send(req.body);
+});
+
+router.delete('/:id', (req, res) => {
+    console.log(req.params.id);
+
+    res.send("Eliminado correctamente");
+});
+
 module.exports = router;

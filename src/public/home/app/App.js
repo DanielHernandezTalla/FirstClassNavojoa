@@ -4,6 +4,8 @@ import {
     Nav
 } from './components/nav.js'
 
+import sectionPersonal from './components/personal.js'
+
 export function App() {
 
     const $root = document.getElementById("root");
@@ -11,12 +13,5 @@ export function App() {
     $root.innerHTML = ``
 
     $root.appendChild(Nav())
-
-
-    $root.innerHTML += `
-    <h1>Hola mundo desde la casita 🏘!!</h1>
-
-    <button id="personal">Personal</button>
-    <button id="puestos">Puestos</button>
-    `;
+    $root.appendChild(sectionPersonal())
 }

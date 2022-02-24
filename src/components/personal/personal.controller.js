@@ -6,7 +6,7 @@ async function get() {
 
         const conn = await getConnection()
 
-        const personas = await conn.query('SELECT * FROM evento');
+        const personas = await conn.query('SELECT * FROM product');
 
         resolve(personas)
     })
