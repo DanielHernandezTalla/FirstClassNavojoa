@@ -1,0 +1,36 @@
+:root {
+    --main-color: #B99C72;
+    --color-white: #fff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+nav {
+    background-color: var(--main-color);
+    color: var(--color-white);
+}
+
+.nav__container {
+    max-width: 1200px;
+    width: 100%;
+    height: 48px;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav__logo {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.nav__logo span {
+    font-style: italic;
+}

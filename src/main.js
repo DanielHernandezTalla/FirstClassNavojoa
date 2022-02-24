@@ -21,7 +21,7 @@ function createWindow() {
         }
     });
 
-    window.loadFile('src/public/index.html');
+    window.loadFile('src/public/home/index.html');
 }
 
 function showNewWindow(id) {

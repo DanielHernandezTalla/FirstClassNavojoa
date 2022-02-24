@@ -1,5 +1,5 @@
 'use strict'
-// const express = require('express')
+const express = require('express')
 
 // Creamos la app con electron
 const {
@@ -16,21 +16,21 @@ const {
 require('./database')
 
 // Creamos el servidor de express
-// const server = express();
+const server = express();
 
 // Obtenemos las rutas que iran en nuesto servidor express
-// const router = require('./routes/router')
+const router = require('./routes/router')
 
 // Usamos express.json para que nos parse el contenido que nos manden
-// server.use(express.json());
+server.use(express.json());
 
 // Agregamos las rutas al servidor express
-// router(server)
+router(server)
 
 // Hacemos correr el servidor express
-// server.listen(3000, () => {
-//     console.log('listening on http://localhost:3000')
-// });
+server.listen(3000, () => {
+    console.log('listening on http://localhost:3000')
+});
 
 require('electron-reload')(__dirname)
 

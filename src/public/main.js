@@ -4,28 +4,6 @@ document.addEventListener('DOMContentLoaded', e => {
 
     const $listInclude = document.querySelectorAll('[data-include]');
 
-    // console.log($listInclude)
-
-    // $listInclude.forEach(element => {
-    //     let url = element.dataset.include;
-
-    //     // console.log(url)
-
-    //     fetch(url, {
-    //             headers: {
-    //                 "Content-type": "text/html; charset=utf-8"
-    //             }
-    //         })
-    //         .then(response => {
-    //             console.log(response);
-    //             return response.json
-    //         })
-    //         .then(data => {
-    //             console.log(data)
-    //         })
-    //         .catch(e => console.log(e))
-    // })
-
     $listInclude.forEach(element => {
         let url = element.dataset.include
         const xhr = new XMLHttpRequest()
