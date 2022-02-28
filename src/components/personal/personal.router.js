@@ -15,25 +15,48 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    console.log(req.params.id);
+
+    controller.getbyid(req.params.id)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.send(err);
+        });
+
 });
 
-router.post('/', (req, res) => {
-    console.log(req.body);
-    res.send(req.body);
+router.post('/:body', (req, res) => {
+    controller.add(req.body)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.send(err);
+        });
+
 });
 
-router.patch('/:id', (req, res) => {
-    console.log(req.params.id);
-    console.log(req.body);
+router.patch('/:body', (req, res) => {
+    controller.update(req.body)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.send(err);
+        });
 
-    res.send(req.body);
 });
 
 router.delete('/:id', (req, res) => {
-    console.log(req.params.id);
+    controller.dlt(req.params.id)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.send(err);
+        });
 
-    res.send("Eliminado correctamente");
 });
 
 module.exports = router;

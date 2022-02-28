@@ -2,11 +2,11 @@
 const mysql = require('promise-mysql');
 
 const connection = mysql.createConnection({
-    host: '127.0.0.1',
+    host: 'localhost',
     port: 3307,
     user: 'root',
     password: 'Daniel2000',
-    database: 'electrondb'
+    database: 'sfc'
 });
 
 // database Name id16766404_sfc

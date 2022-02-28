@@ -1,24 +1,14 @@
-:root {
-    --main-color: #B99C72;
-    --main-dark-color: #a1845b;
-}
-
 nav {
     background-color: var(--main-color);
     color: var(--color-white);
-    z-index: 999;
 }
 
 .nav__container {
-    max-width: 1200px;
-    width: 100%;
     height: 48px;
-    margin: 0 auto;
     padding: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    z-index: 99;
 }
 
 .nav__logo {
@@ -27,7 +17,8 @@ nav {
 }
 
 .nav__logo span {
-    font-style: italic;
+    font-family: 'Oleo Script', cursive;
+    font-weight: normal;
 }
 
 .nav__details {
@@ -35,12 +26,12 @@ nav {
 }
 
 .nav__btn {
-    color: white;
     font-size: 16px;
+    color: white;
 }
 
 .nav__list {
-    width: 220px;
+    width: 180px;
     position: absolute;
     right: 20px;
     padding-top: 24px;
@@ -52,12 +43,8 @@ nav {
     z-index: 9;
 }
 
-.nav__list-opacity {
-    opacity: 0;
-}
-
 .nav__list li {
-    padding: 4px 8px;
+    padding: 2px 8px;
     font-weight: 600;
     transition: all .3s ease;
 }

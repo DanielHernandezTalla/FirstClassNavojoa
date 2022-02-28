@@ -2,13 +2,13 @@ const {
     BrowserWindow
 } = require('electron');
 
-const {
-    createWindowPersonal
-} = require('./components/personal/personal.window');
+// const {
+//     createWindowPersonal
+// } = require('./components/personal/personal.window');
 
-const {
-    createWindowPuestos
-} = require('./components/puestos/puestos.window');
+// const {
+//     createWindowPuestos
+// } = require('./components/puestos/puestos.window');
 
 let window;
 
@@ -21,19 +21,19 @@ function createWindow() {
         }
     });
 
-    window.loadFile('src/public/home/index.html');
+    window.loadFile('src/public/index.html');
 }
 
-function showNewWindow(id) {
-    if (id === 1) {
-        createWindowPersonal(window);
-    }
-    if (id === 2) {
-        createWindowPuestos(window);
-    }
-}
+// function showNewWindow(id) {
+//     if (id === 1) {
+//         createWindowPersonal(window);
+//     }
+//     if (id === 2) {
+//         createWindowPuestos(window);
+//     }
+// }
 
 module.exports = {
     createWindow,
-    showNewWindow
+    // showNewWindow
 };
