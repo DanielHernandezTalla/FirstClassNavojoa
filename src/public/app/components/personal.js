@@ -1,4 +1,5 @@
 'use strict';
+import nav from './nav.js';
 import personalAdd from './personal.add.js';
 
 export default async function sectionPersonal() {
@@ -86,7 +87,7 @@ async function get() {
     }
 }
 
-document.addEventListener("click", e => {
+document.addEventListener("click", async e => {
     const $root = document.getElementById("root");
     // -- evento para pasar a la pantalla de agregar
     if (e.target.matches('#btn-personal-add-view')) {
@@ -94,7 +95,7 @@ document.addEventListener("click", e => {
 
         $root.innerHTML = ``;
 
-        $root.appendChild(personalAdd());
+        $root.appendChild(await personalAdd());
     }
 
     // -- Editar personal
@@ -109,7 +110,7 @@ document.addEventListener("click", e => {
 
         $root.innerHTML = ``;
 
-        $root.appendChild(personalAdd(id, table, "edit"));
+        $root.appendChild(await personalAdd(id, table, "edit"));
     }
 
     // -- Eliminar personal
@@ -119,12 +120,30 @@ document.addEventListener("click", e => {
         let id = $modal.dataset.id;
         let table = $modal.dataset.table;
 
+        try {
+            // let res = await fetch('http://localhost:3000/personal/' + id);
+            let res = await fetch('http://localhost:3000/personal/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            })
+            let data = await res.json();
+
+            console.log(data);
+            $root.innerHTML = ``;
+            $root.appendChild(nav());
+            let $section = await sectionPersonal();
+            $root.appendChild($section);
+
+        } catch (e) {
+            console.error(e);
+        }
         // console.log(id)
         // console.log(table)
 
-        $root.innerHTML = ``;
 
-        $root.appendChild(personalAdd(id, table, "delete"));
+        // $root.appendChild(personalAdd(id, table, "delete"));
     }
 
     // -- Para hacer que desaparesca el modal de la opciones

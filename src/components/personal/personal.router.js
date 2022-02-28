@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
 
 });
 
-router.post('/:body', (req, res) => {
+router.post('/', (req, res) => {
     controller.add(req.body)
         .then(data => {
             res.send(data);
@@ -37,8 +37,8 @@ router.post('/:body', (req, res) => {
 
 });
 
-router.patch('/:body', (req, res) => {
-    controller.update(req.body)
+router.patch('/:id', (req, res) => {
+    controller.update(req.params.id, req.body)
         .then(data => {
             res.send(data);
         })

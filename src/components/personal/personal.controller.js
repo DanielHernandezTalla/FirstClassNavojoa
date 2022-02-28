@@ -29,10 +29,10 @@ async function add(body) {
     });
 }
 
-async function update(body) {
+async function update(id, body) {
     return new Promise(async function (resolve, reject) {
         const conn = await getConnection();
-        const persona = await conn.query('CALL spEmpleado(4, "' + body.ID + '","' + body.Nombre + '","' + body.Telefono + '")');
+        const persona = await conn.query('CALL spEmpleado(4, "' + id + '","' + body.Nombre + '","' + body.Telefono + '")');
         resolve(persona);
     });
 }

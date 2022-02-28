@@ -3,7 +3,7 @@ import nav from './nav.js';
 import sectionPersonal from './personal.js'
 import errorNotification from './notification.error.js'
 
-export default function personalAdd(id = -1, table = null, action = null) {
+export default async function personalAdd(id = -1, table = null, action = null) {
 
     // console.log("id --> ", id);
     // console.log("table --> ", table);
@@ -11,6 +11,9 @@ export default function personalAdd(id = -1, table = null, action = null) {
 
     let selectClass = "";
     let nameH2 = "Agregar";
+    let data = null;
+    if (!action)
+        selectClass = "btn-personal-add"
     if (action === 'delete') {
         selectClass = "btn-personal-delete";
         nameH2 = "Eliminar";
@@ -18,6 +21,10 @@ export default function personalAdd(id = -1, table = null, action = null) {
     if (action === 'edit') {
         selectClass = "btn-personal-edit";
         nameH2 = "Editar";
+        data = await getById(id);
+        console.log(data);
+        console.log(data[0]);
+        console.log(data[0][0]);
     }
 
     // -- Main
@@ -55,15 +62,15 @@ export default function personalAdd(id = -1, table = null, action = null) {
         <!-- <hr class="form-"> -->
         <div class="form__group-grid">
             <label for="user">Nombre</label>
-            <input type="text" name="name">
+            <input type="text" name="name" value="${data? data[0][0].Nombre: ""}">
             <small class="form-error">Error: Agrega un usuario correcto</small>
         </div>
         <div class="form__group-grid">
             <label for="password">Telefono</label>
-            <input type="number" name="phone">
+            <input type="number" name="phone" value="${data? data[0][0].Telefono: ""}">
             <small class="form-error">Error: Agrega una contraseña correcta</small>
         </div>
-        <button id="${selectClass}" class="btn btn-primary" type="submit">Ingresar</button>
+        <button id="${selectClass}" class="btn btn-primary" type="submit">${action === 'edit'? "Editar": "Ingresar"}</button>
         <button id="btn-personal-cancel" class="btn btn-primary" type="submit">Cancelar</button>
     `;
 
@@ -107,18 +114,29 @@ document.addEventListener('submit', async e => {
             Telefono: $form.phone.value
         }
 
+        console.log(persona);
+
+        let res = null;
+
         if (document.getElementById('btn-personal-add')) {
-            addPersonal(persona)
+            res = await addPersonal(persona)
         }
         if (document.getElementById('btn-personal-delete')) {
-            deletePersonal(id, persona)
+            res = deletePersonal(id, persona)
         }
         if (document.getElementById('btn-personal-edit')) {
-            editPersonal(id, persona)
+            res = await editPersonal(id, persona)
+        }
+
+        if (res) {
+            const $root = document.getElementById("root");
+            $root.innerHTML = ``;
+            $root.appendChild(nav());
+            let $section = await sectionPersonal();
+            $root.appendChild($section);
         }
 
         // -- Hacemos aparecer el la siguiente pantalla si todo sale bien
-        // const $root = document.getElementById("root");
 
         // $root.innerHTML = ``;
 
@@ -128,32 +146,58 @@ document.addEventListener('submit', async e => {
     }
 })
 
+async function getById(id) {
+    try {
+        let res = await fetch('http://localhost:3000/personal/' + id);
+        return await res.json();
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 async function addPersonal(persona) {
     console.log('Agregar');
 
-    errorNotification("Internal error");
+    // errorNotification("Internal error");
 
-    // try {
-    //     let res = await fetch('localhost:3000/personal', {
-    //         method: 'POST',
-    //         body: JSON.stringify(persona),
-    //         headers: {
-    //             'Content-type': 'application/json'
-    //         }
-    //     })
+    try {
+        let res = await fetch('http://localhost:3000/personal', {
+            method: 'POST',
+            body: JSON.stringify(persona),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
 
-    //     if (res.status !== 200)
-    //         throw new Error({
-    //             Error: res.error
-    //         })
+        console.log(res)
 
-    // } catch (e) {
-    //     console.log(e)
-    // }
+        return true;
+
+    } catch (e) {
+        console.log(e)
+    }
 }
 
-function editPersonal(id, persona) {
+async function editPersonal(id, persona) {
     console.log(id, "Edit")
+
+
+    try {
+        let res = await fetch('http://localhost:3000/personal/' + id, {
+            method: 'PATCH',
+            body: JSON.stringify(persona),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+
+        console.log(res)
+
+        return true;
+
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 function deletePersonal(id, persona) {
