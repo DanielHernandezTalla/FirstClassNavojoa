@@ -1,9 +1,17 @@
 nav {
+    width: 100vw;
     background-color: var(--main-color);
     color: var(--color-white);
+    position: fixed;
+    top: 0;
+    z-index: 99;
 }
 
 .nav__container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
     height: 48px;
     padding: 16px;
     display: flex;

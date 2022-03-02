@@ -2,7 +2,7 @@ export default function nav() {
     const $nav = document.createElement('nav');
 
     $nav.innerHTML = `
-        <div class="container nav__container">
+        <div class="nav__container">
             <div class="nav__logo">
                 <span>First</span> Class
             </div>
