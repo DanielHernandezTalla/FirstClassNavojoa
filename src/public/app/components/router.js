@@ -31,7 +31,7 @@ export default function Router() {
 
         // -- Ruta puestos
         if (e.target.matches('#btn-home-puestos') || e.target.matches('#btn-home-puestos *')) {
-            console.log("puestos");
+            //console.log("puestos");
             $root.innerHTML=``;
             $root.appendChild(nav());
             let $sectionPuestos= await sectionPuestos();
