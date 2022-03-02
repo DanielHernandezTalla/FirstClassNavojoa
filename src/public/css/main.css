@@ -27,7 +27,8 @@ li {
 }
 
 h2 {
-    padding-bottom: 16px;
+    padding-top: 8px;
+    padding-bottom: 24px;
     text-align: center;
     text-transform: uppercase;
 }
@@ -39,7 +40,7 @@ main {
 /* Clases generales */
 .container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 16px;
 }
@@ -78,8 +79,19 @@ main {
     padding: 8px 16px;
     margin-left: 16px;
     border-radius: 20px;
+    border: 1px solid var(--main-color);
     background: var(--main-color);
     color: white;
+    text-transform: uppercase;
+    float: right;
+}
+
+.btn-cancel {
+    padding: 8px 16px;
+    margin-left: 16px;
+    border-radius: 20px;
+    border: 1px solid #666;
+    color: black;
     text-transform: uppercase;
     float: right;
 }
@@ -118,8 +130,8 @@ main {
 .table__row,
 .table__row-first {
     display: grid;
-    padding: 8px;
-    grid-template-columns: 150px 1fr 200px;
+    padding: 12px;
+    grid-template-columns: 200px 1fr 200px;
 }
 
 .table__row-first {
@@ -206,7 +218,7 @@ main {
 .form__group-grid {
     display: grid;
     grid-template-columns: 1fr;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
 }
 
 .form__group-grid {
@@ -218,7 +230,7 @@ main {
 }
 
 .form-hr {
-    margin-bottom: 16px;
+    margin-bottom: 24px;
 }
 
 .form input {

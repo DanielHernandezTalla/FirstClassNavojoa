@@ -22,9 +22,9 @@ export default async function personalAdd(id = -1, table = null, action = null) 
         selectClass = "btn-personal-edit";
         nameH2 = "Editar";
         data = await getById(id);
-        console.log(data);
-        console.log(data[0]);
-        console.log(data[0][0]);
+        // console.log(data);
+        // console.log(data[0]);
+        // console.log(data[0][0]);
     }
 
     // -- Main
@@ -62,16 +62,16 @@ export default async function personalAdd(id = -1, table = null, action = null) 
         <!-- <hr class="form-"> -->
         <div class="form__group-grid">
             <label for="user">Nombre</label>
-            <input type="text" name="name" value="${data? data[0][0].Nombre: ""}">
+            <input type="text" name="name" value="${data? data.Nombre: ""}">
             <small class="form-error">Error: Agrega un usuario correcto</small>
         </div>
         <div class="form__group-grid">
             <label for="password">Telefono</label>
-            <input type="number" name="phone" value="${data? data[0][0].Telefono: ""}">
+            <input type="number" name="phone" value="${data? data.Telefono: ""}">
             <small class="form-error">Error: Agrega una contraseña correcta</small>
         </div>
         <button id="${selectClass}" class="btn btn-primary" type="submit">${action === 'edit'? "Editar": "Ingresar"}</button>
-        <button id="btn-personal-cancel" class="btn btn-primary" type="submit">Cancelar</button>
+        <button id="btn-personal-cancel" class="btn btn-cancel" type="submit">Cancelar</button>
     `;
 
     // Agregamos el form a su contenedor
@@ -114,7 +114,7 @@ document.addEventListener('submit', async e => {
             Telefono: $form.phone.value
         }
 
-        console.log(persona);
+        // console.log(persona);
 
         let res = null;
 
@@ -149,7 +149,8 @@ document.addEventListener('submit', async e => {
 async function getById(id) {
     try {
         let res = await fetch('http://localhost:3000/personal/' + id);
-        return await res.json();
+        let data = await res.json()
+        return data.body[0];
     } catch (e) {
         console.error(e);
     }
@@ -191,7 +192,7 @@ async function editPersonal(id, persona) {
             }
         })
 
-        console.log(res)
+        // console.log(res)
 
         return true;
 

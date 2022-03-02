@@ -81,7 +81,8 @@ export default async function sectionPersonal() {
 async function get() {
     try {
         let res = await fetch('http://localhost:3000/personal');
-        return await res.json();
+        let data = await res.json()
+        return data.body;
     } catch (e) {
         console.error(e);
     }
