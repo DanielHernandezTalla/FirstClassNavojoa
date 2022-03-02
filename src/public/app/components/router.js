@@ -2,6 +2,8 @@ import nav from './nav.js';
 import login from './login.js';
 import home from './home.js';
 import sectionPersonal from './personal.js';
+import sectionPuestos from './puestos.js';
+
 
 export default function Router() {
 
@@ -30,6 +32,10 @@ export default function Router() {
         // -- Ruta puestos
         if (e.target.matches('#btn-home-puestos') || e.target.matches('#btn-home-puestos *')) {
             console.log("puestos");
+            $root.innerHTML=``;
+            $root.appendChild(nav());
+            let $sectionPuestos= await sectionPuestos();
+            $root.appendChild($sectionPuestos);
         }
     })
 }
