@@ -19,7 +19,11 @@ function validate(schema, action) {
         // -- Validando para editar
         if (action === 'edit') {
             error = validateGetById(req, schema);
-            error += validateUpdate(req, schema);
+            if (error) {
+                response.error(req, res, error, 400, error);
+                return;
+            }
+            error = validateUpdate(req, schema);
         }
 
         // -- En caso de error, este se regresa al cliente, si no continua normal

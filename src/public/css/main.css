@@ -14,7 +14,7 @@
 }
 
 body {
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 i {
@@ -42,6 +42,7 @@ main {
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
+    margin-top: 48px;
     padding: 16px;
 }
 
@@ -241,4 +242,48 @@ main {
 .form small {
     color: red;
     font-weight: 500;
+}
+
+/* Section confirm */
+.container-section-confirm {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-confirm {
+    width: 350px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 16px;
+    background: #ffffff;
+}
+
+.section-confirm h3 {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #333;
+}
+
+.section-confirm p,
+.section-confirm ul {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 16px;
+}
+
+.section-confirm ul li:not(:first-child) {
+    margin-left: 24px;
+    padding: 4px;
+    list-style: circle;
+}
+
+/* Clases generales que por especificidad deben de ir al final */
+.none {
+    display: none;
 }

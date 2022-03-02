@@ -1,6 +1,7 @@
 'use strict';
-import nav from './nav.js';
 import personalAdd from './personal.add.js';
+import modalConfirm from './modal.confirm.js';
+import modalError from './modal.error.js';
 
 export default async function sectionPersonal() {
 
@@ -36,16 +37,17 @@ export default async function sectionPersonal() {
     $divRow.classList.remove('table__row-first');
     $divRow.classList.add('table__row');
 
-    personal.forEach(element => {
-        $divRow.dataset.id = element.ID;
-        $divRow.dataset.table = "personal";
-        $divRow.innerHTML = `
+    if (personal)
+        personal.forEach(element => {
+            $divRow.dataset.id = element.ID;
+            $divRow.dataset.table = "personal";
+            $divRow.innerHTML = `
             <p>${element.ID}</p>
             <p>${element.Nombre}</p>
-            <p>${element.Telefono}</p>
+            <p>${element.Telefono === "undefined" ? "": element.Telefono}</p>
         `;
-        $sectionTable.appendChild($divRow.cloneNode(true));
-    });
+            $sectionTable.appendChild($divRow.cloneNode(true));
+        });
 
     $divRow.classList.remove('table__row')
     $divRow.innerHTML = `
@@ -77,17 +79,6 @@ export default async function sectionPersonal() {
     return $main;
 }
 
-// -- Obteniendo los datos de la base de datos
-async function get() {
-    try {
-        let res = await fetch('http://localhost:3000/personal');
-        let data = await res.json()
-        return data.body;
-    } catch (e) {
-        console.error(e);
-    }
-}
-
 document.addEventListener("click", async e => {
     const $root = document.getElementById("root");
     // -- evento para pasar a la pantalla de agregar
@@ -114,37 +105,9 @@ document.addEventListener("click", async e => {
         $root.appendChild(await personalAdd(id, table, "edit"));
     }
 
-    // -- Eliminar personal
+    // -- Aparecer el modal de confirmacion
     if (e.target.matches('.btn-modal-delete') || e.target.matches('.btn-modal-delete *')) {
-        // console.log("Aqui se va a eliminar el personal");
-        const $modal = document.querySelector('.section-modal');
-        let id = $modal.dataset.id;
-        let table = $modal.dataset.table;
-
-        try {
-            // let res = await fetch('http://localhost:3000/personal/' + id);
-            let res = await fetch('http://localhost:3000/personal/' + id, {
-                method: 'DELETE',
-                headers: {
-                    'Content-type': 'application/json'
-                }
-            })
-            let data = await res.json();
-
-            console.log(data);
-            $root.innerHTML = ``;
-            $root.appendChild(nav());
-            let $section = await sectionPersonal();
-            $root.appendChild($section);
-
-        } catch (e) {
-            console.error(e);
-        }
-        // console.log(id)
-        // console.log(table)
-
-
-        // $root.appendChild(personalAdd(id, table, "delete"));
+        $root.appendChild(modalConfirm());
     }
 
     // -- Para hacer que desaparesca el modal de la opciones
@@ -180,3 +143,22 @@ document.addEventListener('contextmenu', e => {
         $modal.classList.remove('opacity');
     }
 })
+
+// -- Obteniendo los datos de la base de datos
+async function get() {
+    try {
+        let res = await fetch('http://localhost:3000/personal');
+
+        if (!res.ok)
+            throw (res);
+
+        let data = await res.json()
+
+        return data.body;
+    } catch (e) {
+        // console.error(e);
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}

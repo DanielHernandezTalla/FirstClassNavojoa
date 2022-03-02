@@ -13,12 +13,12 @@ export default function login() {
                     <div class="form__group">
                         <label for="user">Usuario</label>
                         <input type="text" name="user">
-                        <small>Error: Agrega un usuario correcto</small>
+                        <small class="opacity">Error: Agrega un usuario correcto</small>
                     </div>
                     <div class="form__group">
                         <label for="password">Contraseña</label>
                         <input type="password" name="password">
-                        <small>Error: Agrega una contraseña correcta</small>
+                        <small class="opacity">Error: Agrega una contraseña correcta</small>
                     </div>
                     <button class="btn btn-primary-lg" type="submit">Ingresar</button>
                 </form>

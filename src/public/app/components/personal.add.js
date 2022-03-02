@@ -1,7 +1,8 @@
 'use strict';
 import nav from './nav.js';
 import sectionPersonal from './personal.js'
-import errorNotification from './notification.error.js'
+// import errorNotification from './notification.error.js'
+import modalError from './modal.error.js';
 
 export default async function personalAdd(id = -1, table = null, action = null) {
 
@@ -61,14 +62,14 @@ export default async function personalAdd(id = -1, table = null, action = null) 
         <hr class="form-hr">
         <!-- <hr class="form-"> -->
         <div class="form__group-grid">
-            <label for="user">Nombre</label>
-            <input type="text" name="name" value="${data? data.Nombre: ""}">
-            <small class="form-error">Error: Agrega un usuario correcto</small>
+            <label for="form-persanal-input-user">Nombre</label>
+            <input id="form-persanal-input-user" type="text" name="name" value="${data? data.Nombre: ""}" required>
+            <small class="form-error opacity">Error: Agrega un usuario correcto</small>
         </div>
         <div class="form__group-grid">
-            <label for="password">Telefono</label>
-            <input type="number" name="phone" value="${data? data.Telefono: ""}">
-            <small class="form-error">Error: Agrega una contraseña correcta</small>
+            <label for="form-persanal-input-password">Telefono</label>
+            <input id="form-persanal-input-password" type="number" name="phone" value="${data? data.Telefono: ""}">
+            <small class="form-error opacity">Error: Agrega una contraseña correcta</small>
         </div>
         <button id="${selectClass}" class="btn btn-primary" type="submit">${action === 'edit'? "Editar": "Ingresar"}</button>
         <button id="btn-personal-cancel" class="btn btn-cancel" type="submit">Cancelar</button>
@@ -109,12 +110,18 @@ document.addEventListener('submit', async e => {
         let id = e.target.dataset.id;
 
         let $form = e.target;
-        const persona = {
-            Nombre: $form.name.value,
-            Telefono: $form.phone.value
-        }
 
-        // console.log(persona);
+        let persona;
+
+        if ($form.phone.value !== '')
+            persona = {
+                Nombre: $form.name.value,
+                Telefono: $form.phone.value
+            }
+        else
+            persona = {
+                Nombre: $form.name.value
+            }
 
         let res = null;
 
@@ -130,37 +137,36 @@ document.addEventListener('submit', async e => {
 
         if (res) {
             const $root = document.getElementById("root");
+            // -- Limpiamos el root
             $root.innerHTML = ``;
+            // -- Agregamos el nav y la tabla que le pertenece
             $root.appendChild(nav());
             let $section = await sectionPersonal();
             $root.appendChild($section);
         }
-
-        // -- Hacemos aparecer el la siguiente pantalla si todo sale bien
-
-        // $root.innerHTML = ``;
-
-        // $root.appendChild(nav());
-        // let $sectionPersonal = await sectionPersonal();
-        // $root.appendChild($sectionPersonal);
     }
 })
 
 async function getById(id) {
     try {
         let res = await fetch('http://localhost:3000/personal/' + id);
+
+        if (!res.ok)
+            throw (res);
+
         let data = await res.json()
         return data.body[0];
+
     } catch (e) {
-        console.error(e);
+        // console.error(e);
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
     }
 }
 
 async function addPersonal(persona) {
-    console.log('Agregar');
-
-    // errorNotification("Internal error");
-
+    // console.log('Agregar');
     try {
         let res = await fetch('http://localhost:3000/personal', {
             method: 'POST',
@@ -170,19 +176,20 @@ async function addPersonal(persona) {
             }
         })
 
-        console.log(res)
+        if (!res.ok)
+            throw (res);
 
         return true;
 
     } catch (e) {
-        console.log(e)
+        // console.log(e)
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
     }
 }
 
 async function editPersonal(id, persona) {
-    console.log(id, "Edit")
-
-
     try {
         let res = await fetch('http://localhost:3000/personal/' + id, {
             method: 'PATCH',
@@ -192,15 +199,15 @@ async function editPersonal(id, persona) {
             }
         })
 
-        // console.log(res)
+        if (!res.ok)
+            throw (res);
 
         return true;
 
     } catch (e) {
-        console.log(e)
+        // console.log(e)
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
     }
-}
-
-function deletePersonal(id, persona) {
-    console.log(id, "Delete")
 }

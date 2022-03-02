@@ -22,7 +22,7 @@ export default function Router() {
 
         // -- Ruta personal
         if (e.target.matches('#btn-home-personal') || e.target.matches('#btn-home-personal *')) {
-            console.log("personal");
+            // console.log("personal");
             $root.innerHTML = ``;
             $root.appendChild(nav());
             let $sectionPersonal = await sectionPersonal();
