@@ -1,8 +1,8 @@
 'use strict';
 
 import sectionPersonal from './personal.js';
+import sectionPuestos from './puestos.js';
 import modalError from './modal.error.js';
-//import sectionPuestos from './puestos.js';/*Linea magica */
 
 export default function modalConfirm(text = null) {
 
@@ -50,7 +50,12 @@ document.addEventListener('click', async e => {
             await dlt(id, table);
 
             // -- Primero obtenemos los datos de la nueva tabla, para evitar que demore en cargar por la consulta
-            let $section = await sectionPersonal();
+            let $section = null;
+            if (table === 'personal')
+                $section = await sectionPersonal();
+
+            if (table === 'puestos')
+                $section = await sectionPuestos();
             //let $section = await sectionPuestos();
 
             // -- Desapareciendo la tabla anterior
@@ -71,8 +76,6 @@ document.addEventListener('click', async e => {
 
             // -- Aparecemos el modal de error
             $root.appendChild(await modalError(e));
-
-
         }
     }
 })
