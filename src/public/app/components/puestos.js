@@ -1,10 +1,11 @@
 'use strict';
+import puestosAdd from './puestos.add.js';
 import modalConfirm from './modal.confirm.js';
 import modalError from './modal.error.js';
 
 export default async function sectionPuestos()
 {
-    let puestos = await get();
+    let puestos = await get()
 
     const $main = document.createElement('main');
     //console.log("Conectado");
@@ -20,32 +21,32 @@ export default async function sectionPuestos()
     $sectionTable.classList.add("table");
 
     const $divRow = document.createElement('div');
-    $divRow.classList.add('table_row-first');
+    $divRow.classList.add('table__row-first');
     $divRow.innerHTML= `
     <p><b>Id</b></p>
     <p><b>Nombre</b></p>
     <p><b>Salario</b></p>`;
 
     $sectionTable.appendChild($divRow.cloneNode(true));
-/*
-    $divRow.classList.remove('table_row-first');
-    $divRow.classList.add('table_row');
+
+    $divRow.classList.remove('table__row-first');
+    $divRow.classList.add('table__row');
 
     if (puestos)
-    personal.forEach(element => {
+    puestos.forEach(element => {
         $divRow.dataset.id = element.ID;
         $divRow.dataset.table = "puestos";
         $divRow.innerHTML = `
         <p>${element.ID}</p>
         <p>${element.Nombre}</p>
-        <p>${element.salario}</p>
+        <p>${element.Salario}</p>
     `;
         $sectionTable.appendChild($divRow.cloneNode(true));
     });
 
         $divRow.classList.remove('table__row')
         $divRow.innerHTML = `
-        <button id="btn-personal-add-view" class="table__button"><i class="bi bi-plus-lg"></i>NUEVO</button>
+        <button id="btn-puestos-add-view" class="table__button"><i class="bi bi-plus-lg"></i>NUEVO</button>
         `
         $sectionTable.appendChild($divRow.cloneNode(true));
 
@@ -61,31 +62,31 @@ export default async function sectionPuestos()
     `;
 
     $sectionModal.appendChild($ulModal);
-*/
+
     $divContainer.appendChild($h2);
     $divContainer.appendChild($sectionTable);
-   // $divContainer.appendChild($sectionModal);
+    $divContainer.appendChild($sectionModal);
 
     $main.appendChild($divContainer);
     
     return $main;
 }
-/*
+
 document.addEventListener("click",async e=>{
     const $root = document.getElementById("root");
 
-    if(e.target.matches('#brn-puesto-add-view')){
-        $root.innerHTML='';
+    if(e.target.matches('#btn-puestos-add-view')){
+        $root.innerHTML=``;
         $root.appendChild(await puestosAdd());
     }
 
-    if(e.target.matches('btn-modal-edit')||e.target.matches('.btn-modal-edit *')){
+    if(e.target.matches('.btn-modal-edit')||e.target.matches('.btn-modal-edit *')){
         const $modal = document.querySelector('.section-modal');
         let id = $modal.dataset.id;
         let table = $modal.dataset.table;
 
         $root.innerHTML=``;
-        $root.appendChild(await personalAdd(id,table,"edit"));
+        $root.appendChild(await puestosAdd(id,table,"edit"));
     }
 
     if(e.target.matches('.btn-modal-delete')||e.target.matches('.btn-modal-delete *')){
@@ -100,7 +101,7 @@ document.addEventListener("click",async e=>{
             $modal.style.let=null;
         }
     }
-});*/
+});
 
 document.addEventListener('contextmenu',e=>{
     e.preventDefault();
@@ -124,14 +125,15 @@ document.addEventListener('contextmenu',e=>{
     /* */
 
     async function get() {
+
         try {
             let res = await fetch('http://localhost:3000/puestos');
     
             if (!res.ok)
                 throw (res);
-    
+            
             let data = await res.json()
-    
+            
             return data.body;
         } catch (e) {
             // console.error(e);

@@ -2,6 +2,7 @@
 
 import sectionPersonal from './personal.js';
 import modalError from './modal.error.js';
+//import sectionPuestos from './puestos.js';/*Linea magica */
 
 export default function modalConfirm(text = null) {
 
@@ -50,6 +51,7 @@ document.addEventListener('click', async e => {
 
             // -- Primero obtenemos los datos de la nueva tabla, para evitar que demore en cargar por la consulta
             let $section = await sectionPersonal();
+            //let $section = await sectionPuestos();
 
             // -- Desapareciendo la tabla anterior
             let $oldMain = document.querySelector('main');

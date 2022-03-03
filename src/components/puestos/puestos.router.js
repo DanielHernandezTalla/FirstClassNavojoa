@@ -1,57 +1,61 @@
 const express = require('express');
 
 const controller = require('./puestos.controller');
+const mySchema = require('./puestos.schema');
+const validate = require('../../middlewares/validator');
+const response = require('../../middlewares/response');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
     controller.get()
         .then(data => {
-            res.send(data);
+            response.success(req, res, data);
         })
         .catch(err => {
-            res.send(err);
+            response.error(req, res, "No se pudo acceder al recurso", 500, err);
         })
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validate(mySchema, 'getById'),(req, res) => {
     controller.getbyid(req.params.id)
         .then(data => {
-            res.send(data);
+            response.success(req, res, data);
         })
         .catch(err => {
-            res.send(err);
+            response.error(req, res, "No se pudo acceder al recurso",500, err);
         })
 })
 
-router.post('/', (req, res) => {
+router.post('/', validate(mySchema, 'create'), (req, res)=> {
     controller.add(req.body)
         .then(data => {
-            res.send(data);
+            response.success(req, res, data, 201);
         })
         .catch(err => {
-            res.send(err);
+            response.error(req, res, "Error al crear el recurso", 500, err);
         });
 
 });
 
-router.patch('/:body', (req, res) => {
-    controller.update(req.body)
+router.patch('/:id', validate(mySchema, 'edit'),(req, res) => {
+    controller.update(req.params.id, req.body)
         .then(data => {
-            res.send(data);
+            response.success(req, res, data);
         })
         .catch(err => {
-            res.send(err);
+            response.error(req, res, "Error al actualizar el recurso", 500, err);
         });
 
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validate(mySchema, 'getById'),(req, res) => {
     controller.dlt(req.params.id)
         .then(data => {
-            res.send(data);
+            response.success(req, res, data);
         })
         .catch(err => {
-            res.send(err);
+            response.error(req, res, "Error al eliminar el recurso", 500, err);
         });
 
 });

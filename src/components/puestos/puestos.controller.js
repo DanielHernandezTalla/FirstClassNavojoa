@@ -5,7 +5,7 @@ async function get(){
     return new Promise(async function(resolve, reject){
         const conn= await getConnection();
         const puestos = await conn.query('CALL spPuesto(1,NULL,NULL,NULL)');
-        resolve(puestos);
+        resolve(puestos[0]);
     })
 }
 
