@@ -45,7 +45,7 @@ export default async function sectionPuestos() {
 
     $divRow.classList.remove('table__row')
     $divRow.innerHTML = `
-        <button id="btn-personal-add-view" class="table__button" data-table="puestos"><i class="bi bi-plus-lg"></i>NUEVO</button>
+        <button id="btn-add-view" class="table__button" data-table="puestos"><i class="bi bi-plus-lg"></i>NUEVO</button>
         `
     $sectionTable.appendChild($divRow.cloneNode(true));
 

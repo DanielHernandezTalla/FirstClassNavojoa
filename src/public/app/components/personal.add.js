@@ -6,13 +6,14 @@ import modalError from './modal.error.js';
 
 export default async function personalAdd(id = -1, table = null, action = null) {
 
-    // console.log("id --> ", id);
-    // console.log("table --> ", table);
-    // console.log("action --> ", action);
+    console.log("id --> ", id);
+    console.log("table --> ", table);
+    console.log("action --> ", action);
 
     let selectClass = "";
     let nameH2 = "Agregar";
     let data = null;
+
     if (!action)
         selectClass = "btn-personal-add"
     if (action === 'delete') {

@@ -5,6 +5,10 @@ import modalError from './modal.error.js';
 
 export default async function puestosAdd(id=-1, table= null,action= null){
 
+    //  console.log("id --> ", id);
+    //  console.log("table --> ", table);
+    //  console.log("action --> ", action);
+
     let selectClass="";
     let nameH2="Agregar";
     let data = null;
@@ -41,6 +45,7 @@ export default async function puestosAdd(id=-1, table= null,action= null){
 
     const $form = document.createElement('form');
     $form.dataset.id=id;
+
     $form.classList.add('form');
     $form.setAttribute('id','form-puestos-add');
 
@@ -132,7 +137,7 @@ document.addEventListener('submit', async e => {
 
 async function getById(id) {
     try {
-        let res = await fetch('http://localhost:3000/puesto/' + id);
+        let res = await fetch('http://localhost:3000/puestos/' + id);
 
         if (!res.ok)
             throw (res);
@@ -151,7 +156,7 @@ async function getById(id) {
 async function addPuesto(puesto) {
     // console.log('Agregar');
     try {
-        let res = await fetch('http://localhost:3000/puesto', {
+        let res = await fetch('http://localhost:3000/puestos', {
             method: 'POST',
             body: JSON.stringify(puesto),
             headers: {
@@ -173,6 +178,7 @@ async function addPuesto(puesto) {
 }
 
 async function editPuesto(id, puesto) {
+    console.log(puesto);
     try {
         let res = await fetch('http://localhost:3000/puestos/' + id, {
             method: 'PATCH',

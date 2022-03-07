@@ -55,7 +55,7 @@ document.addEventListener('click', async e => {
     }
 
     // -- Evento para pasar a la pantalla de agregar
-    if (e.target.matches('#btn-personal-add-view')) {
+    if (e.target.matches('#btn-add-view')) {
         let table = e.target.dataset.table;
         console.log(e.target);
         console.log(table);
