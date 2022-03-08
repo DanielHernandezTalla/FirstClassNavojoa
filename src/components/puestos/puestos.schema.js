@@ -7,7 +7,7 @@ const create = Joi.object({
 })
 
 const update =Joi.object({
-    Nombre: Joi.string().min(3).max(100).required(),
+    Nombre: Joi.string().min(3).max(100).required(), 
     Salario: Joi.string().pattern(/^[0-9]+$/),
 })
 
