@@ -97,10 +97,6 @@ main {
     float: right;
 }
 
-.none {
-    display: none;
-}
-
 .opacity {
     opacity: 0;
 }
@@ -226,6 +222,10 @@ main {
     grid-template-columns: 100px 1fr;
 }
 
+.form__group-grid-large {
+    grid-template-columns: 180px 1fr;
+}
+
 .form-error {
     grid-column: 1/3;
 }
@@ -234,6 +234,7 @@ main {
     margin-bottom: 24px;
 }
 
+.form label,
 .form input {
     padding: 5px;
 }
@@ -283,7 +284,77 @@ main {
     list-style: circle;
 }
 
+/* Documento Form */
+.document-form {
+    display: grid;
+    grid-template-columns: calc(50% - 16px) calc(50% - 16px);
+    gap: 16px;
+}
+
+.document-form .form__group-grid {
+    grid-template-columns: 130px 1fr;
+}
+
+.form__group-grid label,
+.form__group-grid input,
+.flex-right label,
+.flex-right input {
+    padding: 5px 8px;
+}
+
+.form__group-document {
+    grid-column: 1/3;
+}
+
+.form__group-document span {
+    font-weight: bold;
+}
+
+.form__group-document select {
+    border: none;
+    outline: none;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.form__group-row:nth-child(2) {
+    margin-top: 16px;
+}
+
+.form__group-row {
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: 30px 2fr 1fr;
+    gap: 16px;
+}
+
+.form__group-row input,
+.flex-right input {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #666;
+    padding: 5px 8px;
+}
+
+.form__group-row input[type="number"],
+.flex-right input {
+    text-align: center;
+}
+
+h2::before {
+    content: "🎈";
+}
+
+.flex-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
 /* Clases generales que por especificidad deben de ir al final */
 .none {
     display: none;
+}
+
+.btn-cancel-left {
+    float: left;
 }

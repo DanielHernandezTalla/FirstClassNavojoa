@@ -9,7 +9,7 @@ export default function nav() {
             <div class="nav__details">
                 <button id="button-nav" class="btn nav__btn">Daniel <i class="bi bi-gear-fill"></i></button>
                 <ul id="nav-list" class="nav__list opacity">
-                    <li>Usuarios</li>
+                    <li id="btn-home-usuario">Usuarios</li>
                     <li>Ver Perfil</li>
                     <li id="btn-logout">Cerrar Sesion</li>
                 </ul>

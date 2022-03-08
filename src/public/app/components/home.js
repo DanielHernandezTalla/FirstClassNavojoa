@@ -11,7 +11,7 @@ export default function home() {
             </div>
         </section>
 
-        <section class="section-home container">
+        <section class="section-home">
             <button id="btn-home-formato" class="btn btn__home"><img class="btn__home-img" src="app/assets/formato2.1.png"
                     alt="icono del boton"><br> Formato</button>
             <button id="btn-home-evento" class="btn btn__home"><img class="btn__home-img" src="app/assets/evento.png" alt="icono del boton"><br>

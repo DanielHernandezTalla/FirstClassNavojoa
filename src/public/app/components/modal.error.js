@@ -7,7 +7,10 @@ export default async function modalError(e) {
     let details = null;
 
     // -- Vemos el status del error, y si es 400, sabemos que biene un objeto con los detalles
-    if (e.status !== 400) {
+    if (typeof e === "string") {
+        details = []
+        details.push(e);
+    } else if (e.status !== 400) {
         errorMessage = e.statusText;
     } else {
         errorMessage = e.statusText;

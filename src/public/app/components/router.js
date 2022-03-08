@@ -1,8 +1,10 @@
 import nav from './nav.js';
 import login from './login.js';
 import home from './home.js';
-import sectionPersonal from './personal.js';
-import sectionPuestos from './puestos.js';
+import sectionPersonal from './personal/personal.js';
+import sectionPuestos from './puestos/puestos.js';
+import sectionUsuario from './usuarios/usuarios.js';
+import sectionDocument from './documentos/documentos.js';
 
 
 export default function Router() {
@@ -12,7 +14,11 @@ export default function Router() {
     document.addEventListener("click", async e => {
         // -- Ruta formatos
         if (e.target.matches('#btn-home-formato') || e.target.matches('#btn-home-formato *')) {
-            console.log("formato");
+            // console.log("formato");
+            $root.innerHTML = ``;
+            $root.appendChild(nav());
+            let $sectionDocument = await sectionDocument();
+            $root.appendChild($sectionDocument);
         }
 
         // -- Ruta eventos
@@ -32,10 +38,19 @@ export default function Router() {
         // -- Ruta puestos
         if (e.target.matches('#btn-home-puestos') || e.target.matches('#btn-home-puestos *')) {
             //console.log("puestos");
-            $root.innerHTML=``;
+            $root.innerHTML = ``;
             $root.appendChild(nav());
-            let $sectionPuestos= await sectionPuestos();
+            let $sectionPuestos = await sectionPuestos();
             $root.appendChild($sectionPuestos);
+        }
+
+        // -- Ruta usuario
+        if (e.target.matches('#btn-home-usuario') || e.target.matches('#btn-home-usuario *')) {
+            //console.log("puestos");
+            $root.innerHTML = ``;
+            $root.appendChild(nav());
+            let $sectionUsuario = await sectionUsuario();
+            $root.appendChild($sectionUsuario);
         }
     })
 }

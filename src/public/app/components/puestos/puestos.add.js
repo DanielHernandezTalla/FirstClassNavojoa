@@ -1,28 +1,28 @@
 'use strict';
-import nav from './nav.js';
+import nav from '../nav.js';
 import sectionPuestos from './puestos.js';
-import modalError from './modal.error.js';
+import modalError from '../modal.error.js';
 
-export default async function puestosAdd(id=-1, table= null,action= null){
+export default async function puestosAdd(id = -1, table = null, action = null) {
 
     //  console.log("id --> ", id);
     //  console.log("table --> ", table);
     //  console.log("action --> ", action);
 
-    let selectClass="";
-    let nameH2="Agregar";
+    let selectClass = "";
+    let nameH2 = "Agregar";
     let data = null;
 
-    if(!action)
-        selectClass ="btn-puestos-add"
-    if(action==='delete'){
+    if (!action)
+        selectClass = "btn-puestos-add"
+    if (action === 'delete') {
         selectClass = "btn-puestos-delete";
-        nameH2="Eliminar";
+        nameH2 = "Eliminar";
     }
-    if(action=== 'edit'){
-        selectClass= "btn-puestos-edit";
+    if (action === 'edit') {
+        selectClass = "btn-puestos-edit";
         nameH2 = "Editar";
-        data= await getById(id);
+        data = await getById(id);
     }
 
     const $main = document.createElement('main');
@@ -30,13 +30,13 @@ export default async function puestosAdd(id=-1, table= null,action= null){
     const $divContainer = document.createElement('div');
     $divContainer.classList.add('container-lg');
 
-    const $backImage= document.createElement('img');
+    const $backImage = document.createElement('img');
     $backImage.classList.add('img-lg');
     $backImage.src = 'app/assets/home.png';
-    $backImage.alt ='Imagen del first class';
+    $backImage.alt = 'Imagen del first class';
 
     const $h2 = document.createElement('h2');
-    $h2.innerHTML= nameH2 + ' puestos';
+    $h2.innerHTML = nameH2 + ' puestos';
     $h2.classList.add('h2');
     $h2.classList.add('h2-white');
 
@@ -44,10 +44,10 @@ export default async function puestosAdd(id=-1, table= null,action= null){
     $divContentForm.classList.add('form-content');
 
     const $form = document.createElement('form');
-    $form.dataset.id=id;
+    $form.dataset.id = id;
 
     $form.classList.add('form');
-    $form.setAttribute('id','form-puestos-add');
+    $form.setAttribute('id', 'form-puestos-add');
 
     $form.innerHTML = `
     <hr class="form-hr">
@@ -178,7 +178,7 @@ async function addPuesto(puesto) {
 }
 
 async function editPuesto(id, puesto) {
-    console.log(puesto);
+    // console.log(puesto);
     try {
         let res = await fetch('http://localhost:3000/puestos/' + id, {
             method: 'PATCH',

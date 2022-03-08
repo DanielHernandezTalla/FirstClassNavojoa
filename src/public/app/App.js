@@ -1,10 +1,13 @@
 'use strict';
 
 import login from './components/login.js';
+import nav from './components/nav.js';
+import home from './components/home.js';
 import Router from './components/router.js';
 import modalConfirm from './components/modal.confirm.js';
-import personalAdd from './components/personal.add.js';
-import puestosAdd from './components/puestos.add.js';
+import personalAdd from './components/personal/personal.add.js';
+import puestosAdd from './components/puestos/puestos.add.js';
+import usuarioAdd from './components/usuarios/usuarios.add.js';
 
 export async function App() {
 
@@ -12,11 +15,14 @@ export async function App() {
 
     $root.innerHTML = ``;
 
-    $root.appendChild(login());
+    // $root.appendChild(login());
+
+    // Cargamos section Directamente
+    $root.appendChild(nav());
+    $root.appendChild(home());
 
     Router();
 }
-
 
 // -- Agregando eventos generales
 document.addEventListener('click', async e => {
@@ -25,8 +31,8 @@ document.addEventListener('click', async e => {
     // -- Para hacer que desaparesca el menu de la opciones de las tablas
     const $modal = document.querySelector('.section-modal');
     if ($modal) {
-        if (!$modal.classList.contains('opacity')) {
-            $modal.classList.add('opacity');
+        if (!$modal.classList.contains('none')) {
+            $modal.classList.add('none');
             $modal.style.top = null;
             $modal.style.left = null;
         }
@@ -50,6 +56,9 @@ document.addEventListener('click', async e => {
 
         if (table === 'puestos')
             $root.appendChild(await puestosAdd(id, table, "edit"));
+
+        if (table === 'usuario')
+            $root.appendChild(await usuarioAdd(id, table, "edit"));
         // =================================================
         // =================================================
     }
@@ -57,8 +66,9 @@ document.addEventListener('click', async e => {
     // -- Evento para pasar a la pantalla de agregar
     if (e.target.matches('#btn-add-view')) {
         let table = e.target.dataset.table;
-        console.log(e.target);
-        console.log(table);
+        // console.log(e.target);
+        // console.log("====================================");
+        // console.log(table);
         $root.innerHTML = ``;
 
         // -- Agregar aqui las nuevas secciones para agregar recursos
@@ -69,6 +79,9 @@ document.addEventListener('click', async e => {
 
         if (table === 'puestos')
             $root.appendChild(await puestosAdd());
+
+        if (table === 'usuario')
+            $root.appendChild(await usuarioAdd());
         // =================================================
         // =================================================
     }
@@ -77,6 +90,15 @@ document.addEventListener('click', async e => {
     if (e.target.matches('.btn-modal-delete') || e.target.matches('.btn-modal-delete *')) {
         $root.appendChild(modalConfirm());
     }
+
+    // console.log(e.target)
+
+    if (e.target.matches('.btn-cancel-home') || e.target.matches('.btn-document-cancel') || e.target.matches('.btn-document-cancel *')) {
+        $root.innerHTML = ``;
+        $root.appendChild(nav());
+        $root.appendChild(home());
+    }
+
 })
 
 // -- Eventos de click derecho
@@ -99,6 +121,6 @@ document.addEventListener('contextmenu', e => {
         $modal.dataset.table = table;
         $modal.style.top = e.clientY + "px";
         $modal.style.left = e.clientX + "px";
-        $modal.classList.remove('opacity');
+        $modal.classList.remove('none');
     }
 })

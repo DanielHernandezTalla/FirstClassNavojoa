@@ -1,7 +1,7 @@
 'use strict';
 
-import sectionPersonal from './personal.js';
-import sectionPuestos from './puestos.js';
+import sectionPersonal from './personal/personal.js';
+import sectionPuestos from './puestos/puestos.js';
 import modalError from './modal.error.js';
 
 export default function modalConfirm(text = null) {
