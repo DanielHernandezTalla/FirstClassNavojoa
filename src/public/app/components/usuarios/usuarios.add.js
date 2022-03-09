@@ -74,12 +74,12 @@ export default async function usuarioAdd(id = -1, table = null, action = null) {
         </div>
         <div class="form__group-grid">
             <label for="form-usuario-input-password">Contraseña</label>
-            <input id="form-usuario-input-password" type="password" name="password" value="${data? data.Nombre: ""}" required>
+            <input id="form-usuario-input-password" type="password" name="password" value="">
             <small class="form-error opacity">Error: Agrega un usuario correcto</small>
         </div>
         <div class="form__group-grid form__group-grid-large">
             <label for="form-usuario-input-password-com">Confirmar Contraseña</label>
-            <input id="form-usuario-input-password-com" type="password" name="passwordConfirm" value="${data? data.Telefono: ""}">
+            <input id="form-usuario-input-password-com" type="password" name="passwordConfirm" value="">
             <small class="form-error opacity">Error: Agrega una contraseña correcta</small>
         </div>
         <button id="${selectClass}" class="btn btn-primary" type="submit">${action === 'edit'? "Editar": "Ingresar"}</button>
@@ -124,19 +124,7 @@ document.addEventListener('submit', async e => {
 
         let persona;
 
-        // if ($form.phone.value !== '')
-        persona = {
-            Nombre: $form.name.value,
-            Telefono: $form.phone.value,
-            Contraseña: $form.password.value,
-            passwordConfirm: $form.passwordConfirm.value
-        }
-        // else
-        //     persona = {
-        //         Nombre: $form.name.value
-        //     }
-
-        if (persona.Contraseña !== persona.passwordConfirm) {
+        if ($form.password.value !== $form.passwordConfirm.value) {
             const $root = document.getElementById("root");
             $root.appendChild(await modalError("La contraseña y confirmar contraseña deben ser iguales."));
             $form.password.value = '';
@@ -144,15 +132,39 @@ document.addEventListener('submit', async e => {
             return;
         }
 
+        console.log(parseInt($form.password.value))
+
+        if (!$form.password.value.match(/^[0-9]+$/)) {
+            const $root = document.getElementById("root");
+            $root.appendChild(await modalError("Solo se aceptan numeros para la contraseña."));
+            $form.password.value = '';
+            $form.passwordConfirm.value = '';
+            return;
+        }
+
+        if (!$form.password.value)
+            persona = {
+                Nombre: $form.name.value,
+                Telefono: $form.phone.value
+            }
+        else
+            persona = {
+                Nombre: $form.name.value,
+                Telefono: $form.phone.value,
+                Contraseña: $form.password.value
+            }
+
         let res = null;
 
         if (document.getElementById('btn-usuario-add')) {
+            console.log('add')
             res = await addPersonal(persona)
         }
-        if (document.getElementById('btn-usuario-delete')) {
-            res = deletePersonal(id, persona)
-        }
+        // if (document.getElementById('btn-usuario-delete')) {
+        //     res = deletePersonal(id, persona)
+        // }
         if (document.getElementById('btn-usuario-edit')) {
+            console.log('edit')
             res = await editPersonal(id, persona)
         }
 
@@ -170,7 +182,7 @@ document.addEventListener('submit', async e => {
 
 async function getById(id) {
     try {
-        let res = await fetch('http://localhost:3000/personal/' + id);
+        let res = await fetch('http://localhost:3000/usuarios/' + id);
 
         if (!res.ok)
             throw (res);
@@ -189,7 +201,7 @@ async function getById(id) {
 async function addPersonal(persona) {
     // console.log('Agregar');
     try {
-        let res = await fetch('http://localhost:3000/personal', {
+        let res = await fetch('http://localhost:3000/usuarios', {
             method: 'POST',
             body: JSON.stringify(persona),
             headers: {
@@ -212,7 +224,7 @@ async function addPersonal(persona) {
 
 async function editPersonal(id, persona) {
     try {
-        let res = await fetch('http://localhost:3000/personal/' + id, {
+        let res = await fetch('http://localhost:3000/usuarios/' + id, {
             method: 'PATCH',
             body: JSON.stringify(persona),
             headers: {

@@ -2,6 +2,7 @@
 
 import sectionPersonal from './personal/personal.js';
 import sectionPuestos from './puestos/puestos.js';
+import sectionUsuarios from './usuarios/usuarios.js';
 import modalError from './modal.error.js';
 
 export default function modalConfirm(text = null) {
@@ -45,6 +46,8 @@ document.addEventListener('click', async e => {
         let id = $modal.dataset.id;
         let table = $modal.dataset.table;
 
+        // console.log("Table ---> ", table)
+
         try {
 
             await dlt(id, table);
@@ -56,6 +59,9 @@ document.addEventListener('click', async e => {
 
             if (table === 'puestos')
                 $section = await sectionPuestos();
+
+            if (table === 'usuarios')
+                $section = await sectionUsuarios();
             //let $section = await sectionPuestos();
 
             // -- Desapareciendo la tabla anterior
@@ -90,14 +96,18 @@ async function dlt(id, table) {
             }
         });
 
+        // console.log(res);
+
         if (!res.ok)
             throw (res);
 
         let data = await res.json()
 
+        // console.log(data);
+
         return data;
     } catch (e) {
-        // console.error(e);
+        console.error(e);
         const $root = document.getElementById("root");
         $root.appendChild(await modalError(e));
         return null;

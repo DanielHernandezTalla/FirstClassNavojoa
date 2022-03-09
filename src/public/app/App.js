@@ -57,7 +57,7 @@ document.addEventListener('click', async e => {
         if (table === 'puestos')
             $root.appendChild(await puestosAdd(id, table, "edit"));
 
-        if (table === 'usuario')
+        if (table === 'usuarios')
             $root.appendChild(await usuarioAdd(id, table, "edit"));
         // =================================================
         // =================================================
@@ -80,7 +80,7 @@ document.addEventListener('click', async e => {
         if (table === 'puestos')
             $root.appendChild(await puestosAdd());
 
-        if (table === 'usuario')
+        if (table === 'usuarios')
             $root.appendChild(await usuarioAdd());
         // =================================================
         // =================================================

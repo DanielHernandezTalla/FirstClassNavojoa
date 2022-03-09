@@ -3,7 +3,7 @@ import personalAdd from './usuarios.add.js';
 import modalConfirm from '../modal.confirm.js';
 import modalError from '../modal.error.js';
 
-export default async function sectionPersonal() {
+export default async function sectionUsuarios() {
 
     // -- Obtenemos los datos
     let personal = await get()
@@ -42,7 +42,7 @@ export default async function sectionPersonal() {
             $divRow.dataset.id = element.ID;
             // =================================================================
             // -- Aqui agregamos el nombre de la tabla
-            $divRow.dataset.table = "usuario";
+            $divRow.dataset.table = "usuarios";
             $divRow.innerHTML = `
             <p>${element.ID}</p>
             <p>${element.Nombre}</p>
@@ -56,7 +56,7 @@ export default async function sectionPersonal() {
     // =================================================================
     // -- Aqui agregamos el nombre de la tabla
     $divRow.innerHTML = `
-            <button id="btn-add-view" class="table__button" data-table="usuario"><i class="bi bi-plus-lg"></i>NUEVO</button>
+            <button id="btn-add-view" class="table__button" data-table="usuarios"><i class="bi bi-plus-lg"></i>NUEVO</button>
     `
 
     $sectionTable.appendChild($divRow.cloneNode(true));
@@ -92,7 +92,7 @@ export default async function sectionPersonal() {
 // -- Obteniendo los datos de la base de datos
 async function get() {
     try {
-        let res = await fetch('http://localhost:3000/personal');
+        let res = await fetch('http://localhost:3000/usuarios');
 
         if (!res.ok)
             throw (res);

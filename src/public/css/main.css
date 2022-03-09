@@ -223,7 +223,7 @@ main {
 }
 
 .form__group-grid-large {
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: 190px 1fr;
 }
 
 .form-error {

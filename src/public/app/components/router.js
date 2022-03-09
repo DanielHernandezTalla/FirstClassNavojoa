@@ -3,7 +3,7 @@ import login from './login.js';
 import home from './home.js';
 import sectionPersonal from './personal/personal.js';
 import sectionPuestos from './puestos/puestos.js';
-import sectionUsuario from './usuarios/usuarios.js';
+import sectionUsuarios from './usuarios/usuarios.js';
 import sectionDocument from './documentos/documentos.js';
 
 
@@ -49,7 +49,7 @@ export default function Router() {
             //console.log("puestos");
             $root.innerHTML = ``;
             $root.appendChild(nav());
-            let $sectionUsuario = await sectionUsuario();
+            let $sectionUsuario = await sectionUsuarios();
             $root.appendChild($sectionUsuario);
         }
     })
