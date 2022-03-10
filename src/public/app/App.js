@@ -8,6 +8,7 @@ import modalConfirm from './components/modal.confirm.js';
 import personalAdd from './components/personal/personal.add.js';
 import puestosAdd from './components/puestos/puestos.add.js';
 import usuarioAdd from './components/usuarios/usuarios.add.js';
+import sectionDocument from './components/documentos/documentos.js';
 
 export async function App() {
 
@@ -15,11 +16,14 @@ export async function App() {
 
     $root.innerHTML = ``;
 
-    // $root.appendChild(login());
+    $root.appendChild(login());
 
     // Cargamos section Directamente
-    $root.appendChild(nav());
-    $root.appendChild(home());
+    // $root.appendChild(nav());
+    // const $sectionDocument = await sectionDocument('Basico');
+
+    // $root.appendChild($sectionDocument);
+    // $root.appendChild(home());
 
     Router();
 }
@@ -59,6 +63,9 @@ document.addEventListener('click', async e => {
 
         if (table === 'usuarios')
             $root.appendChild(await usuarioAdd(id, table, "edit"));
+
+        // -- Ponemos focus en el primer input
+        $root.querySelector('input').focus();
         // =================================================
         // =================================================
     }
@@ -82,6 +89,9 @@ document.addEventListener('click', async e => {
 
         if (table === 'usuarios')
             $root.appendChild(await usuarioAdd());
+
+        // -- Ponemos focus en el primer input
+        $root.querySelector('input').focus();
         // =================================================
         // =================================================
     }

@@ -4,7 +4,7 @@ import home from './home.js';
 import sectionPersonal from './personal/personal.js';
 import sectionPuestos from './puestos/puestos.js';
 import sectionUsuarios from './usuarios/usuarios.js';
-import sectionDocument from './documentos/documentos.js';
+import sectionDocumentOptions from './documentos/documentos.options.js';
 
 
 export default function Router() {
@@ -17,8 +17,8 @@ export default function Router() {
             // console.log("formato");
             $root.innerHTML = ``;
             $root.appendChild(nav());
-            let $sectionDocument = await sectionDocument();
-            $root.appendChild($sectionDocument);
+            let $sectionDocumentOptions = await sectionDocumentOptions();
+            $root.appendChild($sectionDocumentOptions);
         }
 
         // -- Ruta eventos
