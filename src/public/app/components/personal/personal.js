@@ -41,10 +41,15 @@ export default async function sectionPersonal() {
         personal.forEach(element => {
             $divRow.dataset.id = element.ID;
             $divRow.dataset.table = "personal";
+
+            let telefono = "";
+            if (element.Telefono)
+                telefono = `${element.Telefono.substring(0, 3)}-${element.Telefono.substring(3, 6)}-${element.Telefono.substring(6, 8)}-${element.Telefono.substring(8, 10)}`;
+
             $divRow.innerHTML = `
             <p>${element.ID}</p>
             <p>${element.Nombre}</p>
-            <p>${element.Telefono === "undefined" ? "": element.Telefono}</p>
+            <p>${telefono}</p>
         `;
             $sectionTable.appendChild($divRow.cloneNode(true));
         });

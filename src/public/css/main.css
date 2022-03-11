@@ -209,8 +209,8 @@ main {
 }
 
 .form {
-    max-width: 750px;
-    min-width: 550px;
+    max-width: 850px;
+    min-width: 650px;
     background-color: white;
     padding: 32px 64px;
 }
@@ -407,6 +407,81 @@ main {
 
 .container__options figure i {
     font-size: 3rem;
+}
+
+/* PDF */
+.container-pdf {
+    min-height: calc(100vh - 64px);
+    width: calc(100% - 64px);
+    max-width: 800px;
+    margin: 32px auto;
+    /* background-color: red; */
+}
+
+.pdf-header {
+    width: 100%;
+    height: 100%;
+    /* background-color: orange; */
+    display: flex;
+    align-items: center;
+}
+
+.pdf__logo {
+    height: inherit;
+    width: 150px;
+}
+
+.pdf-header div:last-child {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.pdf-header p:first-child {
+    grid-column: 1/3;
+}
+
+.pdf-header p {
+    margin-left: 32px;
+    padding: 4px;
+}
+
+.pdf-table {
+    margin-top: 48px;
+    color: #777;
+}
+
+.pdf-table:last-child {
+    margin-top: 0;
+    padding-bottom: 32px;
+    width: 100%;
+}
+
+.pdf-table>p {
+    padding: 4px;
+    background-color: #F3EDE9;
+}
+
+.pdf-table div {
+    margin: auto 8px;
+    padding: 4px;
+    display: grid;
+    grid-template-columns: 1fr 100px 1fr;
+    gap: 16px;
+}
+
+.pdf-table p:nth-child(2) {
+    text-align: right;
+    padding-right: 16px;
+}
+
+.pdf-table hr {
+    height: 1px;
+    margin-top: 20px;
+}
+
+.pdf-total {
+    text-align: right;
+    /* padding-bottom: 64px; */
 }
 
 /* Clases generales que por especificidad deben de ir al final */

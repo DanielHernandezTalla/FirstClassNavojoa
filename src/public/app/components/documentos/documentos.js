@@ -1,6 +1,9 @@
 'use strict';
+import documentPDF from './documentos.pdf.js';
 
 export default async function sectionDocument(option) {
+
+    console.log(option);
 
     // -- Obtenemos los puestos que llevara por defecto
     let puestosSections = getOptions(option);
@@ -71,6 +74,10 @@ export default async function sectionDocument(option) {
 
         $formGroupDocument.innerHTML += `<spam class="btn btn-close-group-puesto"><i class="bi bi-x-lg"></i></spam>`;
 
+        // if(option.personal){
+        //     option.personal
+        // }
+
         const $formRow = document.createElement('div');
         $formRow.classList.add('form__group-row')
 
@@ -93,7 +100,7 @@ export default async function sectionDocument(option) {
         </div>
         <div class="form__group-document flex-right">
             <label for="form-total">Total</label>
-            <input id="form-document-total" placeholder="$0.00" type="number">
+            <input id="form-document-total" name="total" placeholder="$0.00" type="number">
         </div>
         <div class="form__group-document flex-right">
             <button class="btn btn-cancel btn-document-cancel">Cancelar</button>
@@ -173,7 +180,8 @@ document.addEventListener('click', async e => {
 
     if (e.target.matches('.button-add-puesto-document')) {
         e.preventDefault();
-        addGroupPuesto(e.target.parentNode);
+        if (e.screenY !== 0)
+            addGroupPuesto(e.target.parentNode);
     }
 
     if (e.target.matches('.btn-close-group-puesto') || e.target.matches('.btn-close-group-puesto *')) {
@@ -197,6 +205,7 @@ document.addEventListener('submit', e => {
     if (e.target.matches('.document-form')) {
         let tipoEvento = e.target.documentTypeEvent
         let cantidadPersonas = e.target.documentPeople
+        let total = e.target.total
         let puestos = e.target.querySelectorAll('.form__group-document')
 
         // console.log(tipoEvento.value)
@@ -219,8 +228,8 @@ document.addEventListener('submit', e => {
                     // console.log(!personasInputs[index].value)
                     if (personasInputs[index].value) {
                         let newPersona = {
-                            persona: personasInputs[index].value,
-                            pago: pagosInputs[index].value
+                            Nombre: personasInputs[index].value,
+                            Salario: pagosInputs[index].value
                         }
                         personas.push(newPersona);
                     }
@@ -239,10 +248,20 @@ document.addEventListener('submit', e => {
         let newFormat = {
             tipoEvento: tipoEvento.value,
             cantidadPersonas: cantidadPersonas.value,
+            lugar: "Salon",
+            total: total.value,
             puestos: arrPuestoPeople
         }
 
         console.log(newFormat)
+
+        const $root = document.getElementById("root");
+        const $main = $root.querySelector('main');
+
+        $root.innerHTML = ``;
+
+        $root.appendChild(documentPDF(newFormat, $main));
+
     }
 })
 
@@ -253,11 +272,11 @@ document.addEventListener('keydown', async e => {
 
     if (e.key === 'Enter' && e.target.matches('.document__input-datalist')) {
         e.preventDefault();
-        // addGroupRow(e.target.parentNode)
-        // let arr = e.target.parentNode.parentNode.querySelectorAll('spam');
-        // for (let i = 0; i < arr.length - 1; i++) {
-        //     arr[i].querySelector('i').classList.replace('bi-plus-lg', "bi-dash-lg");
-        // }
+        await addGroupRow(e.target.parentNode.parentNode)
+        let arr = e.target.parentNode.parentNode.parentNode.querySelectorAll('spam');
+        for (let i = 0; i < arr.length - 1; i++) {
+            arr[i].querySelector('i').classList.replace('bi-plus-lg', "bi-dash-lg");
+        }
     }
 
     // if (e.key === 'Enter' && (e.target.dataset.type === 'pago' || e.target.dataset.type === 'nombreEmpleado')) {
@@ -332,11 +351,11 @@ function getDatalist(personal) {
 }
 
 function getOptions(option) {
-    if (option === 'Basico') return ['Encargado', 'Mesero', 'Cristaleria'];
-    if (option === 'Boda') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista'];
-    if (option === 'VX') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista'];
-    if (option === 'Bautizo') return ['Encargado', 'Mesero', 'Cristaleria'];
-    else return ['Mesero'];
+    if (option === 'Basico') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
+    if (option === 'Boda') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
+    if (option === 'VX') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
+    if (option === 'Bautizo') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
+    else return [];
 }
 
 async function addGroupRow(node) {
@@ -427,6 +446,7 @@ function createSelected(puestos, item = 'Encargado') {
 
 function removeGroupRow(parentGroupRow) {
     parentGroupRow.parentNode.removeChild(parentGroupRow);
+    calcTotal()
 }
 
 async function getPuestos() {
