@@ -1,5 +1,7 @@
 'use strict';
 import documentPDF from './documentos.pdf.js';
+import imprimir from './documentos.impresion.js';
+//import startWindow from './documentos.window.js';
 
 export default async function sectionDocument(option) {
 
@@ -261,6 +263,8 @@ document.addEventListener('submit', e => {
         $root.innerHTML = ``;
 
         $root.appendChild(documentPDF(newFormat, $main));
+        imprimir();
+       // startWindow();
 
     }
 })
