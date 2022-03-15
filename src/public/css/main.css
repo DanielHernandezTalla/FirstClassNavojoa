@@ -122,7 +122,6 @@ main {
     /* opacity: 1; */
     /* transform: translateX(calc(100% + 16px)); */
 }
-
 .mb-32 {
     margin-bottom: 32px;
 }
@@ -247,10 +246,6 @@ main {
     padding: 5px;
 }
 
-form input[type="checkbox"] {
-    height: 20px;
-    width: 20px;
-}
 
 .form small {
     color: red;
@@ -392,7 +387,6 @@ form input[type="checkbox"] {
     grid-template-columns: repeat(auto-fill, minmax(150px, auto));
     grid-auto-rows: 200px;
     gap: 32px;
-    padding-bottom: 32px;
 }
 
 .container__options figure {
@@ -501,14 +495,4 @@ form input[type="checkbox"] {
 
 .btn-cancel-left {
     float: left;
-}
-
-.flex {
-    display: flex;
-    align-items: center;
-}
-
-.flex div {
-    display: flex;
-    align-items: center;
 }
