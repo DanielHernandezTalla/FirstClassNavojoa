@@ -122,8 +122,19 @@ main {
     /* opacity: 1; */
     /* transform: translateX(calc(100% + 16px)); */
 }
+
 .mb-32 {
     margin-bottom: 32px;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.flex div {
+    display: flex;
+    align-items: center;
 }
 
 /* Tablas */
