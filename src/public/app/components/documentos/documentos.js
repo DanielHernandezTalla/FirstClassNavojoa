@@ -358,7 +358,8 @@ function getOptions(option) {
     if (option === 'Basico') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
     if (option === 'Boda') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
     if (option === 'VX') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
-    if (option === 'Bautizo') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
+    if (option === 'Bautizo'|| option==='Shower') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
+    if (option === 'Piñata' ) return ['Encargado', 'Mesero', 'Baños'];
     else return [];
 }
 

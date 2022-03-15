@@ -4,36 +4,39 @@ import sectionDocument from './documentos.js';
 export default async function sectionDocumentOptions() {
 
     let options = [{
-            icon: '<i class="bi bi-file-earmark"></i>',
+            //icon: '<i class="bi bi-file-earmark"></i>',
+            img: 'app/assets/icon_empty.png',
             value: 'Vacio'
         },
         {
-            icon: '<i class="bi bi-file-earmark-arrow-up"></i>',
+            //icon: '<i class="bi bi-file-earmark-arrow-up"></i>',
+            img: 'app/assets/icon_basic.png',
             value: 'Basico'
         },
         {
-            icon: '<i class="bi bi-file-earmark-lock"></i>',
+            //icon: '<i class="bi bi-file-earmark-lock"></i>',
+            img: 'app/assets/icon_wedding.png',
             value: 'Boda'
         },
         {
-            icon: '<i class="bi bi-file-earmark-excel"></i>',
+            //icon: '<i class="bi bi-file-earmark-excel"></i>',
+            img: 'app/assets/icon_xv.png',
             value: 'VX'
         },
         {
-            icon: '<i class="bi bi-file-earmark-easel"></i>',
+            //icon: '<i class="bi bi-file-earmark-easel"></i>',
+            img: 'app/assets/icon_baptism.png',
             value: 'Bautizo'
         },
         {
-            icon: '<i class="bi bi-file-earmark-lock"></i>',
-            value: 'Boda'
+            //icon: '<i class="bi bi-file-earmark-lock"></i>',
+            img: 'app/assets/icon_shower.png',
+            value: 'Shower'
         },
         {
-            icon: '<i class="bi bi-file-earmark-excel"></i>',
-            value: 'VX'
-        },
-        {
-            icon: '<i class="bi bi-file-earmark-easel"></i>',
-            value: 'Bautizo'
+            //icon: '<i class="bi bi-file-earmark-excel"></i>',
+            img: 'app/assets/icon_party.png',
+            value: 'Piñata'
         },
     ]
 
@@ -59,7 +62,7 @@ export default async function sectionDocumentOptions() {
         $figure.dataset.documentType = item.value;
 
         $figure.innerHTML = `
-            ${item.icon}
+            <img src="${item.img}">
             <figcaption>${item.value}</figcaption>
         `
         $containerOptions.appendChild($figure);
