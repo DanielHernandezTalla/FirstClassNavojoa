@@ -123,6 +123,10 @@ main {
     /* transform: translateX(calc(100% + 16px)); */
 }
 
+.mb-32 {
+    margin-bottom: 32px;
+}
+
 /* Tablas */
 .table {
     margin-bottom: 48px;
@@ -243,6 +247,10 @@ main {
     padding: 5px;
 }
 
+form input[type="checkbox"] {
+    height: 20px;
+    width: 20px;
+}
 
 .form small {
     color: red;
@@ -491,4 +499,14 @@ main {
 
 .btn-cancel-left {
     float: left;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.flex div {
+    display: flex;
+    align-items: center;
 }

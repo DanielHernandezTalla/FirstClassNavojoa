@@ -5,7 +5,7 @@ const {
 
 let window;
 
-function createWindow() {
+function createWindow(app) {
     window = new BrowserWindow({
         width: 1024,
         height: 800,
@@ -16,6 +16,9 @@ function createWindow() {
 
     // -- Para quitar el menu
     // window.setMenu(null);
+    window.on('closed', () => {
+        app.quit();
+    });
 
     window.loadFile('src/public/index.html');
 }
