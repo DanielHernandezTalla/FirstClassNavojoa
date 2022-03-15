@@ -14,6 +14,16 @@ export default async function sectionDocumentOptions() {
             value: 'Basico'
         },
         {
+            //icon: '<i class="bi bi-file-earmark-excel"></i>',
+            img: 'app/assets/icon_salon.png',
+            value: 'Anterior salon'
+        },
+        {
+            //icon: '<i class="bi bi-file-earmark-excel"></i>',
+            img: 'app/assets/icon_garden.png',
+            value: 'Anterior Jardin'
+        },
+        {
             //icon: '<i class="bi bi-file-earmark-lock"></i>',
             img: 'app/assets/icon_wedding.png',
             value: 'Boda'
@@ -38,6 +48,7 @@ export default async function sectionDocumentOptions() {
             img: 'app/assets/icon_party.png',
             value: 'Piñata'
         },
+      
     ]
 
     // -- Main
