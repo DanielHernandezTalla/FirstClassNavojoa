@@ -197,7 +197,7 @@ document.addEventListener('click', async e => {
     }
 })
 
-document.addEventListener('submit', e => {
+document.addEventListener('submit', async e => {
     e.preventDefault();
 
     // if (!e.submitter) return;
@@ -263,8 +263,8 @@ document.addEventListener('submit', e => {
         $root.innerHTML = ``;
 
         $root.appendChild(documentPDF(newFormat, $main));
-        imprimir();
-       // startWindow();
+        await imprimir(document.querySelector('html'));
+        // startWindow();
 
     }
 })
