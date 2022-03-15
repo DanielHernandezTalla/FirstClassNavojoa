@@ -40,12 +40,29 @@ export default async function sectionDocument(option) {
     // -- Agregamos los input para el tipo de evento y la cantidad de personas
     let inputs = `
         <div class="form__group-grid">
-            <label for="user">Tipo de Evento</label>
-            <input type="text" name="documentTypeEvent" value="${option}">
+            <label for="documentTypeEvent">Tipo de Evento</label>
+            <input id="documentTypeEvent" type="text" name="documentTypeEvent" value="${option}">
         </div>
         <div class="form__group-grid">
             <label for="user">No Personas</label>
-            <input type="number" name="documentPeople" value="">
+            <input id="documentPeople" type="number" name="documentPeople" value="">
+        </div>
+        <div class="form__group-grid">
+            <label for="">Lugar</label>
+            <div class="flex">
+                <div>
+                    <input id="documentPlaceSalon" type="checkbox" name="documentPlaceSalon" value="">
+                    <label for="documentPlaceSalon">Salon</label>
+                </div>
+                <div>
+                    <input id="documentPlaceJardin" type="checkbox" name="documentPlaceJardin" value="">
+                    <label for="documentPlaceJardin">Jardin</label>
+                </div>
+            </div>
+        </div>
+        <div class="form__group-grid">
+            <label for="documentDate">Fecha</label>
+            <input id="documentDate" type="date" name="documentDate" value="">
         </div>
     `;
 
@@ -207,6 +224,9 @@ document.addEventListener('submit', async e => {
     if (e.target.matches('.document-form')) {
         let tipoEvento = e.target.documentTypeEvent
         let cantidadPersonas = e.target.documentPeople
+        let Salon = e.target.documentPlaceSalon.checked
+        let Jardin = e.target.documentPlaceJardin.checked
+        let Fecha = e.target.documentDate.value
         let total = e.target.total
         let puestos = e.target.querySelectorAll('.form__group-document')
 
@@ -250,7 +270,11 @@ document.addEventListener('submit', async e => {
         let newFormat = {
             tipoEvento: tipoEvento.value,
             cantidadPersonas: cantidadPersonas.value,
-            lugar: "Salon",
+            lugar: {
+                salon: Salon,
+                jardin: Jardin
+            },
+            fecha: Fecha,
             total: total.value,
             puestos: arrPuestoPeople
         }
@@ -263,7 +287,7 @@ document.addEventListener('submit', async e => {
         $root.innerHTML = ``;
 
         $root.appendChild(documentPDF(newFormat, $main));
-        await imprimir(document.querySelector('html'));
+        // await imprimir(document.querySelector('html'));
         // startWindow();
 
     }
@@ -358,8 +382,8 @@ function getOptions(option) {
     if (option === 'Basico') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
     if (option === 'Boda') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
     if (option === 'VX') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
-    if (option === 'Bautizo'|| option==='Shower') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
-    if (option === 'Piñata' ) return ['Encargado', 'Mesero', 'Baños'];
+    if (option === 'Bautizo' || option === 'Shower') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
+    if (option === 'Piñata') return ['Encargado', 'Mesero', 'Baños'];
     else return [];
 }
 

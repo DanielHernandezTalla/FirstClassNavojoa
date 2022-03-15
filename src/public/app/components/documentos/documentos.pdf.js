@@ -1,4 +1,6 @@
 import nav from '../nav.js';
+import imprimir from './documentos.impresion.js';
+const fs = require('fs')
 
 export default function documentPDF(data, $mainDocument) {
     // -- Main
@@ -11,9 +13,56 @@ export default function documentPDF(data, $mainDocument) {
     $pdfHeader.classList.add('pdf-header');
 
     // console.log(__dirname);
+    let date;
+    if (data.fecha) {
+        date = new Date(data.fecha);
+        date.setDate(date.getDate() + 1);
+    } else
+        date = new Date();
 
-    let date = new Date();
-    let dateFormatted = String(date.getDate()).padStart(2, '0') + ' de ' + String(date.getMonth() + 1).padStart(2, '0') + ' del ' + date.getFullYear();
+    let mes = "";
+
+    switch (String(date.getMonth() + 1).padStart(2, '0')) {
+        case '01':
+            mes = "Enero";
+            break;
+        case '02':
+            mes = "Febrero";
+            break;
+        case '03':
+            mes = "Marzo";
+            break;
+        case '04':
+            mes = "Abril";
+            break;
+        case '05':
+            mes = "Mayo";
+            break;
+        case '06':
+            mes = "Junio";
+            break;
+        case '07':
+            mes = "Julio";
+            break;
+        case '08':
+            mes = "Agosto";
+            break;
+        case '09':
+            mes = "Septiembre";
+            break;
+        case '10':
+            mes = "Octubre";
+            break;
+        case '11':
+            mes = "Noviembre";
+            break;
+        default:
+            mes = "Diciembre";
+            break;
+    }
+
+    let dateFormatted = String(date.getDate()).padStart(2, '0') + ' de ' + mes + ' del ' + date.getFullYear();
+    // let dateFormatted = "";
 
     $pdfHeader.innerHTML += `
         <div>
@@ -23,7 +72,7 @@ export default function documentPDF(data, $mainDocument) {
             <p><b>FIRST CLASS</b></p>
             <p>Tipo Evento: ${data.tipoEvento}</p>
             <p>Fecha: ${dateFormatted}</p>
-            <p>Lugar: ${data.lugar}</p>
+            <p>Lugar: ${data.lugar.salon && data.lugar.jardin?"Salon/Jardin": data.lugar.salon?"Salon":data.lugar.jardin?"Jardin":""}</p>
             <p>Catidad Personas: ${data.cantidadPersonas}</p>
         </div>
     `;
@@ -68,6 +117,7 @@ export default function documentPDF(data, $mainDocument) {
     $divContainer.appendChild($pdfTable.cloneNode(true));
 
     $pdfTable.innerHTML = `
+        <button class="btn btn-primary btn-document-pdf-print">Imprimir</button>
         <button class="btn btn-cancel btn-document-pdf-cancel">Cancelar</button>
     `;
 
@@ -75,7 +125,7 @@ export default function documentPDF(data, $mainDocument) {
 
     $main.appendChild($divContainer);
 
-    document.addEventListener('click', e => {
+    document.addEventListener('click', async e => {
         if (e.target.matches('.btn-document-pdf-cancel')) {
             const $root = document.getElementById("root");
             const $main = $root.querySelector('main');
@@ -84,8 +134,19 @@ export default function documentPDF(data, $mainDocument) {
 
             $root.appendChild(nav());
             $root.appendChild($mainDocument);
+            // try {
+            //     await fs.unlinkSync('src/public/app/components/documentos/docdumento.html');
+            // } catch (e) {
+
+            // }
+
         }
     })
-
     return $main;
 }
+
+document.addEventListener('click', async e => {
+    if (e.target.matches('.btn-document-pdf-print')) {
+        await imprimir(document.querySelector('html'));
+    }
+});

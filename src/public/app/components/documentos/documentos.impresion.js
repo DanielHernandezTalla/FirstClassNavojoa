@@ -19,12 +19,13 @@ export default async function imprimir(data) {
     // htmlPDF.querySelectorAll('link').outerHTML = ''
     // htmlPDF.querySelectorAll('link').outerHTML = ''
 
+    htmlPDF.querySelector('.btn-document-pdf-print').outerHTML = '';
     htmlPDF.querySelector('.btn-document-pdf-cancel').outerHTML = '';
     htmlPDF.querySelector('script').outerHTML = '';
 
 
     let content = htmlPDF.innerHTML;
-    console.log(content)
+    // console.log(content)
 
     // await setTimeout(() => {
     if (await save(content))
@@ -57,7 +58,7 @@ function createWindow() {
         footer: 'Footer of the Page'
     }
 
-    console.log('window creadop ')
+    // console.log('window creadop ')
     win = new BrowserWindow({
         show: false,
         webPreferences: {
@@ -73,7 +74,7 @@ function createWindow() {
     win.webContents.on('did-finish-load', () => {
         win.webContents.print(options, async (success, failureReason) => {
             if (!success) console.log(failureReason);
-            console.log('Print Initiated');
+            // console.log('Print Initiated');
             await fs.unlinkSync('src/public/app/components/documentos/docdumento.html');
         });
     });
@@ -81,9 +82,9 @@ function createWindow() {
 
 async function save(content) {
     try {
-        console.log("before save")
+        // console.log("before save")
         await fs.writeFileSync('src/public/app/components/documentos/docdumento.html', content);
-        console.log("after save")
+        // console.log("after save")
 
         return true;
     } catch (e) {

@@ -31,7 +31,7 @@ export default async function sectionDocumentOptions() {
         {
             //icon: '<i class="bi bi-file-earmark-excel"></i>',
             img: 'app/assets/icon_xv.png',
-            value: 'VX'
+            value: 'Quince años'
         },
         {
             //icon: '<i class="bi bi-file-earmark-easel"></i>',
@@ -81,8 +81,10 @@ export default async function sectionDocumentOptions() {
 
     // -- Botones de regresar y siguiente
     let buttonHtml = `
-        <button class="btn btn-primary btn-document-options" data-document-type="Basico" >Crear Basico</button>
-        <button class="btn btn-cancel btn-cancel-home" type="submit">Cancelar</button>
+        <div class="mb-32">
+            <button class="btn btn-primary btn-document-options" data-document-type="Basico" >Crear Basico</button>
+            <button class="btn btn-cancel btn-cancel-home" type="submit">Cancelar</button>
+        </div>
     `;
 
     // -- Agregamos todos los elementos creados al contenedor

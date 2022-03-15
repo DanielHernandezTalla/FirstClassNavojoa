@@ -38,4 +38,6 @@ app.allowRendererProcessReuse = false
 
 // Cuando la aplicacion de electron esta lista, inicia y se crea la ventana
 app.whenReady()
-    .then(createWindow);
+    .then(() => {
+        createWindow(app)
+    });
