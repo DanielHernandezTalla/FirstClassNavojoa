@@ -11,13 +11,12 @@ export default async function sectionDocument(option) {
     let puestosSections = getOptions(option);
     let data = null;
 
-    if (option == "Anterior Jardin") {
+    if (option == "Anterior Jardin")
         data = JSON.parse(localStorage.getItem('jardin'));
-    }
-    if (option == "Anterior salon") {
-        console.log("Anterior Salon");
+
+    if (option == "Anterior salon")
         data = JSON.parse(localStorage.getItem('salon'));
-    }
+
     // console.log(data);
 
     let salon, jardin;
@@ -64,7 +63,7 @@ export default async function sectionDocument(option) {
         </div>
         <div class="form__group-grid">
             <label for="user">No Personas</label>
-            <input id="documentPeople" type="number" name="documentPeople" value="${data?data.cantidadPersonas:null}">
+            <input id="documentPeople" type="number" name="documentPeople" value="${data?data.cantidadPersonas:""}">
         </div>
         <div class="form__group-grid">
             <label for="">Lugar</label>
@@ -204,10 +203,7 @@ document.addEventListener('click', async e => {
     if (e.target.matches('.btn-document-cancel') || e.target.matches('.btn-document-cancel *')) {
         e.preventDefault();
 
-        // const $root = document.getElementById("root");
-        // $root.innerHTML = ``;
-        // $root.appendChild(nav());
-        // $root.appendChild(home());
+        saveInCancel(document.querySelector('form'));
     }
 
     if (e.target.matches('.button-document') || e.target.matches('.button-document *')) {
@@ -275,10 +271,6 @@ document.addEventListener('click', async e => {
 document.addEventListener('submit', async e => {
     e.preventDefault();
 
-    // if (!e.submitter) return;
-    // console.log(e)
-
-    // if (e.submitter.classList.contains('btn-primary')) {
     if (e.target.matches('.document-form')) {
         let tipoEvento = e.target.documentTypeEvent
         let cantidadPersonas = e.target.documentPeople
@@ -402,16 +394,85 @@ document.addEventListener('change', e => {
     }
 })
 
+function saveInCancel($form) {
+    let tipoEvento = $form.documentTypeEvent
+    let cantidadPersonas = $form.documentPeople
+    let Salon = $form.documentPlaceSalon.checked
+    let Jardin = $form.documentPlaceJardin.checked
+    let Fecha = $form.documentDate.value
+    let total = $form.total
+    let puestos = $form.querySelectorAll('.form__group-document')
+
+    // console.log(tipoEvento.value)
+    // console.log(cantidadPersonas.value)
+
+    let arrPuestoPeople = [];
+
+    puestos.forEach(item => {
+        let puesto = item.querySelector('select')
+        if (puesto) {
+
+            // console.log(puesto.value)
+
+            let personasInputs = item.querySelectorAll('.document__input-datalist');
+            let pagosInputs = item.querySelectorAll('input[type="number"]');
+
+            let personas = []
+
+            personasInputs.forEach((item, index) => {
+                // console.log(!personasInputs[index].value)
+                if (personasInputs[index].value) {
+                    let newPersona = {
+                        Nombre: personasInputs[index].value,
+                        Salario: pagosInputs[index].value
+                    }
+                    personas.push(newPersona);
+                }
+            })
+
+            let newPuestoPersona = {
+                puesto: puesto.value,
+                personas: personas
+            }
+
+            arrPuestoPeople.push(newPuestoPersona);
+        }
+
+    })
+
+    let newFormat = {
+        tipoEvento: tipoEvento.value,
+        cantidadPersonas: cantidadPersonas.value,
+        lugar: {
+            salon: Salon,
+            jardin: Jardin
+        },
+        fecha: Fecha,
+        total: total.value,
+        puestos: arrPuestoPeople
+    }
+
+    console.log(newFormat)
+
+    if (newFormat.lugar.salon && newFormat.lugar.jardin) {
+        localStorage.setItem('salon', JSON.stringify(newFormat))
+        localStorage.setItem('jardin', JSON.stringify(newFormat))
+    } else if (newFormat.lugar.salon) {
+        localStorage.setItem('salon', JSON.stringify(newFormat))
+    } else if (newFormat.lugar.jardin) {
+        localStorage.setItem('jardin', JSON.stringify(newFormat))
+    }
+}
+
 function loadData(data, $main) {
     data.puestos.forEach(item => {
         for (const element of $main.querySelectorAll('select')) {
             if (item.puesto === element.value) {
                 item.personas.forEach(async persona => {
                     let node = element.parentNode.querySelector('div');
-                    let inputs = node.querySelectorAll('input');
-                    inputs[inputs.length - 2].value = persona.Nombre;
-                    inputs[inputs.length - 1].value = persona.Salario;
-                    await addGroupRow(node);
+
+                    await addGroupRow(node, persona.Nombre, persona.Salario);
+
                     let arr = node.parentNode.querySelectorAll('spam');
                     for (let i = 0; i < arr.length - 1; i++) {
                         arr[i].querySelector('i').classList.replace('bi-plus-lg', "bi-dash-lg");
@@ -420,6 +481,14 @@ function loadData(data, $main) {
             }
         }
     })
+
+    setTimeout(() => {
+        let divs = $main.querySelectorAll('.form__group-document');
+
+        for (let i = 0; i < divs.length - 3; i++)
+            divs[i].querySelector('div').outerHTML = null;
+
+    }, 500);
 }
 
 function calcTotal() {
@@ -439,13 +508,17 @@ function calcTotal() {
     inputTotal.value = sum;
 }
 
-function getDatalist(personal) {
+function getDatalist(personal, nameDefault = null) {
+    // console.log(nameDefault)
     const $containerDatalist = document.createElement('div')
 
     const $inputList = document.createElement('input');
     $inputList.setAttribute('class', 'document__input-datalist');
     $inputList.setAttribute('list', 'personal');
     $inputList.setAttribute('placeholder', 'Agregar empleado');
+
+    if (nameDefault)
+        $inputList.setAttribute('value', nameDefault);
 
     const $datalist = document.createElement('datalist')
     $datalist.setAttribute('id', 'personal');
@@ -471,11 +544,11 @@ function getOptions(option) {
     else return [];
 }
 
-async function addGroupRow(node) {
+async function addGroupRow(node, nombre = null, salario = null) {
 
     const personal = await getPersonal();
 
-    const $containerDatalist = getDatalist(personal);
+    const $containerDatalist = getDatalist(personal, nombre);
 
     // -- Para saber cuanto es la cantidad de pago
     let parent = node.parentNode;
@@ -492,7 +565,7 @@ async function addGroupRow(node) {
 
     $newRow.innerHTML += '<spam class="btn button-document"><i class="bi bi-plus-lg"></i></spam>';
     $newRow.appendChild($containerDatalist.cloneNode(true));
-    $newRow.innerHTML += `<input type="number" placeholder="$ Pago" data-type='pago' value="${salary}">`;
+    $newRow.innerHTML += `<input type="number" placeholder="$ Pago" data-type='pago' value="${salario?salario:salary}">`;
 
     // $newRow.innerHTML = `
     //             <spam class="btn button-document"><i class="bi bi-plus-lg"></i></spam>
