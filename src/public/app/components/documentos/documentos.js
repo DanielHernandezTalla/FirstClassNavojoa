@@ -9,6 +9,25 @@ export default async function sectionDocument(option) {
 
     // -- Obtenemos los puestos que llevara por defecto
     let puestosSections = getOptions(option);
+    let data = null;
+
+    if (option == "Anterior Jardin") {
+        data = JSON.parse(localStorage.getItem('jardin'));
+    }
+    if (option == "Anterior salon") {
+        console.log("Anterior Salon");
+        data = JSON.parse(localStorage.getItem('salon'));
+    }
+    // console.log(data);
+
+    let salon, jardin;
+
+    if (data) {
+        if (data.lugar.salon)
+            salon = "checked";
+        if (data.lugar.jardin)
+            jardin = "checked";
+    }
 
     // -- Obtener puestos y pagos
     const puestos = await getPuestos();
@@ -41,28 +60,28 @@ export default async function sectionDocument(option) {
     let inputs = `
         <div class="form__group-grid">
             <label for="documentTypeEvent">Tipo de Evento</label>
-            <input id="documentTypeEvent" type="text" name="documentTypeEvent" value="${option}">
+            <input id="documentTypeEvent" type="text" name="documentTypeEvent" value="${data?data.tipoEvento:option}">
         </div>
         <div class="form__group-grid">
             <label for="user">No Personas</label>
-            <input id="documentPeople" type="number" name="documentPeople" value="">
+            <input id="documentPeople" type="number" name="documentPeople" value="${data?data.cantidadPersonas:null}">
         </div>
         <div class="form__group-grid">
             <label for="">Lugar</label>
             <div class="flex">
                 <div>
-                    <input id="documentPlaceSalon" type="checkbox" name="documentPlaceSalon" value="">
+                    <input id="documentPlaceSalon" type="checkbox" name="documentPlaceSalon" ${salon}>
                     <label for="documentPlaceSalon">Salon</label>
                 </div>
                 <div>
-                    <input id="documentPlaceJardin" type="checkbox" name="documentPlaceJardin" value="">
+                    <input id="documentPlaceJardin" type="checkbox" name="documentPlaceJardin" ${jardin}>
                     <label for="documentPlaceJardin">Jardin</label>
                 </div>
             </div>
         </div>
         <div class="form__group-grid">
             <label for="documentDate">Fecha</label>
-            <input id="documentDate" type="date" name="documentDate" value="">
+            <input id="documentDate" type="date" name="documentDate" value="${data?data.fecha:""}">
         </div>
     `;
 
@@ -72,44 +91,80 @@ export default async function sectionDocument(option) {
 
     let sectiosPuestos = ``;
     // -- Agregamos las secciones de los puestos
-    puestosSections.forEach((item) => {
+    if (data)
+        data.puestos.forEach((item) => {
 
-        const $select = document.createElement('select');
-        $select.classList.add('select-puesto-document');
+            const $select = document.createElement('select');
+            $select.classList.add('select-puesto-document');
 
-        let salario = 0;
+            let salario = 0;
 
-        puestos.forEach(itemPuesto => {
-            if (item == itemPuesto.Nombre) {
-                $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
-                salario = itemPuesto.Salario;
-            } else
-                $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
+            puestos.forEach(itemPuesto => {
+                if (item.puesto == itemPuesto.Nombre) {
+                    $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
+                    salario = itemPuesto.Salario;
+                } else
+                    $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
+            })
+
+            const $formGroupDocument = document.createElement('div');
+            $formGroupDocument.classList.add('form__group-document')
+            $formGroupDocument.appendChild($select.cloneNode(true));
+
+            $formGroupDocument.innerHTML += `<spam class="btn btn-close-group-puesto"><i class="bi bi-x-lg"></i></spam>`;
+
+            const $formRow = document.createElement('div');
+            $formRow.classList.add('form__group-row')
+
+            $formRow.innerHTML += '<spam class="btn button-document button-document-new-row"><i class="bi bi-plus-lg"></i></spam>';
+
+            $formRow.appendChild($containerDatalist.cloneNode(true));
+
+            $formRow.innerHTML += `<input type="number" placeholder="$ Pago" data-type='pago' value="${salario}">`;
+
+            $formGroupDocument.appendChild($formRow);
+
+            $form.appendChild($formGroupDocument)
         })
+    else
+        puestosSections.forEach((item) => {
 
-        const $formGroupDocument = document.createElement('div');
-        $formGroupDocument.classList.add('form__group-document')
-        $formGroupDocument.appendChild($select.cloneNode(true));
+            const $select = document.createElement('select');
+            $select.classList.add('select-puesto-document');
 
-        $formGroupDocument.innerHTML += `<spam class="btn btn-close-group-puesto"><i class="bi bi-x-lg"></i></spam>`;
+            let salario = 0;
 
-        // if(option.personal){
-        //     option.personal
-        // }
+            puestos.forEach(itemPuesto => {
+                if (item == itemPuesto.Nombre) {
+                    $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
+                    salario = itemPuesto.Salario;
+                } else
+                    $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
+            })
 
-        const $formRow = document.createElement('div');
-        $formRow.classList.add('form__group-row')
+            const $formGroupDocument = document.createElement('div');
+            $formGroupDocument.classList.add('form__group-document')
+            $formGroupDocument.appendChild($select.cloneNode(true));
 
-        $formRow.innerHTML += '<spam class="btn button-document button-document-new-row"><i class="bi bi-plus-lg"></i></spam>';
+            $formGroupDocument.innerHTML += `<spam class="btn btn-close-group-puesto"><i class="bi bi-x-lg"></i></spam>`;
 
-        $formRow.appendChild($containerDatalist.cloneNode(true));
+            // if(option.personal){
+            //     option.personal
+            // }
 
-        $formRow.innerHTML += `<input type="number" placeholder="$ Pago" data-type='pago' value="${salario}">`;
+            const $formRow = document.createElement('div');
+            $formRow.classList.add('form__group-row')
 
-        $formGroupDocument.appendChild($formRow);
+            $formRow.innerHTML += '<spam class="btn button-document button-document-new-row"><i class="bi bi-plus-lg"></i></spam>';
 
-        $form.appendChild($formGroupDocument)
-    })
+            $formRow.appendChild($containerDatalist.cloneNode(true));
+
+            $formRow.innerHTML += `<input type="number" placeholder="$ Pago" data-type='pago' value="${salario}">`;
+
+            $formGroupDocument.appendChild($formRow);
+
+            $form.appendChild($formGroupDocument)
+        })
 
     // -- Agregamos los botones y el area del total
     let buttons = `
@@ -138,6 +193,9 @@ export default async function sectionDocument(option) {
 
     // -- Agregamos el contenedor al main
     $main.appendChild($divContainer);
+
+    if (data)
+        loadData(data, $main);
 
     return $main;
 }
@@ -281,15 +339,21 @@ document.addEventListener('submit', async e => {
 
         console.log(newFormat)
 
+        if (newFormat.lugar.salon && newFormat.lugar.jardin) {
+            localStorage.setItem('salon', JSON.stringify(newFormat))
+            localStorage.setItem('jardin', JSON.stringify(newFormat))
+        } else if (newFormat.lugar.salon) {
+            localStorage.setItem('salon', JSON.stringify(newFormat))
+        } else if (newFormat.lugar.jardin) {
+            localStorage.setItem('jardin', JSON.stringify(newFormat))
+        }
+
         const $root = document.getElementById("root");
         const $main = $root.querySelector('main');
 
         $root.innerHTML = ``;
 
         $root.appendChild(documentPDF(newFormat, $main));
-        // await imprimir(document.querySelector('html'));
-        // startWindow();
-
     }
 })
 
@@ -338,6 +402,26 @@ document.addEventListener('change', e => {
     }
 })
 
+function loadData(data, $main) {
+    data.puestos.forEach(item => {
+        for (const element of $main.querySelectorAll('select')) {
+            if (item.puesto === element.value) {
+                item.personas.forEach(async persona => {
+                    let node = element.parentNode.querySelector('div');
+                    let inputs = node.querySelectorAll('input');
+                    inputs[inputs.length - 2].value = persona.Nombre;
+                    inputs[inputs.length - 1].value = persona.Salario;
+                    await addGroupRow(node);
+                    let arr = node.parentNode.querySelectorAll('spam');
+                    for (let i = 0; i < arr.length - 1; i++) {
+                        arr[i].querySelector('i').classList.replace('bi-plus-lg', "bi-dash-lg");
+                    }
+                })
+            }
+        }
+    })
+}
+
 function calcTotal() {
     const inputTotal = document.getElementById('form-document-total');
     let sum = 0;
@@ -381,7 +465,7 @@ function getDatalist(personal) {
 function getOptions(option) {
     if (option === 'Basico') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
     if (option === 'Boda') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
-    if (option === 'VX') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
+    if (option === 'Quince años') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
     if (option === 'Bautizo' || option === 'Shower') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
     if (option === 'Piñata') return ['Encargado', 'Mesero', 'Baños'];
     else return [];
@@ -448,7 +532,6 @@ async function addGroupPuesto(node) {
     $formRow.innerHTML += `<input type="number" placeholder="$ Pago" data-type='pago' value="${salario}">`;
 
     $formGroupDocument.appendChild($formRow);
-
 
     node.parentNode.insertBefore($formGroupDocument, node)
     calcTotal()
