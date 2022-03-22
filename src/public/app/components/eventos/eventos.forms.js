@@ -57,6 +57,7 @@ export default async function eventAdd(id = -1, table = null, action = null) {
     $form.appendChild(createEvent());
     // $form.appendChild(createGeneral());
     // $form.appendChild(createPagos());
+
     // $form.appendChild(agregarPagos());
 
     // Agregamos el form a su contenedor
@@ -68,7 +69,6 @@ export default async function eventAdd(id = -1, table = null, action = null) {
     $divContainer.appendChild($divContentForm);
 
     $main.appendChild($divContainer)
-
     return $main;
 }
 
@@ -221,27 +221,53 @@ document.addEventListener('click', async e => {
 
         console.log("Pagos")
 
-        const $event = {
-            fecha: $sectionEvent.querySelector('#form-event-input-fecha').value,
-            sesion: $sectionEvent.querySelector('#form-event-input-sesion').value,
-            lugar: {
-                salon: $sectionEvent.querySelector('#eventPlaceSalon').checked,
-                jardin: $sectionEvent.querySelector('#eventPlaceJardin').checked
-            },
-            cliente: $sectionEvent.querySelector('#form-event-input-cliente').value,
-            ceremoniaCivil: $sectionEvent.querySelector('#form-event-input-ceremonia').value,
-            noPersonas: $sectionGeneral.querySelector('#form-event-input-noPersonas').value,
-            noMeseros: $sectionGeneral.querySelector('#form-event-input-noMeseros').value,
-            hora: $sectionGeneral.querySelector('#form-event-input-hora').value,
-            horaCena: $sectionGeneral.querySelector('#form-event-input-horaCena').value,
-            platillo: $sectionGeneral.querySelector('#form-event-input-platillo').value,
-            alcohol: $sectionGeneral.querySelector('#form-event-input-alcohol').value,
-            croquis: $sectionGeneral.querySelector('#form-event-input-croquis').value,
-            mantel: $sectionGeneral.querySelector('#form-event-input-mantel').value,
-            tipoMesas: $sectionGeneral.querySelector('#form-event-input-tipoMesas').value,
-            tipoSillas: $sectionGeneral.querySelector('#form-event-input-tipoSillas').value,
-            casosEspeciales: $sectionGeneral.querySelector('#form-event-input-casosEspeciales').value,
+        let ubicacion = "";
+        if ($sectionEvent.querySelector('#eventPlaceSalon').checked &&
+            $sectionEvent.querySelector('#eventPlaceJardin').checked) {
+            ubicacion = "Salon/Jardin"
+        } else if ($sectionEvent.querySelector('#eventPlaceSalon').checked) {
+            ubicacion = "Salon"
+        } else if ($sectionEvent.querySelector('#eventPlaceJardin').checked) {
+            ubicacion = "Jardin"
         }
+
+        let adeudoTotal = document.querySelector('.adeudo-total').textContent;
+        let sesion = $sectionEvent.querySelector('#form-event-input-sesion').value;
+
+        const $event = {
+            FechaEvento: $sectionEvent.querySelector('#form-event-input-fecha').value,
+            Sesion: !sesion ? '1999-01-01' : sesion,
+            // Sesion: '2022-05-03',
+            Ubicacion: ubicacion,
+            TipoEvento: $sectionEvent.querySelector('#form-event-input-evento').value,
+            Cliente: $sectionEvent.querySelector('#form-event-input-cliente').value,
+            Telefono: $sectionEvent.querySelector('#form-event-input-telefono').value,
+            CeremoniaCivil: $sectionEvent.querySelector('#form-event-input-ceremonia').value,
+            NoPersonas: parseInt($sectionGeneral.querySelector('#form-event-input-noPersonas').value),
+            NoMeseros: parseInt($sectionGeneral.querySelector('#form-event-input-noMeseros').value),
+            HoraInicio: $sectionGeneral.querySelector('#form-event-input-hora').value,
+            HoraCena: $sectionGeneral.querySelector('#form-event-input-horaCena').value,
+            Platillo: $sectionGeneral.querySelector('#form-event-input-platillo').value,
+            Alcohol: $sectionGeneral.querySelector('#form-event-input-alcohol').value,
+            Croquis: $sectionGeneral.querySelector('#form-event-input-croquis').value,
+            Mantel: $sectionGeneral.querySelector('#form-event-input-mantel').value,
+            Servilleta: $sectionGeneral.querySelector('#form-event-input-servilleta').value,
+            Cristaleria: $sectionGeneral.querySelector('#form-event-input-cristaleria').value,
+            TipoMesa: $sectionGeneral.querySelector('#form-event-input-tipoMesas').value,
+            TipoSilla: $sectionGeneral.querySelector('#form-event-input-tipoSillas').value,
+            CasoEspecial: $sectionGeneral.querySelector('#form-event-input-casosEspeciales').value,
+            CostoTotal: parseInt(document.querySelector('#form-event-input-totalPago').value),
+            AbonoTotal: parseInt(adeudoTotal.substring(1, adeudoTotal.length)),
+        }
+
+        if (fetchAddEvent($event)) {
+            $sectionEvent = "";
+            $sectionGeneral = "";
+            $sectionPagos = "";
+            $sectionAddPagos = "";
+            cancel();
+        } else
+            console.log("Error al agregar")
 
         // Aqui Enviamos la informacion
         console.log($event)
@@ -270,11 +296,13 @@ document.addEventListener('click', async e => {
 
     // Cancel
     if (e.target.matches('#btn-event-cancel')) {
-        const $root = document.getElementById("root");
-        $root.innerHTML = ``;
-        $root.appendChild(nav());
-        let $sectionEventos = await sectionEventos();
-        $root.appendChild($sectionEventos)
+        cancel();
+    }
+})
+
+document.addEventListener('change', e => {
+    if (e.target.matches('#form-event-input-totalPago')) {
+        calcularTotalAbono();
     }
 })
 
@@ -297,7 +325,7 @@ function createEvent() {
         </div>
         <div class="form__group-grid">
             <label for="form-event-input-sesion">Sesion</label>
-            <input id="form-event-input-sesion" type="time" name="sesion" title="Ingresa la fecha y hora de sesion.">
+            <input id="form-event-input-sesion" type="datetime-local" name="sesion" title="Ingresa la fecha y hora de sesion.">
             <small class="form-error opacity">Error: Ingresa la fecha y hora de sesion.</small>
         </div>
         <div class="form__group-grid">
@@ -323,6 +351,11 @@ function createEvent() {
             <label for="form-event-input-cliente">Cliente</label>
             <input id="form-event-input-cliente" type="String" name="cliente" value="" title="Ingresa el nombre del cliente." data-required>
             <small class="form-error opacity">Error: Ingresa el nombre del cliente.</small>
+        </div>
+        <div class="form__group-grid  form__group-grid-2">
+            <label for="form-event-input-telefono">Telefono</label>
+            <input id="form-event-input-telefono" type="number" name="phone">
+            <small class="form-error opacity">Error: Agrega un telefono correcto</small>
         </div>
         <div class="form__group-grid form__group-grid-2 form__group-grid-large">
             <label for="form-event-input-ceremonia">Ceremonia Civil</label>
@@ -403,6 +436,18 @@ function createGeneral() {
             <small class="form-error opacity">Error: Ingresa el tipo de mantel.</small>
         </div>
 
+        <div class="form__group-grid">
+            <label for="form-event-input-cristaleria">Cristaleria</label>
+            <input id="form-event-input-cristaleria" type="text" name="cristaleria" title="Ingresa el tipo de cristaleria.">
+            <small class="form-error opacity">Error: Ingresa el tipo de cristaleria.</small>
+        </div>
+
+        <div class="form__group-grid">
+            <label for="form-event-input-servilleta">Servilleta</label>
+            <input id="form-event-input-servilleta" type="text" name="servilleta" title="Ingresa el tipo de servilleta.">
+            <small class="form-error opacity">Error: Ingresa el tipo de servilleta.</small>
+        </div>
+
         <div class="form__group-grid form__group-grid-2 form__group-grid-middle">
             <label for="form-event-input-tipoMesas">Tipo de mesas</label>
             <input id="form-event-input-tipoMesas" type="String" name="tipoMesas" value="" title="Ingresa el tipo de mesas.">
@@ -437,12 +482,17 @@ function createGeneral() {
 
 function createPagos(data) {
 
-    data = [{
-        id: 1,
-        metodoPago: "Tarjeta",
-        fecha: "12/12/2022",
-        cantidad: "$40,000.00"
-    }]
+    // data = [{
+    //     id: 1,
+    //     metodoPago: "Tarjeta",
+    //     fecha: "12/12/2022",
+    //     cantidad: "$40000.00"
+    // }, {
+    //     id: 1,
+    //     metodoPago: "Tarjeta",
+    //     fecha: "10/10/2022",
+    //     cantidad: "$60000.00"
+    // }]
 
     const $formSection = document.createElement('div');
     $formSection.classList.add('form-section-event');
@@ -452,34 +502,49 @@ function createPagos(data) {
 
     // Agregamos tabla de pagos
     const $sectionTable = document.createElement('div');
+    $sectionTable.classList.add('table__pagos');
 
     $sectionTable.innerHTML = `
-        <button class="btn btn-right"><b id="btn-add-pago">Agregar Pago</b></button>
+        <button class="btn btn-right span-1-4"><b id="btn-add-pago">Agregar Pago</b></button>
     `;
 
+    $sectionTable.innerHTML += `
+
+    <p>No Pago</p>
+    <p>Metodo de pago</p>
+    <p>Fecha</p>
+    <p class="text-align-right">Cantidad</p>`;
+
     if (data) {
-        $sectionTable.innerHTML += `
-        <div class="table__row-4-first">
-        <p>No Pago</p>
-        <p>Metodo de pago</p>
-        <p>Fecha</p>
-        <p>Cantidad</p>
-        </div>`;
+
         data.forEach(item => {
             $sectionTable.innerHTML += `
-                <div class="table__row-4">
+
                     <p>${item.id}</p>
                     <p>${item.metodoPago}</p>
                     <p>${item.fecha}</p>
-                    <p>${item.cantidad}</p>
-                </div>
+                    <p class="text-align-right abono">${item.cantidad}</p>
             `;
         });
-    } else {
-        $sectionTable.innerHTML += `
-            <p class="efect-water">Sin pagos</p>
-        `;
     }
+
+    $sectionTable.innerHTML += `
+            <p></p>
+            <p></p>
+            <p class="text-align-right">Total</p>
+            <p class="text-align-right abono-total"></p>
+
+            <p></p>
+            <p></p>
+            <p class="text-align-right">Total Evento</p>
+            <input id="form-event-input-totalPago" class="text-align-right input-total-pago" type="number" step="0.01" value="">
+
+            <p></p>
+            <p></p>
+            <p class="text-align-right">Adeudo</p>
+            <p class="text-align-right adeudo-total"></p>
+
+    `;
 
     let buttons = `
         <button id="btn-event-pagos" class="btn btn-primary">Siguiente</button>
@@ -490,6 +555,10 @@ function createPagos(data) {
     $formSection.appendChild($sectionRowOptions);
     $formSection.appendChild($sectionTable);
     $formSection.innerHTML += buttons;
+
+    setTimeout(() => {
+        calcularTotalAbono();
+    }, 10)
 
     return $formSection;
 }
@@ -553,6 +622,7 @@ function validateEvent() {
 
     validates.forEach(item => {
         if (!item.value.trim().length) {
+            item.parentNode.querySelector('small').textContent = item.getAttribute('title');
             item.parentNode.querySelector('small').classList.remove('opacity')
             if (!error)
                 item.focus();
@@ -562,6 +632,54 @@ function validateEvent() {
             item.parentNode.querySelector('small').classList.add('opacity')
         // error
     });
+
+    // Validando Entrada de evento
+    let Evento = document.querySelector('#form-event-input-evento');
+    if (Evento)
+        if (Evento.value.trim().length < 3 || Evento.value.trim().length > 50) {
+            Evento.parentNode.querySelector('small').textContent = "El evento debe tener entre 3 y 50 caracteres.";
+            Evento.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                Evento.focus();
+            error = true;
+        }
+
+    // Validando Entrada de Cliente
+    let Cliente = document.querySelector('#form-event-input-cliente');
+    if (Cliente)
+        if (Cliente.value.trim().length < 3 || Cliente.value.trim().length > 50) {
+            Cliente.parentNode.querySelector('small').textContent = "El nombre del cliente debe tener entre 3 y 100 caracteres.";
+            Cliente.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                Cliente.focus();
+            error = true;
+        }
+
+    // Validando Entrada del telefono
+    let Telefono = document.querySelector('#form-event-input-telefono');
+    if (Telefono) {
+        if (Telefono.value !== "")
+            if (Telefono.value.trim().length !== 10) {
+                Telefono.parentNode.querySelector('small').textContent = "El telefono debe tener 10 caracteres.";
+                Telefono.parentNode.querySelector('small').classList.remove('opacity');
+                if (!error)
+                    Telefono.focus();
+                error = true;
+            }
+        if (Telefono.value === "") Telefono.parentNode.querySelector('small').classList.add('opacity');
+    }
+
+    // Validando numero de meseros
+    let NoMeseros = document.querySelector('#form-event-input-noMeseros');
+    if (NoMeseros)
+        if (NoMeseros.value > 250) {
+            NoMeseros.parentNode.querySelector('small').textContent = "No puedes agregar mas de 255 meseros.";
+            NoMeseros.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                NoMeseros.focus();
+            error = true;
+        }
+
 
     if (validateLugar() || error)
         return true;
@@ -589,4 +707,56 @@ function getSectionEvent() {
         return 'general';
     if (document.getElementById('btn-event-pagos'))
         return 'pagos';
+}
+
+function calcularTotalAbono() {
+
+    let total = 0;
+    document.querySelectorAll('.abono').forEach(item => {
+        total += parseInt(item.textContent.substring(1, item.textContent.length));
+    })
+
+    let totalEvento = document.getElementById('form-event-input-totalPago').value;
+
+    document.querySelector('.abono-total').textContent = `$${total}.00`;
+    document.querySelector('.adeudo-total').textContent = `$${totalEvento-total}.00`;
+
+    console.log(total)
+}
+
+async function fetchAddEvent(event) {
+    // console.log('Agregar');
+    try {
+        let res = await fetch('http://localhost:3000/eventos', {
+            method: 'POST',
+            body: JSON.stringify(event),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+
+        if (!res.ok)
+            throw (res);
+
+        return true;
+
+    } catch (e) {
+        // console.log(e)
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}
+
+async function cancel() {
+    $sectionEvent = "";
+    $sectionGeneral = "";
+    $sectionPagos = "";
+    $sectionAddPagos = "";
+
+    const $root = document.getElementById("root");
+    $root.innerHTML = ``;
+    $root.appendChild(nav());
+    let $sectionEventos = await sectionEventos();
+    $root.appendChild($sectionEventos)
 }

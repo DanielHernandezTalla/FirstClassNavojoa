@@ -26,6 +26,9 @@ async function getbyid(id) {
 async function add(body) {
     return new Promise(async function (resolve, reject) {
 
+        if (body.Telefono === "0000000000")
+            body.Telefono = ""
+
         const conn = await getConnection();
 
         const persona = await conn.query('CALL spEmpleado(3, NULL,"' + body.Nombre + '","' + body.Telefono + '")');
@@ -38,6 +41,9 @@ async function add(body) {
 
 async function update(id, body) {
     return new Promise(async function (resolve, reject) {
+
+        if (body.Telefono === "0000000000")
+            body.Telefono = ""
 
         const conn = await getConnection();
 
