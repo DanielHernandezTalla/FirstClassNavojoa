@@ -653,6 +653,7 @@ textarea {
     width: 1.5rem;
     height: 1.5rem;
     margin-left: 1rem;
+    cursor: pointer;
 }
 
 .btn-arrow {
