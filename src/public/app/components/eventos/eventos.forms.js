@@ -2,6 +2,7 @@
 import nav from '../nav.js';
 // import sectionPersonal from './personal.js'
 import modalError from '../modal.error.js';
+import sectionEventos from './calendar.js';
 
 export default async function eventAdd(id = -1, table = null, action = null) {
 
@@ -266,6 +267,15 @@ document.addEventListener('click', async e => {
             console.log($pago)
         }
     }
+
+    // Cancel
+    if (e.target.matches('#btn-event-cancel')) {
+        const $root = document.getElementById("root");
+        $root.innerHTML = ``;
+        $root.appendChild(nav());
+        let $sectionEventos = await sectionEventos();
+        $root.appendChild($sectionEventos)
+    }
 })
 
 function createEvent() {
@@ -323,7 +333,7 @@ function createEvent() {
 
     let buttons = `
         <button id="btn-event-evento" class="btn btn-primary">Siguiente</button>
-        <button id="btn-personal-cancel" class="btn btn-cancel">Cancelar</button>
+        <button id="btn-event-cancel" class="btn btn-cancel">Cancelar</button>
     `;
 
     $formSection.appendChild($sectionRowOptions);
@@ -415,7 +425,7 @@ function createGeneral() {
     let buttons = `
         <button id="btn-event-general" class="btn btn-primary">Siguiente</button>
         <button id="btn-event-general-before" class="btn btn-cancel">Anterior</button>
-        <button id="btn-personal-cancel" class="btn btn-cancel">Cancelar</button>
+        <button id="btn-event-cancel" class="btn btn-cancel">Cancelar</button>
     `;
 
     $formSection.appendChild($sectionRowOptions);
@@ -474,7 +484,7 @@ function createPagos(data) {
     let buttons = `
         <button id="btn-event-pagos" class="btn btn-primary">Siguiente</button>
         <button id="btn-event-pagos-before" class="btn btn-cancel">Anterior</button>
-        <button id="btn-personal-cancel" class="btn btn-cancel">Cancelar</button>
+        <button id="btn-event-cancel" class="btn btn-cancel">Cancelar</button>
     `;
 
     $formSection.appendChild($sectionRowOptions);

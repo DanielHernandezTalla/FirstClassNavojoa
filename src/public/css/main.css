@@ -100,6 +100,7 @@ textarea {
 .btn-cancel {
     padding: 8px 16px;
     margin-left: 16px;
+    margin-bottom: 16px;
     border-radius: 20px;
     border: 1px solid #666;
     color: black;
@@ -592,39 +593,35 @@ textarea {
 }
 
 /*Calendar*/
-.calendar
-{
+.calendar {
     display: grid;
-    grid-template-columns:repeat(7,1fr);
+    grid-template-columns: repeat(7, 1fr);
     grid-template-rows: 2rem repeat(6, 7rem);
 }
 
-.calendar label
-{
-    text-align:center;
-    place-self:center;
+.calendar label {
+    text-align: center;
+    place-self: center;
     width: 100%;
     height: 100%;
 }
-.day
-{
+
+.day {
     outline: 1px solid;
     /* margin-top: 1px;
     margin-left: 1px; */
     border: 1px solid black;
     display: grid;
-    grid-template-columns:1fr;
+    grid-template-columns: 1fr;
     grid-template-rows: 1.5rem 1fr 1fr;
 }
 
-.emptyday
-{
+.emptyday {
     width: 5rem;
     height: 5rem;
 }
 
-.btn_evento
-{
+.btn_evento {
     font-size: 11px;
     border: 1px solid black;
     border-radius: 10px;
@@ -635,14 +632,13 @@ textarea {
     justify-self: center;
 }
 
-.calendar__head{
+.calendar__head {
     display: flex;
     max-height: 1.5rem;
     justify-content: flex-end;
 }
 
-.btn_add-event
-{
+.btn_add-event {
     outline: none;
     border: none;
     background: transparent;
@@ -653,19 +649,17 @@ textarea {
     margin-right: 1rem;
 }
 
-.img__lupa
-{
-    width:1.5rem;
-    height:1.5rem;
+.img__lupa {
+    width: 1.5rem;
+    height: 1.5rem;
     margin-left: 1rem;
 }
 
-.btn-arrow{
+.btn-arrow {
     cursor: pointer;
 }
 
-.calendar_control
-{
+.calendar_control {
     display: flex;
     max-height: 1.5rem;
     justify-content: flex-start;

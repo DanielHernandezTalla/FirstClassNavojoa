@@ -18,7 +18,7 @@ export async function App() {
 
     $root.innerHTML = ``;
 
-    // $root.appendChild(login());
+    $root.appendChild(login());
 
     let newFormat = {
         tipoEvento: "XV",
@@ -94,9 +94,9 @@ export async function App() {
     // $root.appendChild(nav());
     // const $sectionDocument = await sectionDocument('Basico');
 
-    $root.appendChild(nav());
-    const $sectionEventos = await sectionEventos();
-    $root.appendChild($sectionEventos);
+    // $root.appendChild(nav());
+    // const $sectionEventos = await sectionEventos();
+    // $root.appendChild($sectionEventos);
 
     // $root.appendChild($sectionDocument);
     // $root.appendChild(home());
