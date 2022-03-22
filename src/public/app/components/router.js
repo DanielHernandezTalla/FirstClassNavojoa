@@ -5,6 +5,7 @@ import sectionPersonal from './personal/personal.js';
 import sectionPuestos from './puestos/puestos.js';
 import sectionUsuarios from './usuarios/usuarios.js';
 import sectionDocumentOptions from './documentos/documentos.options.js';
+import sectionEventos from './eventos/calendar.js';
 
 
 export default function Router() {
@@ -24,6 +25,10 @@ export default function Router() {
         // -- Ruta eventos
         if (e.target.matches('#btn-home-evento') || e.target.matches('#btn-home-evento *')) {
             console.log("evento");
+            $root.innerHTML= ``;
+            $root.appendChild(nav());
+            let $sectionEventos = await sectionEventos();
+            $root.appendChild($sectionEventos);
         }
 
         // -- Ruta personal
