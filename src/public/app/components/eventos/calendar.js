@@ -1,10 +1,13 @@
 'use strict';
+// import { func } from './joi';
 import eventAdd from './eventos.forms.js';
+
+let FocusDate = new Date(Date.now());
 
 export default async function sectionEventos() {
     let eventos = await get();
+    
     const $main = document.createElement('main');
-
     const $divContainer = document.createElement('div');
     $divContainer.classList.add('container');
 
@@ -16,11 +19,12 @@ export default async function sectionEventos() {
     $btn_addEvento.classList.add('btn_add-event')
     $btn_addEvento.setAttribute('id', 'btn_add-event');
     const $input_mes = document.createElement('input');
+    $input_mes.id="search_month";
     $input_mes.type = 'month';
     $input_mes.classList.add('calendar__input');
 
     const $img_lupa = document.createElement('figure');
-    $img_lupa.innerHTML = `<img class='img__lupa' src='app/assets/Lupa.png'>`;
+    $img_lupa.innerHTML = `<img class='img__lupa' id="search" src='app/assets/Lupa.png'>`;
     $img_lupa.classList.add('figure__lupa')
 
     $calendar_head.appendChild($btn_addEvento);
@@ -31,22 +35,23 @@ export default async function sectionEventos() {
     $calendar_control.classList.add('calendar_control')
 
     const $leftarrow = document.createElement('figure');
-    $leftarrow.innerHTML = `<i class="bi bi-chevron-left"></i>`
+    $leftarrow.innerHTML = `<i class="bi bi-chevron-left" id="btn-back"></i>`;
     $leftarrow.classList.add('btn-arrow');
     $calendar_control.appendChild($leftarrow);
 
     const $labelMonth = document.createElement('label')
-    $labelMonth.innerHTML = `Marzo`
+    $labelMonth.id = 'lblMonth';
+    $labelMonth.innerHTML = `${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`;
     $calendar_control.appendChild($labelMonth);
 
     const $rightarrow = document.createElement('figure');
-    $rightarrow.innerHTML = `<i class="bi bi-chevron-right"></i>`
+    $rightarrow.innerHTML = `<i class="bi bi-chevron-right" id="btn-next"></i>`
     $rightarrow.classList.add('btn-arrow');
     $calendar_control.appendChild($rightarrow);
 
     $divContainer.appendChild($calendar_head);
     $divContainer.appendChild($calendar_control);
-    $divContainer.appendChild(CreateCalendar(eventos, new Date(Date.now())).cloneNode(true));
+    $divContainer.appendChild(CreateCalendar(eventos, FocusDate).cloneNode(true));
 
     $divContainer.innerHTML += `
         <button class="btn btn-cancel btn-cancel-home" type="submit">Cancelar</button>
@@ -58,6 +63,8 @@ export default async function sectionEventos() {
 
 function CreateCalendar(data, date) {
     const $sectionCalendar = document.createElement('section');
+    $sectionCalendar.id = 'calendar';
+
     $sectionCalendar.classList.add('calendar');
     const $domingo = document.createElement('label');
     $domingo.innerHTML = 'Domingo';
@@ -74,7 +81,6 @@ function CreateCalendar(data, date) {
     const $sabado = document.createElement('label');
     $sabado.innerHTML = 'Sabado';
 
-
     $sectionCalendar.appendChild($domingo.cloneNode(true));
     $sectionCalendar.appendChild($lunes.cloneNode(true));
     $sectionCalendar.appendChild($martes.cloneNode(true));
@@ -87,7 +93,7 @@ function CreateCalendar(data, date) {
     let daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     let dia1 = new Date(date.setDate(1));
     let dayAtWeek = dia1.getDay() <= 7 ? dia1.getDay() : 0;
-    console.log(dia1);
+    //console.log(dia1);
     let monthdays = 1;
     for (let i = 0; i < 42; i++) {
         const $divday = document.createElement('div');
@@ -140,6 +146,8 @@ async function get() {
     }
 }
 
+
+
 document.addEventListener('click', async e => {
     if (e.target.matches('#btn_add-event')) {
         // console.log('andosan')
@@ -148,4 +156,86 @@ document.addEventListener('click', async e => {
 
         $root.appendChild(await eventAdd());
     }
+    if(e.target.matches('#btn-next')){
+        let $sectionCalendar = document.getElementById("calendar");
+        FocusDate = UpdateDate(FocusDate.getDate(),(FocusDate.getMonth()+2),FocusDate.getFullYear());
+        //FocusDate = new Date(FocusDate.getFullYear()+"/"+(FocusDate.getMonth() + 1)+"/"+FocusDate.getDate());
+        console.log(FocusDate);
+        let eventos = await get();
+        $sectionCalendar.innerHTML = CreateCalendar(eventos, FocusDate).innerHTML;
+        let $date = document.getElementById("lblMonth");
+        $date.innerHTML=`${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
+    }
+    if(e.target.matches('#btn-back')){
+        let $sectionCalendar = document.getElementById("calendar");
+        FocusDate = UpdateDate(FocusDate.getDate(), FocusDate.getMonth(),FocusDate.getFullYear());
+        //FocusDate = new Date(FocusDate.getFullYear()+"/"+(FocusDate.getMonth()+1)+"/"+FocusDate.getDate());
+        let eventos = await get();
+        $sectionCalendar.innerHTML = CreateCalendar(eventos, FocusDate).innerHTML;
+        let $date = document.getElementById("lblMonth");
+        $date.innerHTML=`${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
+    }
+    if(e.target.matches('#search')){
+        let input_mes = document.getElementById("search_month")
+        let $sectionCalendar = document.getElementById("calendar");
+        if(input_mes.value!=''){
+            console.log(input_mes.value);
+            FocusDate = new Date(input_mes.value);
+            FocusDate.setDate(FocusDate.getDate()+1);
+        }
+        else{
+            FocusDate =new Date(Date.now());
+        }
+        let eventos = await get();
+        $sectionCalendar.innerHTML = CreateCalendar(eventos, FocusDate).innerHTML;
+        let $date = document.getElementById("lblMonth");
+        $date.innerHTML=`${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
+    }
 })
+
+function UpdateDate(dia, mes, año)
+{
+    if(mes==0)
+    {
+        mes=12;
+        año-=1;
+    }
+    else if(mes>12)
+    {
+        mes = 1;
+        año+=1;
+    }
+
+    return new Date(año+"/"+mes+"/"+dia)
+}
+
+function GetTxtMonth(mes)
+{
+    switch(mes)
+    {
+        case 1:
+            return "Enero";
+        case 2:
+            return "Febrero";
+        case 3:
+            return "Marzo";
+        case 4:
+            return "Abril";
+        case 5:
+            return "Mayo";
+        case 6:
+            return "Junio";
+        case 7:
+            return "Julio";
+        case 8:
+            return "Agosto";
+        case 9:
+            return "Septiembre";
+        case 10:
+            return "Octubre";
+        case 11:
+            return "Noviembre";
+        case 12:
+            return "Diciembre";
+    }
+}
