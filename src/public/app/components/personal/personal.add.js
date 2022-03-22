@@ -109,19 +109,25 @@ document.addEventListener('submit', async e => {
         e.preventDefault();
 
         let id = e.target.dataset.id;
-
         let $form = e.target;
-
         let persona;
 
-        if ($form.phone.value !== '')
+        if (document.getElementById('btn-personal-edit') && $form.phone.value === '') {
+            console.log('Editar')
+            persona = {
+                Nombre: $form.name.value,
+                Telefono: "0000000000"
+            }
+
+        } else if ($form.phone.value !== '')
             persona = {
                 Nombre: $form.name.value,
                 Telefono: $form.phone.value
             }
         else
             persona = {
-                Nombre: $form.name.value
+                Nombre: $form.name.value,
+                Telefono: "0000000000"
             }
 
         let res = null;

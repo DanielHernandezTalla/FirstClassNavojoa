@@ -196,6 +196,10 @@ export default async function sectionDocument(option) {
     if (data)
         loadData(data, $main);
 
+    setTimeout(() => {
+        calcTotal()
+    }, 100)
+
     return $main;
 }
 
@@ -466,27 +470,32 @@ function saveInCancel($form) {
 
 function loadData(data, $main) {
     data.puestos.forEach(item => {
-        for (const element of $main.querySelectorAll('select')) {
-            if (item.puesto === element.value) {
-                item.personas.forEach(async persona => {
-                    let node = element.parentNode.querySelector('div');
+        if (item.personas.length > 0)
+            for (const element of $main.querySelectorAll('select')) {
+                if (item.puesto === element.value) {
+                    item.personas.forEach(async persona => {
+                        let node = element.parentNode.querySelector('div');
 
-                    await addGroupRow(node, persona.Nombre, persona.Salario);
+                        await addGroupRow(node, persona.Nombre, persona.Salario);
 
-                    let arr = node.parentNode.querySelectorAll('spam');
-                    for (let i = 0; i < arr.length - 1; i++) {
-                        arr[i].querySelector('i').classList.replace('bi-plus-lg', "bi-dash-lg");
-                    }
-                })
+                        let arr = node.parentNode.querySelectorAll('spam');
+                        for (let i = 0; i < arr.length - 1; i++) {
+                            arr[i].querySelector('i').classList.replace('bi-plus-lg', "bi-dash-lg");
+                        }
+                    })
+                }
             }
-        }
     })
 
     setTimeout(() => {
         let divs = $main.querySelectorAll('.form__group-document');
 
-        for (let i = 0; i < divs.length - 3; i++)
+        for (let i = 0; i < divs.length - 3; i++) {
+
             divs[i].querySelector('div').outerHTML = null;
+            if (!divs[i].querySelector('div'))
+                divs[i].outerHTML = null
+        }
 
     }, 500);
 }
