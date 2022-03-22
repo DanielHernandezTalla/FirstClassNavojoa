@@ -591,6 +591,88 @@ textarea {
     /* padding-bottom: 64px; */
 }
 
+/*Calendar*/
+.calendar
+{
+    display: grid;
+    grid-template-columns:repeat(7,1fr);
+    grid-template-rows: 2rem repeat(6, 7rem);
+}
+
+.calendar label
+{
+    text-align:center;
+    place-self:center;
+    width: 100%;
+    height: 100%;
+}
+.day
+{
+    outline: 1px solid;
+    /* margin-top: 1px;
+    margin-left: 1px; */
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns:1fr;
+    grid-template-rows: 1.5rem 1fr 1fr;
+}
+
+.emptyday
+{
+    width: 5rem;
+    height: 5rem;
+}
+
+.btn_evento
+{
+    font-size: 11px;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 90%;
+    max-height: 90%;
+    text-align: left;
+    padding-left: 10px;
+    justify-self: center;
+}
+
+.calendar__head{
+    display: flex;
+    max-height: 1.5rem;
+    justify-content: flex-end;
+}
+
+.btn_add-event
+{
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: underline;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.img__lupa
+{
+    width:1.5rem;
+    height:1.5rem;
+    margin-left: 1rem;
+}
+
+.btn-arrow{
+    cursor: pointer;
+}
+
+.calendar_control
+{
+    display: flex;
+    max-height: 1.5rem;
+    justify-content: flex-start;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
 /* Clases generales que por especificidad deben de ir al final */
 .none {
     display: none;

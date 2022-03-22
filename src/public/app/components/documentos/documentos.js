@@ -173,7 +173,7 @@ export default async function sectionDocument(option) {
         </div>
         <div class="form__group-document flex-right">
             <label for="form-total">Total</label>
-            <input id="form-document-total" name="total" placeholder="$0.00" type="number">
+            <input id="form-document-total" name="total" placeholder="$0.00" type="number" value="${data!=null?data.total:""}">
         </div>
         <div class="form__group-document flex-right">
             <button class="btn btn-cancel btn-document-cancel">Cancelar</button>
