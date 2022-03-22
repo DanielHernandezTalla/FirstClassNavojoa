@@ -80,7 +80,9 @@ textarea {
     text-transform: uppercase;
 }
 
+
 .btn-primary {
+    height: 34px;
     padding: 8px 16px;
     margin-left: 16px;
     border-radius: 20px;
@@ -95,6 +97,7 @@ textarea {
     width: 100px;
     text-align: center;
     margin-left: calc(100% - 100px);
+    margin-bottom: 8px;
 }
 
 .btn-cancel {
@@ -164,7 +167,30 @@ textarea {
     background: #F3EDE9;
 }
 
-.table__row-4,
+.table__pagos {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 32px 0;
+}
+
+.table__pagos>p {
+    padding: 4px;
+    font-family: 'Raleway', cursive;
+}
+
+.table__pagos p:nth-child(2),
+.table__pagos p:nth-child(3),
+.table__pagos p:nth-child(4),
+.table__pagos p:nth-child(5) {
+    background: var(--main-color);
+    color: white;
+}
+
+.span-1-4 {
+    grid-column: 1/5;
+}
+
+/* .table__row-4,
 .table__row-4-first {
     display: grid;
     padding: 12px;
@@ -181,7 +207,7 @@ textarea {
 
 .table__row-4:last-child {
     margin-bottom: 16px;
-}
+} */
 
 .table__row:hover {
     background: #f8f6f4;
@@ -283,6 +309,10 @@ textarea {
 
 .form__group-grid {
     grid-template-columns: 100px 1fr;
+}
+
+.form__group-grid input:not([type="checkbox"]) {
+    width: 100%;
 }
 
 .form__group-grid-large {
@@ -689,4 +719,17 @@ textarea {
     border-radius: 5px;
     margin: 16px 0;
     color: #ccc;
+}
+
+.text-align-right {
+    text-align: right;
+    padding-right: 16px;
+}
+
+.input-total-pago {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #999;
+    font-family: 'Raleway', cursive;
+    font-size: 16px;
 }

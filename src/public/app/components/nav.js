@@ -8,7 +8,7 @@ export default function nav() {
             </div>
             <div class="nav__details">
                 <button id="button-nav" class="btn nav__btn">Daniel <i class="bi bi-gear-fill"></i></button>
-                <ul id="nav-list" class="nav__list opacity">
+                <ul id="nav-list" class="nav__list none">
                     <li id="btn-home-usuario">Usuarios</li>
                     <li>Ver Perfil</li>
                     <li id="btn-logout">Cerrar Sesion</li>
@@ -23,9 +23,9 @@ export default function nav() {
 document.addEventListener('click', e => {
     if (e.target.matches('#button-nav') || e.target.matches('#button-nav *')) {
         const $navList = document.getElementById('nav-list');
-        if ($navList.classList.contains('opacity'))
-            $navList.classList.remove('opacity');
+        if ($navList.classList.contains('none'))
+            $navList.classList.remove('none');
         else
-            $navList.classList.add('opacity');
+            $navList.classList.add('none');
     }
 });

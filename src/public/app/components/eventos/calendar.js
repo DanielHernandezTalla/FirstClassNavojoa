@@ -111,7 +111,7 @@ function CreateCalendar(data, date) {
                     $evento.dataset.Fecha = element.FechaEvento;
                     $evento.innerHTML = `${element.TipoEvento} <br> ${element.Ubicacion}`;
                     $divday.appendChild($evento.cloneNode(true));
-                    console.log(element)
+                    // console.log(element)
                     data = data.filter((item) => item !== element);
                 }
             });

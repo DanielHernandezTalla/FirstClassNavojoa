@@ -10,6 +10,7 @@ import puestosAdd from './components/puestos/puestos.add.js';
 import usuarioAdd from './components/usuarios/usuarios.add.js';
 import sectionDocument from './components/documentos/documentos.js';
 import documentPDF from './components/documentos/documentos.pdf.js';
+import eventAdd from './components/eventos/eventos.forms.js';
 import sectionEventos from './components/eventos/calendar.js';
 
 export async function App() {
@@ -18,7 +19,7 @@ export async function App() {
 
     $root.innerHTML = ``;
 
-    $root.appendChild(login());
+    // $root.appendChild(login());
 
     let newFormat = {
         tipoEvento: "XV",
@@ -94,8 +95,11 @@ export async function App() {
     // $root.appendChild(nav());
     // const $sectionDocument = await sectionDocument('Basico');
 
-    // $root.appendChild(nav());
-    // const $sectionEventos = await sectionEventos();
+    $root.appendChild(nav());
+    const $sectionEventos = await sectionEventos();
+    $root.appendChild($sectionEventos);
+
+    // const $sectionEventos = await eventAdd();
     // $root.appendChild($sectionEventos);
 
     // $root.appendChild($sectionDocument);
