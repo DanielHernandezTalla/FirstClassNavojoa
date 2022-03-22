@@ -1,6 +1,7 @@
 'use strict';
 // import { func } from './joi';
 import eventAdd from './eventos.forms.js';
+import eventDetails from './event.details.js';
 
 let FocusDate = new Date(Date.now());
 
@@ -111,6 +112,7 @@ function CreateCalendar(data, date) {
                 if (jdate == sdate) {
                     // console.log(jdate+" same "+sdate);
                     const $evento = document.createElement("button");
+                    $evento.id = 'evento';
                     $evento.classList.add('btn_evento');
                     $evento.classList.add('btn');
                     $evento.dataset.id = element.ID;
@@ -190,6 +192,12 @@ document.addEventListener('click', async e => {
         $sectionCalendar.innerHTML = CreateCalendar(eventos, FocusDate).innerHTML;
         let $date = document.getElementById("lblMonth");
         $date.innerHTML=`${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
+    }
+    if(e.target.matches('#evento')){
+        const $root = document.getElementById("root");
+        $root.innerHTML=``;
+
+        $root.appendChild(await eventDetails(1));
     }
 })
 
