@@ -698,6 +698,69 @@ textarea {
     margin-bottom: 1rem;
 }
 
+/*Detalles eventos*/
+.details_head
+{
+    display:flex;
+    justify-content:flex-end;
+}
+
+.details{
+    display: grid;
+    /* grid-area: details; */
+    grid-row: 2/3;
+    grid-template-columns: 1fr 1fr;
+    gap:1rem;
+}
+
+.details_section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr 1fr;
+    /* grid-template-areas: 
+    "typeEvent typeEvent"
+    "details details"
+    "croquis croquis"
+    "details details"; */
+}
+
+.details_section label{
+    font-weight: bold;
+}
+
+.typeEvent{
+    grid-area: 1/1/1/4;
+    text-align: left;
+    padding-top: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.croquis{
+    grid-area: 3/1/4/4;
+    display: grid;
+    grid-template-columns: 1fr 1fr 50%;
+    grid-template-rows: auto auto;
+    margin-top: 1rem;
+}
+
+.img_croquis
+{
+    margin: 1rem;
+    grid-row: 2/3;
+    grid-column: 1/4;
+    justify-self: center;
+    width:35rem;
+    height:20rem;
+    border: 1px solid black;
+}
+
+.casosEspeciales
+{
+    grid-row: 4/5;
+    grid-column: 1/4;
+}
+
 /* Clases generales que por especificidad deben de ir al final */
 .none {
     display: none;

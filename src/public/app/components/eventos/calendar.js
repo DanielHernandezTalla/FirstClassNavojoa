@@ -2,6 +2,7 @@
 // import { func } from './joi';
 import eventAdd from './eventos.forms.js';
 import eventDetails from './event.details.js';
+import nav from '../nav.js';
 
 let FocusDate = new Date(Date.now());
 
@@ -194,10 +195,12 @@ document.addEventListener('click', async e => {
         $date.innerHTML=`${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
     }
     if(e.target.matches('#evento')){
+        let id = e.target.dataset.id;
         const $root = document.getElementById("root");
         $root.innerHTML=``;
+        $root.appendChild(nav());
 
-        $root.appendChild(await eventDetails(1));
+        $root.appendChild(await eventDetails(id));
     }
 })
 
@@ -247,3 +250,5 @@ function GetTxtMonth(mes)
             return "Diciembre";
     }
 }
+
+export {GetTxtMonth};
