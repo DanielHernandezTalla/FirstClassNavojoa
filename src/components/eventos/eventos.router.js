@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
 
 });
 
-router.patch('/:id', validate(mySchema, 'edit'), (req, res) => {
+router.patch('/:id', (req, res) => {
     controller.update(req.params.id, req.body)
         .then(data => {
             response.success(req, res, data);

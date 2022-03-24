@@ -3,9 +3,10 @@
 import sectionPersonal from './personal/personal.js';
 import sectionPuestos from './puestos/puestos.js';
 import sectionUsuarios from './usuarios/usuarios.js';
+import sectionEventos from './eventos/calendar.js';
 import modalError from './modal.error.js';
 
-export default function modalConfirm(text = null) {
+export default function modalConfirm(text = null, id = null) {
 
     if (text === null)
         text = '¿Estas seguro de eliminar?';
@@ -18,9 +19,9 @@ export default function modalConfirm(text = null) {
     $section.classList.add('section-confirm');
 
     $section.innerHTML = `
-        <h3>Eliminar Personal</h3>
+        <h3>Eliminar</h3>
         <p>${text}</p>
-        <button class="btn btn-primary btn-confirm-ok" type="submit">Aceptar</button>
+        <button class="btn btn-primary btn-confirm-ok" data-id="${id}" type="submit">Aceptar</button>
         <button class="btn btn-cancel btn-confirm-cancel" type="submit">Cancelar</button>
         <div class="clearfix"></div>
     `;
@@ -43,8 +44,18 @@ document.addEventListener('click', async e => {
     // -- Eliminar el recurso
     if (e.target.matches('.btn-confirm-ok')) {
         const $modal = document.querySelector('.section-modal');
-        let id = $modal.dataset.id;
-        let table = $modal.dataset.table;
+
+        let id;
+        let table;
+
+        if ($modal) {
+            id = $modal.dataset.id;
+            table = $modal.dataset.table;
+        } else {
+            id = e.target.dataset.id;
+            table = 'eventos';
+        }
+
 
         // console.log("Table ---> ", table)
 
@@ -62,6 +73,9 @@ document.addEventListener('click', async e => {
 
             if (table === 'usuarios')
                 $section = await sectionUsuarios();
+
+            if (table === 'eventos')
+                $section = await sectionEventos();
             //let $section = await sectionPuestos();
 
             // -- Desapareciendo la tabla anterior

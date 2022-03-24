@@ -8,7 +8,7 @@ let FocusDate = new Date(Date.now());
 
 export default async function sectionEventos() {
     let eventos = await get();
-    
+
     const $main = document.createElement('main');
     const $divContainer = document.createElement('div');
     $divContainer.classList.add('container');
@@ -21,7 +21,7 @@ export default async function sectionEventos() {
     $btn_addEvento.classList.add('btn_add-event')
     $btn_addEvento.setAttribute('id', 'btn_add-event');
     const $input_mes = document.createElement('input');
-    $input_mes.id="search_month";
+    $input_mes.id = "search_month";
     $input_mes.type = 'month';
     $input_mes.classList.add('calendar__input');
 
@@ -42,6 +42,7 @@ export default async function sectionEventos() {
     $calendar_control.appendChild($leftarrow);
 
     const $labelMonth = document.createElement('label')
+    $labelMonth.classList.add('calendar-month');
     $labelMonth.id = 'lblMonth';
     $labelMonth.innerHTML = `${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`;
     $calendar_control.appendChild($labelMonth);
@@ -159,40 +160,39 @@ document.addEventListener('click', async e => {
 
         $root.appendChild(await eventAdd());
     }
-    if(e.target.matches('#btn-next')){
+    if (e.target.matches('#btn-next')) {
         let $sectionCalendar = document.getElementById("calendar");
-        FocusDate = UpdateDate(FocusDate.getDate(),(FocusDate.getMonth()+2),FocusDate.getFullYear());
+        FocusDate = UpdateDate(FocusDate.getDate(), (FocusDate.getMonth() + 2), FocusDate.getFullYear());
         //FocusDate = new Date(FocusDate.getFullYear()+"/"+(FocusDate.getMonth() + 1)+"/"+FocusDate.getDate());
         console.log(FocusDate);
         let eventos = await get();
         $sectionCalendar.innerHTML = CreateCalendar(eventos, FocusDate).innerHTML;
         let $date = document.getElementById("lblMonth");
-        $date.innerHTML=`${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
+        $date.innerHTML = `${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
     }
-    if(e.target.matches('#btn-back')){
+    if (e.target.matches('#btn-back')) {
         let $sectionCalendar = document.getElementById("calendar");
-        FocusDate = UpdateDate(FocusDate.getDate(), FocusDate.getMonth(),FocusDate.getFullYear());
+        FocusDate = UpdateDate(FocusDate.getDate(), FocusDate.getMonth(), FocusDate.getFullYear());
         //FocusDate = new Date(FocusDate.getFullYear()+"/"+(FocusDate.getMonth()+1)+"/"+FocusDate.getDate());
         let eventos = await get();
         $sectionCalendar.innerHTML = CreateCalendar(eventos, FocusDate).innerHTML;
         let $date = document.getElementById("lblMonth");
-        $date.innerHTML=`${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
+        $date.innerHTML = `${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
     }
-    if(e.target.matches('#search')){
+    if (e.target.matches('#search')) {
         let input_mes = document.getElementById("search_month")
         let $sectionCalendar = document.getElementById("calendar");
-        if(input_mes.value!=''){
+        if (input_mes.value != '') {
             console.log(input_mes.value);
             FocusDate = new Date(input_mes.value);
-            FocusDate.setDate(FocusDate.getDate()+1);
-        }
-        else{
-            FocusDate =new Date(Date.now());
+            FocusDate.setDate(FocusDate.getDate() + 1);
+        } else {
+            FocusDate = new Date(Date.now());
         }
         let eventos = await get();
         $sectionCalendar.innerHTML = CreateCalendar(eventos, FocusDate).innerHTML;
         let $date = document.getElementById("lblMonth");
-        $date.innerHTML=`${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
+        $date.innerHTML = `${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
     }
     if(e.target.matches('#evento')){
         let id = e.target.dataset.id;
@@ -204,26 +204,20 @@ document.addEventListener('click', async e => {
     }
 })
 
-function UpdateDate(dia, mes, año)
-{
-    if(mes==0)
-    {
-        mes=12;
-        año-=1;
-    }
-    else if(mes>12)
-    {
+function UpdateDate(dia, mes, año) {
+    if (mes == 0) {
+        mes = 12;
+        año -= 1;
+    } else if (mes > 12) {
         mes = 1;
-        año+=1;
+        año += 1;
     }
 
-    return new Date(año+"/"+mes+"/"+dia)
+    return new Date(año + "/" + mes + "/" + dia)
 }
 
-function GetTxtMonth(mes)
-{
-    switch(mes)
-    {
+function GetTxtMonth(mes) {
+    switch (mes) {
         case 1:
             return "Enero";
         case 2:
