@@ -636,8 +636,8 @@ function validateEvent() {
     // Validando Entrada de evento
     let Evento = document.querySelector('#form-event-input-evento');
     if (Evento)
-        if (Evento.value.trim().length < 3 || Evento.value.trim().length > 50) {
-            Evento.parentNode.querySelector('small').textContent = "El evento debe tener entre 3 y 50 caracteres.";
+        if (Evento.value.trim().length < 2 || Evento.value.trim().length > 50) {
+            Evento.parentNode.querySelector('small').textContent = "El evento debe tener entre 2 y 50 caracteres.";
             Evento.parentNode.querySelector('small').classList.remove('opacity');
             if (!error)
                 Evento.focus();

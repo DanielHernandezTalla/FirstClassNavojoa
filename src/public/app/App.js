@@ -16,6 +16,7 @@ import sectionEventos from './components/eventos/calendar.js';
 export async function App() {
 
     const $root = document.getElementById("root");
+    let idPerfil = 1;
 
     $root.innerHTML = ``;
 
@@ -95,7 +96,7 @@ export async function App() {
     // $root.appendChild(nav());
     // const $sectionDocument = await sectionDocument('Basico');
 
-    $root.appendChild(nav());
+    $root.appendChild(nav(idPerfil));
     const $sectionEventos = await sectionEventos();
     $root.appendChild($sectionEventos);
 
@@ -181,8 +182,14 @@ document.addEventListener('click', async e => {
         $root.appendChild(modalConfirm());
     }
 
-    // console.log(e.target)
+    if (e.target.matches('#btn-home-perfil')) {
+        let id = e.target.dataset.idperfil;
+        console.log(id);
+        $root.innerHTML = ``;
+        $root.appendChild(await usuarioAdd(id, 'usuarios', "edit"));
+    }
 
+    // console.log(e.target)
     if (e.target.matches('.btn-cancel-home') || e.target.matches('.btn-document-cancel') || e.target.matches('.btn-document-cancel *')) {
         $root.innerHTML = ``;
         $root.appendChild(nav());
