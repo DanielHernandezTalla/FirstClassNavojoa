@@ -77,8 +77,6 @@ export default async function sectionDetailsEvent(id){
     <p class="eventdata">${data.TipoMesa}</p>
     <label class="lbldetail" >Mantel</label>
     <p class="eventdata">${data.Mantel}</p>
-    <label class="lbldetail" >Servilleta</label>
-    <p class="eventdata">${data.Servilleta}</p>
     `
     const $details2 = document.createElement('div');
     $details2.classList.add('details');
@@ -100,6 +98,8 @@ export default async function sectionDetailsEvent(id){
     <p class="eventdata">${data.TipoSilla}</p>
     <label class="lbldetail" >Cristaleria</label>
     <p class="eventdata">${data.Cristaleria}</p>
+    <label class="lbldetail" >Servilleta</label>
+    <p class="eventdata">${data.Servilleta}</p>
     `
     const $croquis = document.createElement('div');
     $croquis.classList.add('croquis');
@@ -171,6 +171,7 @@ export default async function sectionDetailsEvent(id){
     $divContainer.appendChild($sectionTable);
 
     $divContainer.innerHTML += `
+    <button class="btn btn-primary" type="submit">Editar</button>
     <button class="btn btn-cancel btn-cancel-home" type="submit">Cancelar</button>
 `;
     $main.appendChild($divContainer);

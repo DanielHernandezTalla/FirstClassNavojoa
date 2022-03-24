@@ -710,7 +710,7 @@ textarea {
     display: grid;
     /* grid-area: details; */
     grid-row: 2/3;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto auto;
     gap:1rem;
 }
 
