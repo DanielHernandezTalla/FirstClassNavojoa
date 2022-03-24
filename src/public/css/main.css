@@ -170,7 +170,8 @@ textarea {
 .table__pagos {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    padding: 32px 0;
+    padding: 0;
+    padding-bottom: 32px;
 }
 
 .table__pagos>p {
@@ -178,10 +179,10 @@ textarea {
     font-family: 'Raleway', cursive;
 }
 
+.table__pagos p:nth-child(1),
 .table__pagos p:nth-child(2),
 .table__pagos p:nth-child(3),
-.table__pagos p:nth-child(4),
-.table__pagos p:nth-child(5) {
+.table__pagos p:nth-child(4) {
     background: var(--main-color);
     color: white;
 }
@@ -716,7 +717,7 @@ textarea {
 .details_section{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr auto;
     /* grid-template-areas: 
     "typeEvent typeEvent"
     "details details"
@@ -759,6 +760,7 @@ textarea {
 {
     grid-row: 4/5;
     grid-column: 1/4;
+    margin-bottom: 2rem;
 }
 
 /* Clases generales que por especificidad deben de ir al final */

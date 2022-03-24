@@ -8,6 +8,8 @@ export default async function sectionDetailsEvent(id){
     let data = await getById(id);
     data = data[0];
     console.log(data);
+    let pagos= await getPagosById(id);
+    console.log(pagos);
 
     const $main = document.createElement('main');
     const $divContainer = document.createElement('div');
@@ -45,20 +47,15 @@ export default async function sectionDetailsEvent(id){
     $details1.classList.add('details');
 
     /*Dando formato a los campos*/
-    console.group("Formatos");
     let fechaEvento = new Date(data.FechaEvento);
-    console.log(fechaEvento);
     fechaEvento = fechaEvento.getDate()+" de "+await GetTxtMonth(fechaEvento.getMonth()+1)+" de "+fechaEvento.getFullYear();
-    console.log(fechaEvento);
+   
     let sesion = new Date(data.Sesion);
     sesion = sesion.getDate()+" de "+await GetTxtMonth(sesion.getMonth()+1)
     +" de "+sesion.getFullYear()+" a las "+sesion.getHours()+":"+sesion.getMinutes();
-    console.log(sesion);
+    
     let hora = data.HoraInicio.substring(0,5);
-    console.log(hora);
     let horacena = data.HoraCena.substring(0,5);
-    console.log(horacena);
-    console.groupEnd();
     /*Fin de los formatos*/
 
     $details1.innerHTML =`
@@ -117,12 +114,62 @@ export default async function sectionDetailsEvent(id){
     <label class="lbldetail" >Casos especiales </label>
     <p class="eventdata">${data.CasoEspecial}</p>
     `
+    const $sectionTable = document.createElement('div');
+    $sectionTable.classList.add('table__pagos');
+
+    $sectionTable.innerHTML=`
+        <p>No Pago</p>
+        <p>Metodo de pago</p>
+        <p>Fecha</p> 
+        <p class="text-align-right">Cantidad</p>
+    `;
+
+    if(pagos){
+        
+        let sumaAbonos=0;
+        pagos.forEach(item=>{
+            
+            let fechaPago = new Date(item.FechaPago);
+            fechaPago = fechaPago.getDate()+"/"+ GetTxtMonth(fechaPago.getMonth()+1)+"/"+fechaPago.getFullYear();
+   
+            $sectionTable.innerHTML+=`
+                <p>${item.NoAbono}</p>
+                <p>${item.MetodoPago}</p>
+                <p>${fechaPago}</p>
+                <p class="text-align-right abono">$${item.Monto}</p>
+            `
+            sumaAbonos+=parseInt(item.Monto);
+        })
+        let adeudototal=parseInt(data.CostoTotal)-sumaAbonos;
+        $sectionTable.innerHTML += `
+        <p></p>
+        <p></p>
+        <p class="text-align-right">Abono total</p>
+        <p class="text-align-right abono-total">$${sumaAbonos}</p>
+
+        <p></p>
+        <p></p>
+        <p class="text-align-right">Total Evento</p>
+        <p class="text-align-right">$${data.CostoTotal}</p>
+
+        <p></p>
+        <p></p>
+        <p class="text-align-right">Adeudo restante</p>
+        <p class="text-align-right adeudo-total">$${adeudototal}</p>
+
+`;
+
+    }
+    
+
 
     $detailSection.appendChild($details1);
     $detailSection.appendChild($details2);
     $detailSection.appendChild($croquis);
     $detailSection.appendChild($casosEspeciales);
     $divContainer.appendChild($detailSection);
+    $divContainer.appendChild($sectionTable);
+
     $divContainer.innerHTML += `
     <button class="btn btn-cancel btn-cancel-home" type="submit">Cancelar</button>
 `;
@@ -147,3 +194,20 @@ async function getById(id)
         return null;
     }
 } 
+
+async function getPagosById(id)
+{
+    try{
+        let res = await fetch('http://localhost:3000/pagos/'+ id+'/');
+
+        if(!res.ok)
+            throw (res);
+        let data = await res.json();
+
+        return data.body;
+    }catch (e) {
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}

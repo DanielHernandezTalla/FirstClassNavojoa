@@ -502,11 +502,13 @@ function createPagos(data) {
 
     // Agregamos tabla de pagos
     const $sectionTable = document.createElement('div');
+
+    
     $sectionTable.classList.add('table__pagos');
 
-    $sectionTable.innerHTML = `
-        <button class="btn btn-right span-1-4"><b id="btn-add-pago">Agregar Pago</b></button>
-    `;
+    // $sectionTable.innerHTML = `
+    //     <button class="btn btn-right span-1-4"><b id="btn-add-pago">Agregar Pago</b></button>
+    // `;
 
     $sectionTable.innerHTML += `
 
@@ -553,6 +555,9 @@ function createPagos(data) {
     `;
 
     $formSection.appendChild($sectionRowOptions);
+    $formSection.innerHTML +=`
+    <button class="btn btn-right span-1-4"><b id="btn-add-pago">Agregar Pago</b></button>
+    `;
     $formSection.appendChild($sectionTable);
     $formSection.innerHTML += buttons;
 
