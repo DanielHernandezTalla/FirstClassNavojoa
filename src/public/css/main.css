@@ -93,6 +93,18 @@ textarea {
     float: right;
 }
 
+.btn-danger {
+    height: 34px;
+    padding: 8px 16px;
+    margin-left: 16px;
+    border-radius: 20px;
+    border: 1px solid rgb(192, 62, 62);
+    background: rgb(192, 62, 62);
+    color: white;
+    text-transform: uppercase;
+    float: right;
+}
+
 .btn-right {
     width: 100px;
     text-align: center;
@@ -383,7 +395,7 @@ textarea {
 .container-section-confirm {
     height: 100vh;
     width: 100vw;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0%;
     display: flex;
@@ -625,6 +637,7 @@ textarea {
 
 /*Calendar*/
 .calendar {
+    margin-bottom: 16px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: 2rem repeat(6, 7rem);
@@ -711,36 +724,38 @@ textarea {
 }
 
 /*Detalles eventos*/
-.details_head
-{
-    display:flex;
-    justify-content:flex-end;
+.details_head {
+    display: flex;
+    justify-content: flex-end;
+    color: #999;
 }
 
-.details{
+.details {
     display: grid;
     /* grid-area: details; */
     grid-row: 2/3;
     grid-template-columns: 1fr 1fr;
-    gap:1rem;
+    gap: 1rem;
 }
 
-.details_section{
+.details_section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr 1fr auto;
-    /* grid-template-areas: 
+    font-family: "Raleway"cursive;
+    /* grid-template-areas:
     "typeEvent typeEvent"
     "details details"
     "croquis croquis"
     "details details"; */
 }
 
-.details_section label{
+.details_section label {
+    color: #666666;
     font-weight: bold;
 }
 
-.typeEvent{
+.typeEvent {
     grid-area: 1/1/1/4;
     text-align: left;
     padding-top: 1rem;
@@ -748,7 +763,7 @@ textarea {
     font-size: 1.8rem;
 }
 
-.croquis{
+.croquis {
     grid-area: 3/1/4/4;
     display: grid;
     grid-template-columns: 1fr 1fr 50%;
@@ -756,19 +771,17 @@ textarea {
     margin-top: 1rem;
 }
 
-.img_croquis
-{
+.img_croquis {
     margin: 1rem;
     grid-row: 2/3;
     grid-column: 1/4;
     justify-self: center;
-    width:35rem;
-    height:20rem;
+    width: 35rem;
+    height: 20rem;
     border: 1px solid black;
 }
 
-.casosEspeciales
-{
+.casosEspeciales {
     grid-row: 4/5;
     grid-column: 1/4;
     margin-bottom: 2rem;

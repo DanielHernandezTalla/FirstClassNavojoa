@@ -1,22 +1,28 @@
 'use strict';
+import nav from '../nav.js';
+import sectionEventos from './calendar.js';
 import eventAdd from './eventos.forms.js';
 import modalError from '../modal.error.js';
-import {GetTxtMonth} from './calendar.js';
+import modalConfirm from '../modal.confirm.js'
+import {
+    GetTxtMonth
+} from './calendar.js';
 
-export default async function sectionDetailsEvent(id){
+
+export default async function sectionDetailsEvent(id) {
 
     let data = await getById(id);
     data = data[0];
-    console.log(data);
-    let pagos= await getPagosById(id);
-    console.log(pagos);
+    // console.log(data);
+    let pagos = await getPagosById(id);
+    // console.log(pagos);
 
     const $main = document.createElement('main');
     const $divContainer = document.createElement('div');
     $divContainer.classList.add('container');
 
     const $h2 = document.createElement('h2');
-    $h2.innerHTML='DETALLES EVENTO';
+    $h2.innerHTML = 'DETALLES EVENTO';
     $h2.classList.add('h2');
     $divContainer.appendChild($h2);
 
@@ -48,17 +54,17 @@ export default async function sectionDetailsEvent(id){
 
     /*Dando formato a los campos*/
     let fechaEvento = new Date(data.FechaEvento);
-    fechaEvento = fechaEvento.getDate()+" de "+await GetTxtMonth(fechaEvento.getMonth()+1)+" de "+fechaEvento.getFullYear();
-   
+    fechaEvento = fechaEvento.getDate() + " de " + await GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
+
     let sesion = new Date(data.Sesion);
-    sesion = sesion.getDate()+" de "+await GetTxtMonth(sesion.getMonth()+1)
-    +" de "+sesion.getFullYear()+" a las "+sesion.getHours()+":"+sesion.getMinutes();
-    
-    let hora = data.HoraInicio.substring(0,5);
-    let horacena = data.HoraCena.substring(0,5);
+    sesion = sesion.getDate() + " de " + await GetTxtMonth(sesion.getMonth() + 1) +
+        " de " + sesion.getFullYear() + " a las " + sesion.getHours() + ":" + sesion.getMinutes();
+
+    let hora = data.HoraInicio.substring(0, 5);
+    let horacena = data.HoraCena.substring(0, 5);
     /*Fin de los formatos*/
 
-    $details1.innerHTML =`
+    $details1.innerHTML = `
     <label class="lbldetail" >Fecha</label>
     <p class="eventdata">${fechaEvento}</p>
     <label class="lbldetail" >Ubicacion</label>
@@ -83,7 +89,7 @@ export default async function sectionDetailsEvent(id){
     const $details2 = document.createElement('div');
     $details2.classList.add('details');
 
-    $details2.innerHTML =`
+    $details2.innerHTML = `
     <label class="lbldetail" >Sesion</label>
     <p class="eventdata">${sesion}</p>
     <label class="lbldetail" >Evento</label>
@@ -103,44 +109,49 @@ export default async function sectionDetailsEvent(id){
     `
     const $croquis = document.createElement('div');
     $croquis.classList.add('croquis');
-    $croquis.innerHTML=`
+    $croquis.innerHTML = `
     <label class="lbldetail" >Croquis </label>
     <p class="eventdata">21-05-2022</p>
     <img class="img_croquis">
     `
     const $casosEspeciales = document.createElement('div');
     $casosEspeciales.classList.add('casosEspeciales');
-    $casosEspeciales.innerHTML=`
+    $casosEspeciales.innerHTML = `
     <label class="lbldetail" >Casos especiales </label>
     <p class="eventdata">${data.CasoEspecial}</p>
     `
+
+    const $PagosH3 = document.createElement('h3');
+    $PagosH3.innerHTML = `Pagos`;
+    $PagosH3.classList.add('typeEvent');
+
     const $sectionTable = document.createElement('div');
     $sectionTable.classList.add('table__pagos');
 
-    $sectionTable.innerHTML=`
+    $sectionTable.innerHTML = `
         <p>No Pago</p>
         <p>Metodo de pago</p>
-        <p>Fecha</p> 
+        <p>Fecha</p>
         <p class="text-align-right">Cantidad</p>
     `;
 
-    if(pagos){
-        
-        let sumaAbonos=0;
-        pagos.forEach(item=>{
-            
+    if (pagos) {
+
+        let sumaAbonos = 0;
+        pagos.forEach(item => {
+
             let fechaPago = new Date(item.FechaPago);
-            fechaPago = fechaPago.getDate()+"/"+ GetTxtMonth(fechaPago.getMonth()+1)+"/"+fechaPago.getFullYear();
-   
-            $sectionTable.innerHTML+=`
+            fechaPago = fechaPago.getDate() + "/" + GetTxtMonth(fechaPago.getMonth() + 1) + "/" + fechaPago.getFullYear();
+
+            $sectionTable.innerHTML += `
                 <p>${item.NoAbono}</p>
                 <p>${item.MetodoPago}</p>
                 <p>${fechaPago}</p>
                 <p class="text-align-right abono">$${item.Monto}</p>
             `
-            sumaAbonos+=parseInt(item.Monto);
+            sumaAbonos += parseInt(item.Monto);
         })
-        let adeudototal=parseInt(data.CostoTotal)-sumaAbonos;
+        let adeudototal = parseInt(data.CostoTotal) - sumaAbonos;
         $sectionTable.innerHTML += `
         <p></p>
         <p></p>
@@ -160,7 +171,7 @@ export default async function sectionDetailsEvent(id){
 `;
 
     }
-    
+
 
 
     $detailSection.appendChild($details1);
@@ -168,44 +179,106 @@ export default async function sectionDetailsEvent(id){
     $detailSection.appendChild($croquis);
     $detailSection.appendChild($casosEspeciales);
     $divContainer.appendChild($detailSection);
+    $divContainer.appendChild($PagosH3);
     $divContainer.appendChild($sectionTable);
 
+
     $divContainer.innerHTML += `
-    <button class="btn btn-cancel btn-cancel-home" type="submit">Cancelar</button>
+    <button id="btn-event-editar" data-id=${id} class="btn btn-primary">Editar</button>
+    <button id="btn-event-remover" data-id=${id} class="btn btn-danger">Eliminar</button>
+    <button class="btn btn-cancel btn-cancel-event" type="submit">Cancelar</button>
 `;
     $main.appendChild($divContainer);
     return $main;
 }
 
-async function getById(id)
-{
-    try{
-        let res = await fetch('http://localhost:3000/eventos/'+ id+'/');
+async function getById(id) {
+    try {
+        let res = await fetch('http://localhost:3000/eventos/' + id + '/');
 
-        if(!res.ok)
+        if (!res.ok)
             throw (res);
         let data = await res.json();
 
         return data.body;
 
-    }catch(e){
+    } catch (e) {
         const $root = document.getElementById("root");
         $root.appendChild(await modalError(e));
         return null;
     }
-} 
+}
 
-async function getPagosById(id)
-{
-    try{
-        let res = await fetch('http://localhost:3000/pagos/'+ id+'/');
+async function getPagosById(id) {
+    try {
+        let res = await fetch('http://localhost:3000/pagos/' + id + '/');
 
-        if(!res.ok)
+        if (!res.ok)
             throw (res);
         let data = await res.json();
 
         return data.body;
-    }catch (e) {
+    } catch (e) {
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}
+
+document.addEventListener('click', async e => {
+    if (e.target.matches('.btn-cancel-event')) {
+
+        const $root = document.getElementById("root");
+        $root.innerHTML = ``;
+        $root.appendChild(nav());
+        let $sectionEventos = await sectionEventos();
+        $root.appendChild($sectionEventos)
+    }
+    if (e.target.matches('#btn-event-editar')) {
+        // console.log(e.target.dataset.id);
+        const $root = document.getElementById("root");
+        $root.innerHTML = ``;
+
+        $root.appendChild(await eventAdd(e.target.dataset.id, null, 'edit'));
+
+    }
+    if (e.target.matches('#btn-event-remover')) {
+
+        document.getElementById('root').appendChild(modalConfirm('¿Estas seguro de eliminar?', e.target.dataset.id));
+
+        // let res = await fetchRemoveEvent(e.target.dataset.id);
+
+        // setTimeout(async () => {
+
+        //     const $root = document.getElementById("root");
+
+        //     $root.innerHTML = ``;
+        //     $root.appendChild(nav());
+
+        //     let $sectionEventos = await sectionEventos();
+        //     $root.appendChild($sectionEventos)
+
+        // }, 100)
+
+    }
+})
+
+async function fetchRemoveEvent(id) {
+    try {
+        let res = await fetch('http://localhost:3000/eventos/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+
+        if (!res.ok)
+            throw (res);
+
+        return true;
+
+    } catch (e) {
+        // console.log(e)
         const $root = document.getElementById("root");
         $root.appendChild(await modalError(e));
         return null;

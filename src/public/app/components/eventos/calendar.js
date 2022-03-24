@@ -244,8 +244,5 @@ function GetTxtMonth(mes) {
             return "Diciembre";
     }
 }
-<<<<<<< HEAD
-=======
 
 export {GetTxtMonth};
->>>>>>> ac8298d449a580c76bc7f178433de2680a47f4df

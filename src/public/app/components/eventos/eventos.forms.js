@@ -4,11 +4,18 @@ import nav from '../nav.js';
 import modalError from '../modal.error.js';
 import sectionEventos from './calendar.js';
 
+let $sectionEvent;
+let $sectionGeneral;
+let $sectionPagos;
+let $sectionAddPagos;
+
 export default async function eventAdd(id = -1, table = null, action = null) {
+
+    // console.log(id);
 
     let selectClass = "";
     let nameH2 = "Agregar";
-    let data = null;
+    let data = "";
 
     if (!action)
         selectClass = "btn-event-add"
@@ -54,9 +61,9 @@ export default async function eventAdd(id = -1, table = null, action = null) {
     $form.classList.add('form');
     $form.setAttribute('id', 'form-event-add');
 
-    $form.appendChild(createEvent());
-    // $form.appendChild(createGeneral());
-    // $form.appendChild(createPagos());
+    $form.appendChild(createEvent(data));
+    $sectionGeneral = createGeneral(data);
+    $sectionPagos = await createPagos(data);
 
     // $form.appendChild(agregarPagos());
 
@@ -71,11 +78,6 @@ export default async function eventAdd(id = -1, table = null, action = null) {
     $main.appendChild($divContainer)
     return $main;
 }
-
-let $sectionEvent;
-let $sectionGeneral;
-let $sectionPagos;
-let $sectionAddPagos;
 
 document.addEventListener('click', async e => {
 
@@ -114,9 +116,10 @@ document.addEventListener('click', async e => {
             $sectionGeneral = document.querySelector('.form-section-event').cloneNode(true);
             document.querySelector('.form-section-event').outerHTML = '';
 
-            if (!$sectionPagos)
+            if (!$sectionPagos) {
                 document.querySelector('.form').appendChild(createPagos());
-            else
+                calcularTotalAbono();
+            } else
                 document.querySelector('.form').appendChild($sectionPagos);
         }
     }
@@ -196,10 +199,12 @@ document.addEventListener('click', async e => {
                 document.querySelector('.form-section-event').outerHTML = '';
 
                 if ($sectionGeneral)
-                    if (!$sectionPagos)
+                    if (!$sectionPagos) {
                         document.querySelector('.form').appendChild(createPagos());
-                    else
-                        document.querySelector('.form').appendChild($sectionPagos);
+                        calcularTotalAbono();
+                    }
+                else
+                    document.querySelector('.form').appendChild($sectionPagos);
                 else document.querySelector('.form').appendChild(createGeneral());
             }
         }
@@ -208,16 +213,17 @@ document.addEventListener('click', async e => {
                 $sectionGeneral = document.querySelector('.form-section-event').cloneNode(true);
                 document.querySelector('.form-section-event').outerHTML = '';
 
-                if (!$sectionPagos)
+                if (!$sectionPagos) {
                     document.querySelector('.form').appendChild(createPagos());
-                else
+                    calcularTotalAbono();
+                } else
                     document.querySelector('.form').appendChild($sectionPagos);
             }
         }
     }
 
     // Botones para guardar el evento
-    if (e.target.matches('#btn-event-pagos')) {
+    if (e.target.matches('#btn-event-pagos') || e.target.matches('#btn-event-editar-event')) {
 
         console.log("Pagos")
 
@@ -260,17 +266,30 @@ document.addEventListener('click', async e => {
             AbonoTotal: parseInt(adeudoTotal.substring(1, adeudoTotal.length)),
         }
 
-        if (fetchAddEvent($event)) {
-            $sectionEvent = "";
-            $sectionGeneral = "";
-            $sectionPagos = "";
-            $sectionAddPagos = "";
-            cancel();
-        } else
-            console.log("Error al agregar")
+        if (e.target.matches('#btn-event-pagos')) {
+            if (fetchAddEvent($event)) {
+                $sectionEvent = "";
+                $sectionGeneral = "";
+                $sectionPagos = "";
+                $sectionAddPagos = "";
+                cancel();
+            } else
+                console.log("Error al agregar")
+        }
+
+        if (e.target.matches('#btn-event-editar-event')) {
+            if (fetchUpdateEvent($event)) {
+                $sectionEvent = "";
+                $sectionGeneral = "";
+                $sectionPagos = "";
+                $sectionAddPagos = "";
+                cancel();
+            } else
+                console.log("Error al agregar")
+        }
 
         // Aqui Enviamos la informacion
-        console.log($event)
+        // console.log($event)
     }
 
     // Botones de para agregar pago
@@ -281,6 +300,7 @@ document.addEventListener('click', async e => {
     if (e.target.matches('#btn-pagos-cancel')) {
         document.querySelector('.form-section-event').outerHTML = '';
         document.querySelector('.form').appendChild(createPagos());
+        calcularTotalAbono();
     }
     if (e.target.matches('#btn-pagos-create')) {
         if (!validateEvent()) {
@@ -306,7 +326,40 @@ document.addEventListener('change', e => {
     }
 })
 
-function createEvent() {
+function createEvent(data = null) {
+
+    // console.log(data[0])
+    // console.log(data[0].FechaEvento)
+    let ID = "";
+    let salon = false;
+    let jardin = false;
+    let fechaEvento = "";
+    let sesion = "";
+    let ceremonia = "";
+
+    if (data) {
+
+        ID = data[0].ID;
+
+        if (data[0].Ubicacion.includes("Salon")) salon = true;
+
+        if (data[0].Ubicacion.includes("Jardin")) jardin = true;
+
+        if (data[0].FechaEvento)
+            fechaEvento = `${data[0].FechaEvento.substring(0, 4)}-${data[0].FechaEvento.substring(5, 7)}-${data[0].FechaEvento.substring(8, 10)}`;
+
+        if (data[0].Sesion)
+            if (data[0].Sesion.substring(0, 4) !== "1999")
+                sesion = `${data[0].Sesion.substring(0, 4)}-${data[0].Sesion.substring(5, 7)}-${data[0].Sesion.substring(8, 10)}T${data[0].Sesion.substring(11, 13)}:${data[0].Sesion.substring(14, 16)}`;
+
+        if (data[0].CeremoniaCivil)
+            ceremonia = `${data[0].CeremoniaCivil.substring(0, 2)}:${data[0].CeremoniaCivil.substring(3, 5)}:${data[0].CeremoniaCivil.substring(6, 8)}`;
+
+        // console.log(fechaEvento)
+        // console.log(sesion)
+        // console.log(data[0].CeremoniaCivil)
+        // console.log(ceremonia)
+    }
 
     const $formSection = document.createElement('div');
     $formSection.classList.add('form-section-event');
@@ -320,23 +373,23 @@ function createEvent() {
     $formContentGroup.innerHTML = `
         <div class="form__group-grid">
             <label for="form-event-input-fecha">Fecha</label>
-            <input id="form-event-input-fecha" type="date" name="fecha" value="" title="Ingresa la fecha del evento." data-required>
+            <input id="form-event-input-fecha" type="date" name="fecha" value="${fechaEvento}" title="Ingresa la fecha del evento." data-required>
             <small class="form-error opacity">Error: Ingresa la fecha del evento.</small>
         </div>
         <div class="form__group-grid">
             <label for="form-event-input-sesion">Sesion</label>
-            <input id="form-event-input-sesion" type="datetime-local" name="sesion" title="Ingresa la fecha y hora de sesion.">
+            <input id="form-event-input-sesion" type="datetime-local" name="sesion" value="${sesion}" title="Ingresa la fecha y hora de sesion.">
             <small class="form-error opacity">Error: Ingresa la fecha y hora de sesion.</small>
         </div>
         <div class="form__group-grid">
             <label>Lugar</label>
             <div class="flex">
                 <div>
-                    <input id="eventPlaceSalon" type="checkbox" name="eventPlaceSalon">
+                    <input id="eventPlaceSalon" type="checkbox" name="eventPlaceSalon" ${salon? "checked": ""}>
                     <label for="eventPlaceSalon">Salon</label>
                 </div>
                 <div>
-                    <input id="eventPlaceJardin" type="checkbox" name="eventPlaceJardin">
+                    <input id="eventPlaceJardin" type="checkbox" name="eventPlaceJardin" ${jardin? "checked": ""}>
                     <label for="eventPlaceJardin">Jardin</label>
                 </div>
             </div>
@@ -344,22 +397,22 @@ function createEvent() {
         </div>
         <div class="form__group-grid">
             <label for="form-event-input-evento">Evento</label>
-            <input id="form-event-input-evento" type="String" name="evento" value="" title="Ingresa el tipo de evento." data-required>
+            <input id="form-event-input-evento" type="text" name="evento" value="${data?data[0].TipoEvento:""}" title="Ingresa el tipo de evento." data-required>
             <small class="form-error opacity">Error: Ingresa el tipo de evento.</small>
         </div>
         <div class="form__group-grid form__group-grid-2">
             <label for="form-event-input-cliente">Cliente</label>
-            <input id="form-event-input-cliente" type="String" name="cliente" value="" title="Ingresa el nombre del cliente." data-required>
+            <input id="form-event-input-cliente" type="text" name="cliente" value="${data?data[0].Cliente:""}" title="Ingresa el nombre del cliente." data-required>
             <small class="form-error opacity">Error: Ingresa el nombre del cliente.</small>
         </div>
         <div class="form__group-grid  form__group-grid-2">
             <label for="form-event-input-telefono">Telefono</label>
-            <input id="form-event-input-telefono" type="number" name="phone">
+            <input id="form-event-input-telefono" type="number" name="phone" value="${data?data[0].Telefono:""}">
             <small class="form-error opacity">Error: Agrega un telefono correcto</small>
         </div>
         <div class="form__group-grid form__group-grid-2 form__group-grid-large">
             <label for="form-event-input-ceremonia">Ceremonia Civil</label>
-            <input id="form-event-input-ceremonia" type="String" name="ceremonia" value="" title="¿Habra ceremonia?">
+            <input id="form-event-input-ceremonia" type="time" name="ceremonia" value="${ceremonia}" title="¿Habra ceremonia?">
             <small class="form-error opacity">Error: Agrega la hora y detalles de la ceremonia</small>
         </div>
     `;
@@ -376,7 +429,19 @@ function createEvent() {
     return $formSection;
 }
 
-function createGeneral() {
+function createGeneral(data = null) {
+
+    console.log(data[0])
+
+    let horaInicio = "";
+    let horaCena = "";
+
+    if (data) {
+        if (data[0].HoraInicio)
+            horaInicio = `${data[0].HoraInicio.substring(0, 2)}:${data[0].HoraInicio.substring(3, 5)}:${data[0].HoraInicio.substring(6, 8)}`;
+        if (data[0].HoraCena)
+            horaCena = `${data[0].HoraCena.substring(0, 2)}:${data[0].HoraCena.substring(3, 5)}:${data[0].HoraCena.substring(6, 8)}`;
+    }
 
     const $formSection = document.createElement('div');
     $formSection.classList.add('form-section-event');
@@ -390,37 +455,37 @@ function createGeneral() {
     $formContentGroup.innerHTML = `
         <div class="form__group-grid form__group-grid-middle">
             <label for="form-event-input-noPersonas">No. Personas</label>
-            <input id="form-event-input-noPersonas" type="number" name="noPersonas" value="" title="Ingresa el numero de personas." data-required>
+            <input id="form-event-input-noPersonas" type="number" name="noPersonas" value="${data?data[0].NoPersonas:""}" title="Ingresa el numero de personas." data-required>
             <small class="form-error opacity">Error: Ingresa el numero de personas.</small>
         </div>
 
         <div class="form__group-grid form__group-grid-middle">
             <label for="form-event-input-noMeseros">No. Meseros</label>
-            <input id="form-event-input-noMeseros" type="number" name="noMeseros" value="" title="Ingresa el numero de meseros." data-required>
+            <input id="form-event-input-noMeseros" type="number" name="noMeseros" value="${data?data[0].NoMeseros:""}" title="Ingresa el numero de meseros." data-required>
             <small class="form-error opacity">Error: Ingresa el numero de meseros.</small>
         </div>
 
         <div class="form__group-grid">
             <label for="form-event-input-hora">Hora</label>
-            <input id="form-event-input-hora" type="time" name="hora" title="Ingresa la hora que inicia el evento.">
+            <input id="form-event-input-hora" type="time" name="hora" value="${horaInicio}" title="Ingresa la hora que inicia el evento.">
             <small class="form-error opacity">Error: Ingresa la hora que inicia el evento.</small>
         </div>
 
         <div class="form__group-grid">
             <label for="form-event-input-horaCena">Hora Cena</label>
-            <input id="form-event-input-horaCena" type="time" name="horaCena" title="Ingresa la hora de la cena.">
+            <input id="form-event-input-horaCena" type="time" name="horaCena" value="${horaCena}" title="Ingresa la hora de la cena.">
             <small class="form-error opacity">Error: Ingresa la hora de la cena.</small>
         </div>
 
         <div class="form__group-grid">
             <label for="form-event-input-platillo">Platillo</label>
-            <input id="form-event-input-platillo" type="String" name="platillo" value="" title="Ingresa el platillo para el evento.">
+            <input id="form-event-input-platillo" type="String" name="platillo" value="${data?data[0].Platillo:""}" title="Ingresa el platillo para el evento.">
             <small class="form-error opacity">Error: Ingresa el platillo para el evento.</small>
         </div>
 
         <div class="form__group-grid">
             <label for="form-event-input-alcohol">Alcohol</label>
-            <input id="form-event-input-alcohol" type="String" name="alcohol" value="" title="Ingresa los datos para el alcohol.">
+            <input id="form-event-input-alcohol" type="String" name="alcohol" value="${data?data[0].Alcohol:""}" title="Ingresa los datos para el alcohol.">
             <small class="form-error opacity">Error: Ingresa los datos para el alcohol.</small>
         </div>
 
@@ -432,37 +497,37 @@ function createGeneral() {
 
         <div class="form__group-grid">
             <label for="form-event-input-mantel">Mantel</label>
-            <input id="form-event-input-mantel" type="text" name="mantel" title="Ingresa el tipo de mantel.">
+            <input id="form-event-input-mantel" type="text" name="mantel" value="${data?data[0].Mantel:""}" title="Ingresa el tipo de mantel.">
             <small class="form-error opacity">Error: Ingresa el tipo de mantel.</small>
         </div>
 
         <div class="form__group-grid">
             <label for="form-event-input-cristaleria">Cristaleria</label>
-            <input id="form-event-input-cristaleria" type="text" name="cristaleria" title="Ingresa el tipo de cristaleria.">
+            <input id="form-event-input-cristaleria" type="text" name="cristaleria" value="${data?data[0].Cristaleria:""}" title="Ingresa el tipo de cristaleria.">
             <small class="form-error opacity">Error: Ingresa el tipo de cristaleria.</small>
         </div>
 
         <div class="form__group-grid">
             <label for="form-event-input-servilleta">Servilleta</label>
-            <input id="form-event-input-servilleta" type="text" name="servilleta" title="Ingresa el tipo de servilleta.">
+            <input id="form-event-input-servilleta" type="text" name="servilleta" value="${data?data[0].Servilleta:""}" title="Ingresa el tipo de servilleta.">
             <small class="form-error opacity">Error: Ingresa el tipo de servilleta.</small>
         </div>
 
         <div class="form__group-grid form__group-grid-2 form__group-grid-middle">
             <label for="form-event-input-tipoMesas">Tipo de mesas</label>
-            <input id="form-event-input-tipoMesas" type="String" name="tipoMesas" value="" title="Ingresa el tipo de mesas.">
+            <input id="form-event-input-tipoMesas" type="String" name="tipoMesas" value="${data?data[0].TipoMesa:""}" title="Ingresa el tipo de mesas.">
             <small class="form-error opacity">Error: Ingresa el tipo de mesas.</small>
         </div>
 
         <div class="form__group-grid form__group-grid-2 form__group-grid-middle">
             <label for="form-event-input-tipoSillas">Tipo de sillas</label>
-            <input id="form-event-input-tipoSillas" type="String" name="tipoSillas" value="" title="Ingresa el tipo de sillas.">
+            <input id="form-event-input-tipoSillas" type="String" name="tipoSillas" value="${data?data[0].TipoSilla:""}" title="Ingresa el tipo de sillas.">
             <small class="form-error opacity">Error: Ingresa el tipo de sillas.</small>
         </div>
 
         <div class="form__group-grid form__group-grid-2 form__group-grid-large">
             <label for="form-event-input-casosEspeciales">Casos especiales</label>
-            <textarea id="form-event-input-casosEspeciales" class="form__group-grid-2" rows="4" name="casosEspeciales" title="Agrega datos extras."></textarea>
+            <textarea id="form-event-input-casosEspeciales" class="form__group-grid-2" value="${data?data[0].CasoEspecial:""}" rows="4" name="casosEspeciales" title="Agrega datos extras."></textarea>
             <small class="form-error opacity">Error: Agrega datos extras.</small>
         </div>
     `;
@@ -480,7 +545,17 @@ function createGeneral() {
     return $formSection;
 }
 
-function createPagos(data) {
+let flat = false;
+
+async function createPagos(dataForm = null) {
+
+    let data = null;
+
+    if (dataForm) {
+        console.log(dataForm);
+        data = await getPagosById(dataForm[0].ID);
+        // console.log(dataPagos);
+    }
 
     // data = [{
     //     id: 1,
@@ -503,7 +578,7 @@ function createPagos(data) {
     // Agregamos tabla de pagos
     const $sectionTable = document.createElement('div');
 
-    
+
     $sectionTable.classList.add('table__pagos');
 
     // $sectionTable.innerHTML = `
@@ -517,53 +592,60 @@ function createPagos(data) {
     <p>Fecha</p>
     <p class="text-align-right">Cantidad</p>`;
 
+    let suma = 0;
+    let totalCosto = 0;
+
     if (data) {
-
+        totalCosto = dataForm[0].CostoTotal;
         data.forEach(item => {
+            suma += item.Monto;
             $sectionTable.innerHTML += `
-
-                    <p>${item.id}</p>
-                    <p>${item.metodoPago}</p>
-                    <p>${item.fecha}</p>
-                    <p class="text-align-right abono">${item.cantidad}</p>
+                    <p>${item.NoAbono}</p>
+                    <p>${item.MetodoPago}</p>
+                    <p>${item.FechaPago}</p>
+                    <p class="text-align-right abono">$${item.Monto}</p>
             `;
         });
     }
+
+    let adeudoTotal = totalCosto - suma;
 
     $sectionTable.innerHTML += `
             <p></p>
             <p></p>
             <p class="text-align-right">Total</p>
-            <p class="text-align-right abono-total"></p>
+            <p class="text-align-right abono-total">$${suma}</p>
 
             <p></p>
             <p></p>
             <p class="text-align-right">Total Evento</p>
-            <input id="form-event-input-totalPago" class="text-align-right input-total-pago" type="number" step="0.01" value="">
+            <input id="form-event-input-totalPago" class="text-align-right input-total-pago" type="number" step="0.01" value="${dataForm?totalCosto:""}">
 
             <p></p>
             <p></p>
             <p class="text-align-right">Adeudo</p>
-            <p class="text-align-right adeudo-total"></p>
+            <p class="text-align-right adeudo-total">$${adeudoTotal}</p>
 
     `;
 
     let buttons = `
-        <button id="btn-event-pagos" class="btn btn-primary">Siguiente</button>
+        <button id="${!dataForm?'btn-event-pagos': 'btn-event-editar-event'}" class="btn btn-primary" data-id=${dataForm?dataForm[0].ID:""}>Siguiente</button>
         <button id="btn-event-pagos-before" class="btn btn-cancel">Anterior</button>
         <button id="btn-event-cancel" class="btn btn-cancel">Cancelar</button>
     `;
 
     $formSection.appendChild($sectionRowOptions);
-    $formSection.innerHTML +=`
+    $formSection.innerHTML += `
     <button class="btn btn-right span-1-4"><b id="btn-add-pago">Agregar Pago</b></button>
     `;
     $formSection.appendChild($sectionTable);
     $formSection.innerHTML += buttons;
 
-    setTimeout(() => {
-        calcularTotalAbono();
-    }, 10)
+    // setTimeout(() => {
+    //     // if (flat)
+    //     calcularTotalAbono();
+    //     // flat = true;
+    // }, 100)
 
     return $formSection;
 }
@@ -730,10 +812,37 @@ function calcularTotalAbono() {
 }
 
 async function fetchAddEvent(event) {
-    // console.log('Agregar');
+    console.log(event);
     try {
         let res = await fetch('http://localhost:3000/eventos', {
             method: 'POST',
+            body: JSON.stringify(event),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+
+        if (!res.ok)
+            throw (res);
+
+        return true;
+
+    } catch (e) {
+        // console.log(e)
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}
+
+async function fetchUpdateEvent(event) {
+    console.log("======================");
+    let id = document.querySelector('.btn-primary').dataset.id;
+    console.log(id);
+    console.log(event);
+    try {
+        let res = await fetch('http://localhost:3000/eventos/' + id, {
+            method: 'PATCH',
             body: JSON.stringify(event),
             headers: {
                 'Content-type': 'application/json'
@@ -758,10 +867,44 @@ async function cancel() {
     $sectionGeneral = "";
     $sectionPagos = "";
     $sectionAddPagos = "";
+    setTimeout(async () => {
+        const $root = document.getElementById("root");
+        $root.innerHTML = ``;
+        $root.appendChild(nav());
+        let $sectionEventos = await sectionEventos();
+        $root.appendChild($sectionEventos)
+    }, 100)
+}
 
-    const $root = document.getElementById("root");
-    $root.innerHTML = ``;
-    $root.appendChild(nav());
-    let $sectionEventos = await sectionEventos();
-    $root.appendChild($sectionEventos)
+async function getById(id) {
+    try {
+        let res = await fetch('http://localhost:3000/eventos/' + id + '/');
+
+        if (!res.ok)
+            throw (res);
+        let data = await res.json();
+
+        return data.body;
+
+    } catch (e) {
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}
+
+async function getPagosById(id) {
+    try {
+        let res = await fetch('http://localhost:3000/pagos/' + id + '/');
+
+        if (!res.ok)
+            throw (res);
+        let data = await res.json();
+
+        return data.body;
+    } catch (e) {
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
 }
