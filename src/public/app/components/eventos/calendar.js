@@ -1,6 +1,8 @@
 'use strict';
 // import { func } from './joi';
 import eventAdd from './eventos.forms.js';
+import eventDetails from './event.details.js';
+import nav from '../nav.js';
 
 let FocusDate = new Date(Date.now());
 
@@ -112,6 +114,7 @@ function CreateCalendar(data, date) {
                 if (jdate == sdate) {
                     // console.log(jdate+" same "+sdate);
                     const $evento = document.createElement("button");
+                    $evento.id = 'evento';
                     $evento.classList.add('btn_evento');
                     $evento.classList.add('btn');
                     $evento.dataset.id = element.ID;
@@ -191,6 +194,14 @@ document.addEventListener('click', async e => {
         let $date = document.getElementById("lblMonth");
         $date.innerHTML = `${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
     }
+    if(e.target.matches('#evento')){
+        let id = e.target.dataset.id;
+        const $root = document.getElementById("root");
+        $root.innerHTML=``;
+        $root.appendChild(nav());
+
+        $root.appendChild(await eventDetails(id));
+    }
 })
 
 function UpdateDate(dia, mes, año) {
@@ -233,3 +244,8 @@ function GetTxtMonth(mes) {
             return "Diciembre";
     }
 }
+<<<<<<< HEAD
+=======
+
+export {GetTxtMonth};
+>>>>>>> ac8298d449a580c76bc7f178433de2680a47f4df
