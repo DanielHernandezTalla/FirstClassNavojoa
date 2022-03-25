@@ -1,20 +1,22 @@
 'use strict'
-const Joi = require('Joi');
+const Joi = require('joi');
 
-const create= Joi.object({
-//    monto: Joi.number().required(),
-//    IdEvento:  Joi.number().required(),
-//    NoAbono: Joi.number().required(),
+const create = Joi.object({
+    //    monto: Joi.number().required(),
+    //    IdEvento:  Joi.number().required(),
+    //    NoAbono: Joi.number().required(),
 })
 
 const update = Joi.object({
-//    monto: Joi.number.required(),
+    //    monto: Joi.number.required(),
 })
 
 const getById = Joi.object({
     id: Joi.number().required()
 })
 
-module.exports ={
-    create, getById,update
+module.exports = {
+    create,
+    getById,
+    update
 }

@@ -225,7 +225,7 @@ document.addEventListener('click', async e => {
     // Botones para guardar el evento
     if (e.target.matches('#btn-event-pagos') || e.target.matches('#btn-event-editar-event')) {
 
-        console.log("Pagos")
+        // console.log("Pagos")
 
         let ubicacion = "";
         if ($sectionEvent.querySelector('#eventPlaceSalon').checked &&
@@ -431,7 +431,7 @@ function createEvent(data = null) {
 
 function createGeneral(data = null) {
 
-    console.log(data[0])
+    // console.log(data[0])
 
     let horaInicio = "";
     let horaCena = "";
@@ -527,7 +527,7 @@ function createGeneral(data = null) {
 
         <div class="form__group-grid form__group-grid-2 form__group-grid-large">
             <label for="form-event-input-casosEspeciales">Casos especiales</label>
-            <textarea id="form-event-input-casosEspeciales" class="form__group-grid-2" value="${data?data[0].CasoEspecial:""}" rows="4" name="casosEspeciales" title="Agrega datos extras."></textarea>
+            <textarea id="form-event-input-casosEspeciales" class="form__group-grid-2" rows="4" name="casosEspeciales" title="Agrega datos extras.">${data?data[0].CasoEspecial:""}</textarea>
             <small class="form-error opacity">Error: Agrega datos extras.</small>
         </div>
     `;
@@ -552,7 +552,7 @@ async function createPagos(dataForm = null) {
     let data = null;
 
     if (dataForm) {
-        console.log(dataForm);
+        // console.log(dataForm);
         data = await getPagosById(dataForm[0].ID);
         // console.log(dataPagos);
     }
@@ -808,11 +808,11 @@ function calcularTotalAbono() {
     document.querySelector('.abono-total').textContent = `$${total}.00`;
     document.querySelector('.adeudo-total').textContent = `$${totalEvento-total}.00`;
 
-    console.log(total)
+    // console.log(total)
 }
 
 async function fetchAddEvent(event) {
-    console.log(event);
+    // console.log(event);
     try {
         let res = await fetch('http://localhost:3000/eventos', {
             method: 'POST',
@@ -836,10 +836,10 @@ async function fetchAddEvent(event) {
 }
 
 async function fetchUpdateEvent(event) {
-    console.log("======================");
+    // console.log("======================");
     let id = document.querySelector('.btn-primary').dataset.id;
-    console.log(id);
-    console.log(event);
+    // console.log(id);
+    // console.log(event);
     try {
         let res = await fetch('http://localhost:3000/eventos/' + id, {
             method: 'PATCH',

@@ -1,5 +1,5 @@
 'use strict'
-const Joi = require('Joi');
+const Joi = require('joi');
 
 const create = Joi.object({
     Cliente: Joi.string().min(3).max(100).required(),
@@ -33,5 +33,8 @@ const getMonth = Joi.object({
 })
 
 module.exports = {
-    create, getById ,update, getMonth
+    create,
+    getById,
+    update,
+    getMonth
 }
