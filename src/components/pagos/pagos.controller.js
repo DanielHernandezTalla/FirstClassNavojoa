@@ -32,18 +32,29 @@ async function getById(id) {
 
 async function add(body, confirm) {
     return new Promise(async function (resolve, reject) {
+
         try {
             const conn = await getConnection();
-            const pagos = await conn.query('CALL spPago(3,NULL,' + body.IdEvento + ',' + body.NoAbono + ',"' + body.FechaPago + '","' + body.MetodoPago + '",' + body.Monto + ')');
+            if (!confirm) {
 
-            if (pagos[0][0]['@ABONO'])
+                const pagos = await conn.query('CALL spPago(3,NULL,' + body.IdEvento + ',' + body.NoAbono + ',"' + body.FechaPago + '","' + body.MetodoPago + '",' + body.Monto + ')');
+
+                if (pagos[0][0]['result'] === 0)
+                    resolve({
+                        isMayor: pagos[0][0]['result']
+                    });
+                else
+                    resolve({
+                        affectedRows: pagos["affectedRows"]
+                    });
+
+            } else {
+                const pagos = await conn.query('CALL spAgregarPago(1,' + body.IdEvento + ',"' + body.FechaPago + '","' + body.MetodoPago + '",' + body.Monto + ')');
+
                 resolve({
-                    isMayor: pagos[0][0]['@ABONO']
+                    affectedRows: pagos["affectedRows"]
                 });
-
-            resolve({
-                affectedRows: pagos["affectedRows"]
-            });
+            }
         } catch (e) {
 
             console.log(e)
