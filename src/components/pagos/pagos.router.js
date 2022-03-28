@@ -9,27 +9,27 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     controller.get()
-        .then(data=>{
+        .then(data => {
             response.success(req, res, data);
         })
-        .catch(err=>{
-            response.error(req, res, "No se pudo acceder al recurso",500, err);
+        .catch(err => {
+            response.error(req, res, "No se pudo acceder al recurso", 500, err);
         });
 });
 
-router.get('/:id', validate(mySchema,'getById'), (req, res) => {
+router.get('/:id', validate(mySchema, 'getById'), (req, res) => {
     controller.getById(req.params.id)
-        .then(data=>{
+        .then(data => {
             response.success(req, res, data);
         })
-        .catch(err=>{
-            response.error(req, res, "No se pudo acceder al recurso",500, err);
+        .catch(err => {
+            response.error(req, res, "No se pudo acceder al recurso", 500, err);
         });
 });
 
 
-router.post('/', (req, res)=>{
-    controller.add(req.body)
+router.post('/', (req, res) => {
+    controller.add(req.body,false)
         .then(data => {
             response.success(req, res, data, 201);
         })
@@ -38,9 +38,19 @@ router.post('/', (req, res)=>{
         });
 });
 
-router.patch('/:id', validate(mySchema, 'update'), (req, res)=>{
+router.post('/pagoConfirm/', (req, res) => {
+    controller.add(req.body, true)
+        .then(data => {
+            response.success(req, res, data, 201);
+        })
+        .catch(err => {
+            response.error(req, res, "Error al crear el recurso", 500, err);
+        });
+});
+
+router.patch('/:id', (req, res) => {
     controller.update(req.params.id, req.body)
-        .then(data=>{
+        .then(data => {
             response.success(req, res, data);
         })
         .catch(err => {
@@ -48,12 +58,12 @@ router.patch('/:id', validate(mySchema, 'update'), (req, res)=>{
         })
 })
 
-router.delete('/:id', validate(mySchema,'getById'), (req, res)=>{
+router.delete('/:id', validate(mySchema, 'getById'), (req, res) => {
     controller.dlt(req.params.id)
         .then(data => {
             response.success(req, res, data);
         })
-        .catch(err=>{
+        .catch(err => {
             response.error(req, res, "Error al eliminar el recurso", 500, err);
         });
 });

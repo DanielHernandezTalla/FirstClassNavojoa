@@ -1,7 +1,7 @@
 'use strict';
 import nav from '../nav.js';
-// import sectionPersonal from './personal.js'
 import modalError from '../modal.error.js';
+import modalConfirm from '../modal.confirm.js';
 import sectionEventos from './calendar.js';
 
 let $sectionEvent;
@@ -9,9 +9,12 @@ let $sectionGeneral;
 let $sectionPagos;
 let $sectionAddPagos;
 
-export default async function eventAdd(id = -1, table = null, action = null) {
+export default async function eventAdd(id = -1, table = null, action = null, section = null) {
 
-    // console.log(id);
+    $sectionEvent = null;
+    $sectionGeneral = null;
+    $sectionPagos = null;
+    $sectionAddPagos = null;
 
     let selectClass = "";
     let nameH2 = "Agregar";
@@ -61,19 +64,35 @@ export default async function eventAdd(id = -1, table = null, action = null) {
     $form.classList.add('form');
     $form.setAttribute('id', 'form-event-add');
 
-    $form.appendChild(createEvent(data));
+    $sectionEvent = createEvent(data);
     $sectionGeneral = createGeneral(data);
     $sectionPagos = await createPagos(data);
+    $sectionAddPagos = agregarPagos(data);
 
-    // $form.appendChild(agregarPagos());
+    if (section === "pagos") $form.appendChild($sectionPagos);
+    else $form.appendChild($sectionEvent);
 
     // Agregamos el form a su contenedor
     $divContentForm.appendChild($form);
+
+    // -- Seccion del modal
+    const $sectionModal = document.createElement('section');
+    $sectionModal.classList.add('section-modal');
+    $sectionModal.classList.add('none');
+
+    const $ulModal = document.createElement('ul');
+
+    $ulModal.innerHTML = `
+        <li class="btn btn-modal-delete"><i class="bi bi-trash"></i>Eliminar</li>
+    `;
+
+    $sectionModal.appendChild($ulModal);
 
     // Agregamos todos los elementos al contenedor principal
     $divContainer.appendChild($backImage);
     $divContainer.appendChild($h2);
     $divContainer.appendChild($divContentForm);
+    $divContainer.appendChild($sectionModal);
 
     $main.appendChild($divContainer)
     return $main;
@@ -89,10 +108,7 @@ document.addEventListener('click', async e => {
             $sectionEvent = document.querySelector('.form-section-event').cloneNode(true);
             document.querySelector('.form-section-event').outerHTML = '';
 
-            if (!$sectionGeneral)
-                document.querySelector('.form').appendChild(createGeneral());
-            else
-                document.querySelector('.form').appendChild($sectionGeneral);
+            document.querySelector('.form').appendChild($sectionGeneral);
             document.querySelector('input').focus();
         }
     }
@@ -102,11 +118,7 @@ document.addEventListener('click', async e => {
             $sectionGeneral = document.querySelector('.form-section-event').cloneNode(true);
             document.querySelector('.form-section-event').outerHTML = '';
 
-            // console.log($sectionEvent)
-            if (!$sectionEvent)
-                document.querySelector('.form').appendChild(createEvent());
-            else
-                document.querySelector('.form').appendChild($sectionEvent);
+            document.querySelector('.form').appendChild($sectionEvent);
             document.querySelector('input').focus();
         }
     }
@@ -116,11 +128,7 @@ document.addEventListener('click', async e => {
             $sectionGeneral = document.querySelector('.form-section-event').cloneNode(true);
             document.querySelector('.form-section-event').outerHTML = '';
 
-            if (!$sectionPagos) {
-                document.querySelector('.form').appendChild(createPagos());
-                calcularTotalAbono();
-            } else
-                document.querySelector('.form').appendChild($sectionPagos);
+            document.querySelector('.form').appendChild($sectionPagos);
         }
     }
     if (e.target.matches('#btn-event-pagos-before')) {
@@ -128,10 +136,8 @@ document.addEventListener('click', async e => {
         if (!validateEvent()) {
             $sectionPagos = document.querySelector('.form-section-event').cloneNode(true);
             document.querySelector('.form-section-event').outerHTML = '';
-            if (!$sectionGeneral)
-                document.querySelector('.form').appendChild(createGeneral());
-            else
-                document.querySelector('.form').appendChild($sectionGeneral);
+
+            document.querySelector('.form').appendChild($sectionGeneral);
             document.querySelector('input').focus();
         }
     }
@@ -139,55 +145,43 @@ document.addEventListener('click', async e => {
     // Botones de opciones en evento
     if (e.target.matches('#btn-options-event')) {
         let section = getSectionEvent();
-        if (section === "general") {
+        if (section === "general")
             if (!validateEvent()) {
                 $sectionGeneral = document.querySelector('.form-section-event').cloneNode(true);
                 document.querySelector('.form-section-event').outerHTML = '';
 
-                // console.log($sectionEvent)
-                if (!$sectionEvent)
-                    document.querySelector('.form').appendChild(createEvent());
-                else
-                    document.querySelector('.form').appendChild($sectionEvent);
+                document.querySelector('.form').appendChild($sectionEvent);
             }
-        }
-        if (section === "pagos") {
+
+        if (section === "pagos")
             if (!validateEvent()) {
                 $sectionPagos = document.querySelector('.form-section-event').cloneNode(true);
                 document.querySelector('.form-section-event').outerHTML = '';
-                if (!$sectionGeneral)
-                    document.querySelector('.form').appendChild(createGeneral());
-                else
-                    document.querySelector('.form').appendChild($sectionEvent);
+
+                document.querySelector('.form').appendChild($sectionEvent);
             }
-        }
+
         document.querySelector('input').focus();
     }
     if (e.target.matches('#btn-options-general')) {
         let section = getSectionEvent();
 
-        if (section === "event") {
+        if (section === "event")
             if (!validateEvent()) {
-                // Despues de validar pasar al siguiente o mostrar los errores
                 $sectionEvent = document.querySelector('.form-section-event').cloneNode(true);
                 document.querySelector('.form-section-event').outerHTML = '';
 
-                if (!$sectionGeneral)
-                    document.querySelector('.form').appendChild(createGeneral());
-                else
-                    document.querySelector('.form').appendChild($sectionGeneral);
+                document.querySelector('.form').appendChild($sectionGeneral);
             }
-        }
-        if (section === "pagos") {
+
+        if (section === "pagos")
             if (!validateEvent()) {
                 $sectionPagos = document.querySelector('.form-section-event').cloneNode(true);
                 document.querySelector('.form-section-event').outerHTML = '';
-                if (!$sectionGeneral)
-                    document.querySelector('.form').appendChild(createGeneral());
-                else
-                    document.querySelector('.form').appendChild($sectionGeneral);
+
+                document.querySelector('.form').appendChild($sectionGeneral);
             }
-        }
+
         document.querySelector('input').focus();
     }
     if (e.target.matches('#btn-options-pagos')) {
@@ -213,104 +207,71 @@ document.addEventListener('click', async e => {
                 $sectionGeneral = document.querySelector('.form-section-event').cloneNode(true);
                 document.querySelector('.form-section-event').outerHTML = '';
 
-                if (!$sectionPagos) {
-                    document.querySelector('.form').appendChild(createPagos());
-                    calcularTotalAbono();
-                } else
-                    document.querySelector('.form').appendChild($sectionPagos);
+                document.querySelector('.form').appendChild($sectionPagos);
             }
         }
     }
 
     // Botones para guardar el evento
     if (e.target.matches('#btn-event-pagos') || e.target.matches('#btn-event-editar-event')) {
-
-        // console.log("Pagos")
-
-        let ubicacion = "";
-        if ($sectionEvent.querySelector('#eventPlaceSalon').checked &&
-            $sectionEvent.querySelector('#eventPlaceJardin').checked) {
-            ubicacion = "Salon/Jardin"
-        } else if ($sectionEvent.querySelector('#eventPlaceSalon').checked) {
-            ubicacion = "Salon"
-        } else if ($sectionEvent.querySelector('#eventPlaceJardin').checked) {
-            ubicacion = "Jardin"
-        }
-
-        let adeudoTotal = document.querySelector('.adeudo-total').textContent;
-        let sesion = $sectionEvent.querySelector('#form-event-input-sesion').value;
-
-        const $event = {
-            FechaEvento: $sectionEvent.querySelector('#form-event-input-fecha').value,
-            Sesion: !sesion ? '1999-01-01' : sesion,
-            // Sesion: '2022-05-03',
-            Ubicacion: ubicacion,
-            TipoEvento: $sectionEvent.querySelector('#form-event-input-evento').value,
-            Cliente: $sectionEvent.querySelector('#form-event-input-cliente').value,
-            Telefono: $sectionEvent.querySelector('#form-event-input-telefono').value,
-            CeremoniaCivil: $sectionEvent.querySelector('#form-event-input-ceremonia').value,
-            NoPersonas: parseInt($sectionGeneral.querySelector('#form-event-input-noPersonas').value),
-            NoMeseros: parseInt($sectionGeneral.querySelector('#form-event-input-noMeseros').value),
-            HoraInicio: $sectionGeneral.querySelector('#form-event-input-hora').value,
-            HoraCena: $sectionGeneral.querySelector('#form-event-input-horaCena').value,
-            Platillo: $sectionGeneral.querySelector('#form-event-input-platillo').value,
-            Alcohol: $sectionGeneral.querySelector('#form-event-input-alcohol').value,
-            Croquis: $sectionGeneral.querySelector('#form-event-input-croquis').value,
-            Mantel: $sectionGeneral.querySelector('#form-event-input-mantel').value,
-            Servilleta: $sectionGeneral.querySelector('#form-event-input-servilleta').value,
-            Cristaleria: $sectionGeneral.querySelector('#form-event-input-cristaleria').value,
-            TipoMesa: $sectionGeneral.querySelector('#form-event-input-tipoMesas').value,
-            TipoSilla: $sectionGeneral.querySelector('#form-event-input-tipoSillas').value,
-            CasoEspecial: $sectionGeneral.querySelector('#form-event-input-casosEspeciales').value,
-            CostoTotal: parseInt(document.querySelector('#form-event-input-totalPago').value),
-            AbonoTotal: parseInt(adeudoTotal.substring(1, adeudoTotal.length)),
-        }
-
-        if (e.target.matches('#btn-event-pagos')) {
-            if (fetchAddEvent($event)) {
-                $sectionEvent = "";
-                $sectionGeneral = "";
-                $sectionPagos = "";
-                $sectionAddPagos = "";
-                cancel();
-            } else
-                console.log("Error al agregar")
-        }
-
-        if (e.target.matches('#btn-event-editar-event')) {
-            if (fetchUpdateEvent($event)) {
-                $sectionEvent = "";
-                $sectionGeneral = "";
-                $sectionPagos = "";
-                $sectionAddPagos = "";
-                cancel();
-            } else
-                console.log("Error al agregar")
-        }
-
-        // Aqui Enviamos la informacion
-        // console.log($event)
+        saveEvent(e);
     }
 
     // Botones de para agregar pago
     if (e.target.matches('#btn-add-pago')) {
+        // $sectionPagos = document.querySelector('.form-section-event');
+        // console.log($sectionPagos)
+        $sectionPagos = document.querySelector('.form-section-event').cloneNode(true);
         document.querySelector('.form-section-event').outerHTML = '';
-        document.querySelector('.form').appendChild(agregarPagos());
+        document.querySelector('.form').appendChild($sectionAddPagos);
     }
     if (e.target.matches('#btn-pagos-cancel')) {
+        let idEvento = document.querySelector('.btn-primary').dataset.idevento
+        let data = await getById(idEvento);
+        $sectionPagos = await createPagos(data);
+        $sectionAddPagos = agregarPagos(data);
         document.querySelector('.form-section-event').outerHTML = '';
-        document.querySelector('.form').appendChild(createPagos());
+        document.querySelector('.form').appendChild($sectionPagos);
         calcularTotalAbono();
     }
     if (e.target.matches('#btn-pagos-create')) {
         if (!validateEvent()) {
+
+            let idEvento = document.getElementById('btn-pagos-create').dataset.idevento;
+            // console.log(idEvento);
+
+            if (!idEvento)
+                idEvento = await saveEvent(null, true);
+
+            if (!idEvento) return
+
             const $pago = {
-                fechaPago: document.querySelector('form').fechaPago.value,
-                cantidad: document.querySelector('form').cantidad.value,
-                tipoPago: document.querySelector('form').tipoPago.value,
+                IdEvento: idEvento,
+                NoAbono: 2,
+                FechaPago: document.querySelector('form').fechaPago.value,
+                Monto: parseInt(document.querySelector('form').cantidad.value),
+                MetodoPago: document.querySelector('form').tipoPago.value,
             }
-            // Aqui Enviamos la informacion
-            console.log($pago)
+
+            // Aqui agregamos el pago
+            // let result = await addPagos($pago)
+            let result = {
+                isMayor :2
+            }
+
+            if (result.isMayor === 2) {
+                const $root = document.getElementById("root");
+                $root.appendChild(await modalConfirm("La suma de los abonos es mayor al total del costo del evento ¿Quieres agregar el pago aun?", null, $pago));
+            } else {
+                // Quitamos el form y ponemos la tabla de abonos
+
+                let data = await getById($pago.IdEvento);
+                $sectionPagos = await createPagos(data);
+                $sectionAddPagos = agregarPagos(data);
+                document.querySelector('.form-section-event').outerHTML = '';
+                document.querySelector('.form').appendChild($sectionPagos);
+                calcularTotalAbono();
+            }
         }
     }
 
@@ -320,16 +281,29 @@ document.addEventListener('click', async e => {
     }
 })
 
-document.addEventListener('change', e => {
+document.addEventListener('change', async e => {
     if (e.target.matches('#form-event-input-totalPago')) {
         calcularTotalAbono();
+        validateEvent();
+    }
+
+    if (e.target.matches('#form-event-input-fecha')) {
+
+        let fecha = e.target.value;
+
+        let resultAvaliableDays = await getAvailableDays(fecha)
+
+        if (resultAvaliableDays[0].QuantityOfDays == 2) {
+            const $root = document.getElementById("root");
+            $root.appendChild(await modalError("Dia ocupado."));
+            e.target.value = null;
+        }
     }
 })
 
 function createEvent(data = null) {
 
     // console.log(data[0])
-    // console.log(data[0].FechaEvento)
     let ID = "";
     let salon = false;
     let jardin = false;
@@ -354,11 +328,6 @@ function createEvent(data = null) {
 
         if (data[0].CeremoniaCivil)
             ceremonia = `${data[0].CeremoniaCivil.substring(0, 2)}:${data[0].CeremoniaCivil.substring(3, 5)}:${data[0].CeremoniaCivil.substring(6, 8)}`;
-
-        // console.log(fechaEvento)
-        // console.log(sesion)
-        // console.log(data[0].CeremoniaCivil)
-        // console.log(ceremonia)
     }
 
     const $formSection = document.createElement('div');
@@ -455,13 +424,13 @@ function createGeneral(data = null) {
     $formContentGroup.innerHTML = `
         <div class="form__group-grid form__group-grid-middle">
             <label for="form-event-input-noPersonas">No. Personas</label>
-            <input id="form-event-input-noPersonas" type="number" name="noPersonas" value="${data?data[0].NoPersonas:""}" title="Ingresa el numero de personas." data-required>
+            <input id="form-event-input-noPersonas" type="number" name="noPersonas" value="${data?data[0].NoPersonas:""}" title="Ingresa el numero de personas.">
             <small class="form-error opacity">Error: Ingresa el numero de personas.</small>
         </div>
 
         <div class="form__group-grid form__group-grid-middle">
             <label for="form-event-input-noMeseros">No. Meseros</label>
-            <input id="form-event-input-noMeseros" type="number" name="noMeseros" value="${data?data[0].NoMeseros:""}" title="Ingresa el numero de meseros." data-required>
+            <input id="form-event-input-noMeseros" type="number" name="noMeseros" value="${data?data[0].NoMeseros:""}" title="Ingresa el numero de meseros.">
             <small class="form-error opacity">Error: Ingresa el numero de meseros.</small>
         </div>
 
@@ -545,29 +514,13 @@ function createGeneral(data = null) {
     return $formSection;
 }
 
-let flat = false;
-
 async function createPagos(dataForm = null) {
 
     let data = null;
 
-    if (dataForm) {
-        // console.log(dataForm);
-        data = await getPagosById(dataForm[0].ID);
-        // console.log(dataPagos);
-    }
 
-    // data = [{
-    //     id: 1,
-    //     metodoPago: "Tarjeta",
-    //     fecha: "12/12/2022",
-    //     cantidad: "$40000.00"
-    // }, {
-    //     id: 1,
-    //     metodoPago: "Tarjeta",
-    //     fecha: "10/10/2022",
-    //     cantidad: "$60000.00"
-    // }]
+    if (dataForm)
+        data = await getPagosById(dataForm[0].ID);
 
     const $formSection = document.createElement('div');
     $formSection.classList.add('form-section-event');
@@ -580,10 +533,6 @@ async function createPagos(dataForm = null) {
 
 
     $sectionTable.classList.add('table__pagos');
-
-    // $sectionTable.innerHTML = `
-    //     <button class="btn btn-right span-1-4"><b id="btn-add-pago">Agregar Pago</b></button>
-    // `;
 
     $sectionTable.innerHTML += `
 
@@ -598,12 +547,13 @@ async function createPagos(dataForm = null) {
     if (data) {
         totalCosto = dataForm[0].CostoTotal;
         data.forEach(item => {
+            let fechaPago = item.FechaPago.substring(8, 10) + " de " + GetTxtMonth(parseInt(item.FechaPago.substring(5, 7))) + " de " + item.FechaPago.substring(0, 4);
             suma += item.Monto;
             $sectionTable.innerHTML += `
-                    <p>${item.NoAbono}</p>
-                    <p>${item.MetodoPago}</p>
-                    <p>${item.FechaPago}</p>
-                    <p class="text-align-right abono">$${item.Monto}</p>
+                    <p data-table='pagos' class="table__row-clear" data-id="${item.ID}">${item.NoAbono}</p>
+                    <p data-table='pagos' class="table__row-clear" data-id="${item.ID}">${item.MetodoPago}</p>
+                    <p data-table='pagos' class="table__row-clear" data-id="${item.ID}">${fechaPago}</p>
+                    <p data-table='pagos' class="table__row-clear text-align-right abono" data-id="${item.ID}">$${item.Monto}</p>
             `;
         });
     }
@@ -623,13 +573,18 @@ async function createPagos(dataForm = null) {
 
             <p></p>
             <p></p>
+            <p></p>
+            <small></small>
+
+            <p></p>
+            <p></p>
             <p class="text-align-right">Adeudo</p>
             <p class="text-align-right adeudo-total">$${adeudoTotal}</p>
 
     `;
 
     let buttons = `
-        <button id="${!dataForm?'btn-event-pagos': 'btn-event-editar-event'}" class="btn btn-primary" data-id=${dataForm?dataForm[0].ID:""}>Siguiente</button>
+        <button id="${!dataForm?'btn-event-pagos': 'btn-event-editar-event'}" class="btn btn-primary" data-id=${dataForm?dataForm[0].ID:""}>Guardar</button>
         <button id="btn-event-pagos-before" class="btn btn-cancel">Anterior</button>
         <button id="btn-event-cancel" class="btn btn-cancel">Cancelar</button>
     `;
@@ -641,16 +596,10 @@ async function createPagos(dataForm = null) {
     $formSection.appendChild($sectionTable);
     $formSection.innerHTML += buttons;
 
-    // setTimeout(() => {
-    //     // if (flat)
-    //     calcularTotalAbono();
-    //     // flat = true;
-    // }, 100)
-
     return $formSection;
 }
 
-function agregarPagos() {
+function agregarPagos(data) {
     const $formSection = document.createElement('div');
     $formSection.classList.add('form-section-event');
 
@@ -673,15 +622,22 @@ function agregarPagos() {
             <small class="form-error opacity">Error: Ingresa la cantidad del pago.</small>
         </div>
 
-        <div class="form__group-grid form__group-grid-middle">
+        <div class="form__group-grid form__group-grid-large">
+
             <label for="form-pago-input-tipoPago">Metodo de pago</label>
-            <input id="form-pago-input-tipoPago" type="text" name="tipoPago" title="Ingresa el tipo de pago." data-required>
+
+            <select name="tipoPago" id="form-pago-input-tipoPago" title="Ingresa el tipo de pago." data-required>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta">Tarjeta</option>
+            <option value="Transferencia">Transferencia</option>
+            </select>
+
             <small class="form-error opacity">Error: Ingresa el tipo de pago.</small>
         </div>
     `;
 
     let buttons = `
-        <button id="btn-pagos-create" class="btn btn-primary">Guardar Pago</button>
+        <button id="btn-pagos-create" class="btn btn-primary" data-idevento="${data?data[0].ID:""}" >Guardar Pago</button>
         <button id="btn-pagos-cancel" class="btn btn-cancel">Cancelar</button>
     `;
 
@@ -711,10 +667,11 @@ function validateEvent() {
         if (!item.value.trim().length) {
             item.parentNode.querySelector('small').textContent = item.getAttribute('title');
             item.parentNode.querySelector('small').classList.remove('opacity')
-            if (!error)
+            if (!error) {
                 item.focus();
+                error = true;
+            }
 
-            error = true;
         } else
             item.parentNode.querySelector('small').classList.add('opacity')
         // error
@@ -756,6 +713,19 @@ function validateEvent() {
         if (Telefono.value === "") Telefono.parentNode.querySelector('small').classList.add('opacity');
     }
 
+    // Validando numero de personas
+    let NoPersonas = document.querySelector('#form-event-input-noPersonas');
+    if (NoPersonas)
+        if (NoPersonas.value > 65535) {
+            NoPersonas.parentNode.querySelector('small').textContent = "No puedes agregar mas de 65,535 personas.";
+            NoPersonas.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                NoPersonas.focus();
+            error = true;
+        } else {
+            NoPersonas.parentNode.querySelector('small').classList.add('opacity');
+        }
+
     // Validando numero de meseros
     let NoMeseros = document.querySelector('#form-event-input-noMeseros');
     if (NoMeseros)
@@ -765,6 +735,141 @@ function validateEvent() {
             if (!error)
                 NoMeseros.focus();
             error = true;
+        } else {
+            NoMeseros.parentNode.querySelector('small').classList.add('opacity');
+        }
+
+    // Validando platillo
+    let Platillo = document.querySelector('#form-event-input-platillo');
+    if (Platillo)
+        // if (Platillo.value.trim() !== "") {
+        if (Platillo.value.trim() !== "" && (Platillo.value.trim().length < 3 || Platillo.value.trim().length > 200)) {
+            Platillo.parentNode.querySelector('small').textContent = "El platillo debe tener entre 3 y 200 caracteres.";
+            Platillo.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                Platillo.focus();
+            error = true;
+        } else
+            Platillo.parentNode.querySelector('small').classList.add('opacity');
+
+
+    // Validando alcohol
+    let Alcohol = document.querySelector('#form-event-input-alcohol');
+    if (Alcohol)
+        if (Alcohol.value.trim() !== "" && (Alcohol.value.trim().length < 2 || Alcohol.value.trim().length > 150)) {
+            Alcohol.parentNode.querySelector('small').textContent = "El alcohol debe tener entre 2 y 150 caracteres.";
+            Alcohol.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                Alcohol.focus();
+            error = true;
+        } else
+            Alcohol.parentNode.querySelector('small').classList.add('opacity');
+
+    // Validando mantel
+    let Mantel = document.querySelector('#form-event-input-mantel');
+    if (Mantel)
+        if (Mantel.value.trim() !== "" && (Mantel.value.trim().length < 3 || Mantel.value.trim().length > 150)) {
+            Mantel.parentNode.querySelector('small').textContent = "El mantel debe tener entre 3 y 150 caracteres.";
+            Mantel.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                Mantel.focus();
+            error = true;
+        } else
+            Mantel.parentNode.querySelector('small').classList.add('opacity');
+
+    // Validando cristaleria
+    let Cristaleria = document.querySelector('#form-event-input-cristaleria');
+    if (Cristaleria)
+        if (Cristaleria.value.trim() !== "" && (Cristaleria.value.trim().length < 3 || Cristaleria.value.trim().length > 150)) {
+            Cristaleria.parentNode.querySelector('small').textContent = "La cristaleria debe tener entre 3 y 150 caracteres.";
+            Cristaleria.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                Cristaleria.focus();
+            error = true;
+        } else
+            Cristaleria.parentNode.querySelector('small').classList.add('opacity');
+
+    // Validando servilleta
+    let Servilleta = document.querySelector('#form-event-input-servilleta');
+    if (Servilleta)
+        if (Servilleta.value.trim() !== "" && (Servilleta.value.trim().length < 3 || Servilleta.value.trim().length > 150)) {
+            Servilleta.parentNode.querySelector('small').textContent = "La servillet a debe tener entre 3 y 45 caracteres.";
+            Servilleta.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                Servilleta.focus();
+            error = true;
+        } else
+            Servilleta.parentNode.querySelector('small').classList.add('opacity');
+
+    // Validando Tipo mesa
+    let TipoMesas = document.querySelector('#form-event-input-tipoMesas');
+    if (TipoMesas)
+        if (TipoMesas.value.trim() !== "" && (TipoMesas.value.trim().length < 3 || TipoMesas.value.trim().length > 150)) {
+            TipoMesas.parentNode.querySelector('small').textContent = "El tipo de mesa debe tener entre 3 y 150 caracteres.";
+            TipoMesas.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                TipoMesas.focus();
+            error = true;
+        } else
+            TipoMesas.parentNode.querySelector('small').classList.add('opacity');
+
+    // Validando Tipo sillas
+    let TipoSillas = document.querySelector('#form-event-input-tipoSillas');
+    if (TipoSillas)
+        if (TipoSillas.value.trim() !== "" && (TipoSillas.value.trim().length < 3 || TipoSillas.value.trim().length > 150)) {
+            TipoSillas.parentNode.querySelector('small').textContent = "El tipo de silas debe tener entre 3 y 150 caracteres.";
+            TipoSillas.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                TipoSillas.focus();
+            error = true;
+        } else
+            TipoSillas.parentNode.querySelector('small').classList.add('opacity');
+
+    // Validando casos especiales
+    let CasosEspeciales = document.querySelector('#form-event-input-casosEspeciales');
+    if (CasosEspeciales)
+        if (CasosEspeciales.value.trim() !== "" && (CasosEspeciales.value.trim().length < 3 || CasosEspeciales.value.trim().length > 250)) {
+            CasosEspeciales.parentNode.querySelector('small').textContent = "Los detalles de casos especiales deben tener entre 3 y 250 caracteres.";
+            CasosEspeciales.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                CasosEspeciales.focus();
+            error = true;
+        } else
+            CasosEspeciales.parentNode.querySelector('small').classList.add('opacity');
+
+
+    // Validando maximo de evento
+    let CostoMaximo = document.querySelector('#form-event-input-totalPago');
+    if (CostoMaximo)
+        if (parseInt(CostoMaximo.value) > 9999999.99) {
+            // const $root = document.getElementById("root");
+            // $root.appendChild(await modalError(e));
+            CostoMaximo.parentNode.querySelector('small').textContent = "No puedes agregar un costo mayor a 9999999.99";
+            CostoMaximo.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                CostoMaximo.focus();
+            error = true;
+        } else {
+            CostoMaximo.parentNode.querySelector('small').classList.add('opacity');
+            CostoMaximo.parentNode.querySelector('small').textContent = "";
+        }
+
+    // Validando maximo de pago
+    let cantidadPago = document.querySelector('#form-pago-input-cantidad');
+    if (cantidadPago)
+        if (parseInt(cantidadPago.value) > 9999999.99) {
+            // const $root = document.getElementById("root");
+            // $root.appendChild(await modalError(e));
+            cantidadPago.parentNode.querySelector('small').textContent = "No puedes agregar un pago mayor a 9999999.99";
+            cantidadPago.parentNode.querySelector('small').classList.remove('opacity');
+            if (!error)
+                cantidadPago.focus();
+            error = true;
+        } else {
+            if (parseInt(cantidadPago.value)) {
+                cantidadPago.parentNode.querySelector('small').classList.add('opacity');
+                // cantidadPago.parentNode.querySelector('small').textContent = " ";
+            }
         }
 
 
@@ -792,7 +897,7 @@ function getSectionEvent() {
         return 'event';
     if (document.getElementById('btn-event-general'))
         return 'general';
-    if (document.getElementById('btn-event-pagos'))
+    if (document.getElementById('btn-event-pagos') || document.getElementById('btn-event-editar-event'))
         return 'pagos';
 }
 
@@ -811,54 +916,32 @@ function calcularTotalAbono() {
     // console.log(total)
 }
 
-async function fetchAddEvent(event) {
-    // console.log(event);
-    try {
-        let res = await fetch('http://localhost:3000/eventos', {
-            method: 'POST',
-            body: JSON.stringify(event),
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
-
-        if (!res.ok)
-            throw (res);
-
-        return true;
-
-    } catch (e) {
-        // console.log(e)
-        const $root = document.getElementById("root");
-        $root.appendChild(await modalError(e));
-        return null;
-    }
-}
-
-async function fetchUpdateEvent(event) {
-    // console.log("======================");
-    let id = document.querySelector('.btn-primary').dataset.id;
-    // console.log(id);
-    // console.log(event);
-    try {
-        let res = await fetch('http://localhost:3000/eventos/' + id, {
-            method: 'PATCH',
-            body: JSON.stringify(event),
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
-
-        if (!res.ok)
-            throw (res);
-
-        return true;
-
-    } catch (e) {
-        // console.log(e)
-        const $root = document.getElementById("root");
-        $root.appendChild(await modalError(e));
-        return null;
+function GetTxtMonth(mes) {
+    switch (mes) {
+        case 1:
+            return "Enero";
+        case 2:
+            return "Febrero";
+        case 3:
+            return "Marzo";
+        case 4:
+            return "Abril";
+        case 5:
+            return "Mayo";
+        case 6:
+            return "Junio";
+        case 7:
+            return "Julio";
+        case 8:
+            return "Agosto";
+        case 9:
+            return "Septiembre";
+        case 10:
+            return "Octubre";
+        case 11:
+            return "Noviembre";
+        case 12:
+            return "Diciembre";
     }
 }
 
@@ -874,6 +957,125 @@ async function cancel() {
         let $sectionEventos = await sectionEventos();
         $root.appendChild($sectionEventos)
     }, 100)
+}
+
+async function saveEvent(e, saveOnpagos = false) {
+    if (validateEvent()) return;
+
+    // $sectionPagos = document.querySelector('.form-section-event').cloneNode(true);
+
+    let ubicacion = "";
+    if ($sectionEvent.querySelector('#eventPlaceSalon').checked &&
+        $sectionEvent.querySelector('#eventPlaceJardin').checked) {
+        ubicacion = "Salon/Jardin"
+    } else if ($sectionEvent.querySelector('#eventPlaceSalon').checked) {
+        ubicacion = "Salon"
+    } else if ($sectionEvent.querySelector('#eventPlaceJardin').checked) {
+        ubicacion = "Jardin"
+    }
+
+    let sesion = $sectionEvent.querySelector('#form-event-input-sesion').value;
+    let costoTotal = $sectionPagos.querySelector('#form-event-input-totalPago').value;
+
+    const $event = {
+        FechaEvento: $sectionEvent.querySelector('#form-event-input-fecha').value,
+        Sesion: !sesion ? '1999-01-01' : sesion,
+        Ubicacion: ubicacion,
+        TipoEvento: $sectionEvent.querySelector('#form-event-input-evento').value,
+        Cliente: $sectionEvent.querySelector('#form-event-input-cliente').value,
+        Telefono: $sectionEvent.querySelector('#form-event-input-telefono').value,
+        CeremoniaCivil: $sectionEvent.querySelector('#form-event-input-ceremonia').value,
+        NoPersonas: parseInt($sectionGeneral.querySelector('#form-event-input-noPersonas').value),
+        NoMeseros: parseInt($sectionGeneral.querySelector('#form-event-input-noMeseros').value),
+        HoraInicio: $sectionGeneral.querySelector('#form-event-input-hora').value,
+        HoraCena: $sectionGeneral.querySelector('#form-event-input-horaCena').value,
+        Platillo: $sectionGeneral.querySelector('#form-event-input-platillo').value,
+        Alcohol: $sectionGeneral.querySelector('#form-event-input-alcohol').value,
+        Croquis: $sectionGeneral.querySelector('#form-event-input-croquis').value,
+        Mantel: $sectionGeneral.querySelector('#form-event-input-mantel').value,
+        Servilleta: $sectionGeneral.querySelector('#form-event-input-servilleta').value,
+        Cristaleria: $sectionGeneral.querySelector('#form-event-input-cristaleria').value,
+        TipoMesa: $sectionGeneral.querySelector('#form-event-input-tipoMesas').value,
+        TipoSilla: $sectionGeneral.querySelector('#form-event-input-tipoSillas').value,
+        CasoEspecial: $sectionGeneral.querySelector('#form-event-input-casosEspeciales').value,
+        CostoTotal: parseInt(!costoTotal ? 0 : costoTotal),
+        AbonoTotal: parseInt(0),
+    }
+
+    if (saveOnpagos) {
+        let result = await fetchAddEvent($event);
+        if (result.ID) return result.ID;
+
+        return false;
+    }
+
+    if (e.target.matches('#btn-event-pagos')) {
+        let result = await fetchAddEvent($event);
+        if (result)
+            cancel();
+    }
+
+    if (e.target.matches('#btn-event-editar-event')) {
+        let result = await fetchUpdateEvent($event);
+
+        if (result)
+            cancel();
+    }
+}
+
+// Funciones Fetch
+async function fetchAddEvent(event) {
+    // console.log(event);
+    try {
+        let res = await fetch('http://localhost:3000/eventos', {
+            method: 'POST',
+            body: JSON.stringify(event),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+
+        if (!res.ok)
+            throw (res);
+
+        let data = await res.json();
+
+        return data.body;
+
+    } catch (e) {
+        // console.log(e)
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return false;
+    }
+}
+
+async function fetchUpdateEvent(event) {
+
+    let id = document.querySelector('.btn-primary').dataset.id;
+
+    try {
+        let res = await fetch('http://localhost:3000/eventos/' + id, {
+            method: 'PATCH',
+            body: JSON.stringify(event),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+
+        // console.log('=========================');
+
+        if (!res.ok)
+            throw (res);
+
+        return true;
+
+    } catch (e) {
+        // console.log(e)
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return false;
+    }
 }
 
 async function getById(id) {
@@ -896,6 +1098,46 @@ async function getById(id) {
 async function getPagosById(id) {
     try {
         let res = await fetch('http://localhost:3000/pagos/' + id + '/');
+
+        if (!res.ok)
+            throw (res);
+        let data = await res.json();
+
+        return data.body;
+    } catch (e) {
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}
+
+async function addPagos(pago) {
+    try {
+        let res = await fetch('http://localhost:3000/pagos', {
+            method: 'POST',
+            body: JSON.stringify(pago),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+
+        if (!res.ok)
+            throw (res);
+        let data = await res.json();
+
+        return data.body;
+    } catch (e) {
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}
+
+async function getAvailableDays(day) {
+    try {
+        let res = await fetch('http://localhost:3000/eventos/getAvailableDays/' + day, {
+            method: 'GET'
+        })
 
         if (!res.ok)
             throw (res);

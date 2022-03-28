@@ -3,6 +3,7 @@
 import eventAdd from './eventos.forms.js';
 import eventDetails from './event.details.js';
 import nav from '../nav.js';
+import modalError from '../modal.error.js';
 
 let FocusDate = new Date(Date.now());
 
@@ -107,24 +108,25 @@ function CreateCalendar(data, date) {
             //monthdays+"/"+(date.getMonth()+1)+"/"+date.getFullYear()
             $divday.innerHTML = `${monthdays} <br>`
 
-            data.forEach(element => {
-                let jdate = new Date(element.FechaEvento);
-                jdate = jdate.getFullYear() + "/" + (jdate.getMonth() + 1) + "/" + jdate.getDate();
-                let sdate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + monthdays;
-                if (jdate == sdate) {
-                    // console.log(jdate+" same "+sdate);
-                    const $evento = document.createElement("button");
-                    $evento.id = 'evento';
-                    $evento.classList.add('btn_evento');
-                    $evento.classList.add('btn');
-                    $evento.dataset.id = element.ID;
-                    $evento.dataset.Fecha = element.FechaEvento;
-                    $evento.innerHTML = `${element.TipoEvento} <br> ${element.Ubicacion}`;
-                    $divday.appendChild($evento.cloneNode(true));
-                    // console.log(element)
-                    data = data.filter((item) => item !== element);
-                }
-            });
+            if (data)
+                data.forEach(element => {
+                    let jdate = new Date(element.FechaEvento);
+                    jdate = jdate.getFullYear() + "/" + (jdate.getMonth() + 1) + "/" + jdate.getDate();
+                    let sdate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + monthdays;
+                    if (jdate == sdate) {
+                        // console.log(jdate+" same "+sdate);
+                        const $evento = document.createElement("button");
+                        $evento.id = 'evento';
+                        $evento.classList.add('btn_evento');
+                        $evento.classList.add('btn');
+                        $evento.dataset.id = element.ID;
+                        $evento.dataset.Fecha = element.FechaEvento;
+                        $evento.innerHTML = `${element.TipoEvento} <br> ${element.Ubicacion}`;
+                        $divday.appendChild($evento.cloneNode(true));
+                        // console.log(element)
+                        data = data.filter((item) => item !== element);
+                    }
+                });
             monthdays++;
         }
         $sectionCalendar.appendChild($divday.cloneNode(true))
@@ -149,8 +151,6 @@ async function get() {
         return null;
     }
 }
-
-
 
 document.addEventListener('click', async e => {
     if (e.target.matches('#btn_add-event')) {
@@ -194,10 +194,10 @@ document.addEventListener('click', async e => {
         let $date = document.getElementById("lblMonth");
         $date.innerHTML = `${GetTxtMonth(FocusDate.getMonth()+1)} ${FocusDate.getFullYear()}`
     }
-    if(e.target.matches('#evento')){
+    if (e.target.matches('#evento')) {
         let id = e.target.dataset.id;
         const $root = document.getElementById("root");
-        $root.innerHTML=``;
+        $root.innerHTML = ``;
         $root.appendChild(nav());
 
         $root.appendChild(await eventDetails(id));
@@ -245,4 +245,6 @@ function GetTxtMonth(mes) {
     }
 }
 
-export {GetTxtMonth};
+export {
+    GetTxtMonth
+};

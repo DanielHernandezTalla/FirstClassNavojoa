@@ -63,9 +63,23 @@ router.delete('/:id', validate(mySchema, 'getById'), (req, res) => {
 
 });
 
-router.get('getMonth/:id', validate(mySchema, 'getById'), (req, res) => {
+router.get('/getMonth/:id', (req, res) => {
 
     controller.getMonth(req.params.id)
+        .then(data => {
+            response.success(req, res, data);
+        })
+        .catch(err => {
+            response.error(req, res, "No se pudo acceder al recurso", 500, err);
+        });
+
+});
+
+router.get('/getAvailableDays/:day', (req, res) => {
+
+    // res.send("nasnk")
+
+    controller.availableDays(req.params.day)
         .then(data => {
             response.success(req, res, data);
         })

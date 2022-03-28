@@ -129,6 +129,10 @@ document.addEventListener('click', async e => {
         let id = $modal.dataset.id;
         let table = $modal.dataset.table;
 
+        if (table === 'pagos') {
+            return;
+        }
+
         const $main = document.querySelector('main');
         $root.removeChild($main);
 
@@ -204,7 +208,7 @@ document.addEventListener('contextmenu', e => {
 
     // -- Evento que aparece las opciones
     // -- para cuando se da click derecho en las filas de las tablas
-    if (e.target.matches('.table__row') || e.target.matches('.table__row *')) {
+    if (e.target.matches('.table__row') || e.target.matches('.table__row *') || e.target.matches('.table__row-clear')) {
         let id = e.target.dataset.id;
         let table = e.target.dataset.table;
 

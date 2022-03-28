@@ -3,6 +3,9 @@
 // -- Haciendo modal dependiendo del error que venga
 export default async function modalError(e) {
 
+    console.log(e)
+    // console.log("----------------")
+
     let errorMessage = "";
     let details = null;
 
@@ -11,12 +14,20 @@ export default async function modalError(e) {
         details = []
         details.push(e);
     } else if (e.status !== 400) {
-        errorMessage = e.statusText;
+        let data = await e.json();
+        // console.log(data)
+        errorMessage = data.error.body;
+        console.group()
+        console.error("ERROR CODE: ", data.error.details.code);
+        console.error("ERROR NUMERO: ", data.error.details.errno);
+        console.error("ERROR SQL MESSAGE: ", data.error.details.sqlMessage);
+        console.error("ERROR SQL: ", data.error.details.sql);
+        console.groupEnd()
     } else {
         errorMessage = e.statusText;
         let detailsError = await e.json();
         details = [];
-        // console.log(detailsError)
+        console.log(detailsError)
         detailsError.error.details.forEach(item => {
             details.push(item.message);
         })
