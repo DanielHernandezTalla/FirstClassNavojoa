@@ -254,12 +254,11 @@ document.addEventListener('click', async e => {
             }
 
             // Aqui agregamos el pago
-            // let result = await addPagos($pago)
-            let result = {
-                isMayor :2
-            }
+            let result = await addPagos($pago)
 
-            if (result.isMayor === 2) {
+            // console.log(result);
+
+            if (result.isMayor === 0) {
                 const $root = document.getElementById("root");
                 $root.appendChild(await modalConfirm("La suma de los abonos es mayor al total del costo del evento ¿Quieres agregar el pago aun?", null, $pago));
             } else {
@@ -1124,6 +1123,8 @@ async function addPagos(pago) {
         if (!res.ok)
             throw (res);
         let data = await res.json();
+
+        console.log(data);
 
         return data.body;
     } catch (e) {
