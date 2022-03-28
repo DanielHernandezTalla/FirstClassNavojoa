@@ -24,8 +24,8 @@ export default function Router() {
 
         // -- Ruta eventos
         if (e.target.matches('#btn-home-evento') || e.target.matches('#btn-home-evento *')) {
-            console.log("evento");
-            $root.innerHTML= ``;
+            // console.log("evento");
+            $root.innerHTML = ``;
             $root.appendChild(nav());
             let $sectionEventos = await sectionEventos();
             $root.appendChild($sectionEventos);

@@ -1,6 +1,7 @@
 'use strict';
 import documentPDF from './documentos.pdf.js';
 import imprimir from './documentos.impresion.js';
+import modalError from '../modal.error.js';
 //import startWindow from './documentos.window.js';
 
 export default async function sectionDocument(option) {
@@ -98,13 +99,14 @@ export default async function sectionDocument(option) {
 
             let salario = 0;
 
-            puestos.forEach(itemPuesto => {
-                if (item.puesto == itemPuesto.Nombre) {
-                    $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
-                    salario = itemPuesto.Salario;
-                } else
-                    $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
-            })
+            if (puestos)
+                puestos.forEach(itemPuesto => {
+                    if (item.puesto == itemPuesto.Nombre) {
+                        $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
+                        salario = itemPuesto.Salario;
+                    } else
+                        $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
+                })
 
             const $formGroupDocument = document.createElement('div');
             $formGroupDocument.classList.add('form__group-document')
@@ -133,13 +135,14 @@ export default async function sectionDocument(option) {
 
             let salario = 0;
 
-            puestos.forEach(itemPuesto => {
-                if (item == itemPuesto.Nombre) {
-                    $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
-                    salario = itemPuesto.Salario;
-                } else
-                    $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
-            })
+            if (puestos)
+                puestos.forEach(itemPuesto => {
+                    if (item == itemPuesto.Nombre) {
+                        $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
+                        salario = itemPuesto.Salario;
+                    } else
+                        $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
+                })
 
             const $formGroupDocument = document.createElement('div');
             $formGroupDocument.classList.add('form__group-document')
@@ -456,7 +459,7 @@ function saveInCancel($form) {
         puestos: arrPuestoPeople
     }
 
-    console.log(newFormat)
+    // console.log(newFormat)
 
     if (newFormat.lugar.salon && newFormat.lugar.jardin) {
         localStorage.setItem('salon', JSON.stringify(newFormat))
@@ -532,11 +535,12 @@ function getDatalist(personal, nameDefault = null) {
     const $datalist = document.createElement('datalist')
     $datalist.setAttribute('id', 'personal');
 
-    personal.forEach(item => {
-        $datalist.innerHTML += `
+    if (personal)
+        personal.forEach(item => {
+            $datalist.innerHTML += `
             <option value='${item.Nombre}'></option>
         `;
-    })
+        })
 
     $containerDatalist.appendChild($inputList);
     $containerDatalist.appendChild($datalist);
@@ -625,13 +629,14 @@ function createSelected(puestos, item = 'Encargado') {
     $select.classList.add('select-puesto-document');
 
     let salario;
-    puestos.forEach(itemPuesto => {
-        if (item == itemPuesto.Nombre) {
-            $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
-            salario = itemPuesto.Salario;
-        } else
-            $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
-    })
+    if (puestos)
+        puestos.forEach(itemPuesto => {
+            if (item == itemPuesto.Nombre) {
+                $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}" selected>${itemPuesto.Nombre}</option>`;
+                salario = itemPuesto.Salario;
+            } else
+                $select.innerHTML += `<option value="${itemPuesto.Nombre}" data-salario="${itemPuesto.Salario}">${itemPuesto.Nombre}</option>`;
+        })
     return {
         $select,
         salario

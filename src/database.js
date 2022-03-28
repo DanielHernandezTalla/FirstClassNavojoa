@@ -2,12 +2,12 @@
 const mysql = require('promise-mysql');
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    port: 3307,
-    user: 'root',
-    password: 'Daniel2000',
-    database: 'sfc'
-});
+    host: 'beajjg9oovumjxjrwknn-mysql.services.clever-cloud.com',
+    port: 3306,
+    user: 'uwzm74uonuqr1alp',
+    password: 'tWpuxqakUnhHGNmkvVJO',
+    database: 'beajjg9oovumjxjrwknn'
+})
 
 // database Name id16766404_sfc
 // dbUser 	id16766404_root

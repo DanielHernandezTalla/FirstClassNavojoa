@@ -12,6 +12,8 @@ const statusMessage = {
 exports.success = (req, res, body = null, status = 200) => {
     if (!body)
         body = statusMessage[status];
+
+    // console.log(body)
     res.status(status).send({
         'error': null,
         'body': body
@@ -22,8 +24,12 @@ exports.error = (req, res, body = null, status = 500, details = null) => {
     console.error("[Response Error] " + details)
     if (!body)
         body = statusMessage[status];
+
     res.status(status).send({
-        'error': body,
+        'error': {
+            'body': body,
+            'details': details
+        },
         'body': null,
     });
 }
