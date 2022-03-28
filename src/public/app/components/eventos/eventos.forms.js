@@ -695,9 +695,9 @@ function agregarPagos() {
 function craeteSectionRowOptions() {
     return `
         <div class="form-div-hr">
-            <div><img id="btn-options-event" src="./app/assets/icon_salon_whitout_border.png" alt="1"/><small><b>Evento</b></small></div>
+            <div><img id="btn-options-event" src="./app/assets/icon_star_whitout_border.png" alt="1"/><small><b>Evento</b></small></div>
             <div><img id="btn-options-general" src="./app/assets/icon_salon_whitout_border.png" alt="2"/><small><b>General</b></small></div>
-            <div><img id="btn-options-pagos" src="./app/assets/icon_salon_whitout_border.png" alt="3"/><small><b>Pagos</b></small></div>
+            <div><img id="btn-options-pagos" src="./app/assets/icon_pagos_whitout_border.png" alt="3"/><small><b>Pagos</b></small></div>
         </div>
     `;
 }

@@ -7,6 +7,7 @@ let window;
 
 function createWindow(app) {
     window = new BrowserWindow({
+        icon: "src/public/app/assets/icon_first.ico",
         width: 1200,
         height: 800,
         webPreferences: {

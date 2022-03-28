@@ -284,3 +284,13 @@ async function fetchRemoveEvent(id) {
         return null;
     }
 }
+
+function drawDetails()
+{
+
+}
+
+function drawPayments()
+{
+    
+}
