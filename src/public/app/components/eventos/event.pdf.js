@@ -15,8 +15,33 @@ export default async function imprimirEvent($content) {
 
     const htmlPDF = $content.cloneNode(true);
 
+    console.log(htmlPDF);
+
+    htmlPDF.querySelector('.container').style.margin = "0px";
+    htmlPDF.querySelectorAll('.container')[1].style.margin = "0px";
+    htmlPDF.querySelector('.container').style.padding = "0px";
+    htmlPDF.querySelectorAll('.container')[1].style.padding = "0px";
+
+    htmlPDF.querySelectorAll('label').forEach(label => {
+        label.style.color = "black";
+    })
+
+    htmlPDF.querySelectorAll('p').forEach(p => {
+        p.style.color = "black";
+    })
+
+    htmlPDF.querySelectorAll('link')[5].setAttribute('href', '../../../css/main.css');
+
+    htmlPDF.querySelector('nav').outerHTML = ''
+
+    htmlPDF.querySelectorAll('button').forEach(btn => {
+        btn.outerHTML = ''
+    })
+
+    htmlPDF.querySelector('.pays-cheese').outerHTML = "";
+
     // // Editamos los links css
-   // htmlPDF.querySelectorAll('link')[5].setAttribute('href', '../../../../css/main.css');
+    // htmlPDF.querySelectorAll('link')[5].setAttribute('href', '../../../../css/main.css');
     //htmlPDF.querySelectorAll('link')[5].setAttribute('href', './css/main.css');
     // htmlPDF.querySelectorAll('link').outerHTML = ''
     // htmlPDF.querySelectorAll('link').outerHTML = ''
@@ -62,7 +87,7 @@ function createWindow() {
 
     // console.log('window creadop ')
     win = new BrowserWindow({
-        show: false,
+        show: true,
         webPreferences: {
             nodeIntegration: true
         }
@@ -107,4 +132,3 @@ async function save(content) {
 //     divContainer.appendChild($Eventdoc);
 //     $main.appendChild($divContainer);
 // }
-

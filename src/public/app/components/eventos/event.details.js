@@ -26,9 +26,10 @@ export default async function sectionDetailsEvent(id) {
 
     const $details = document.createElement('div');
     $details.appendChild(drawDetails(data));
-    $details.id="IdDetallesEvento";
+    $details.id = "IdDetallesEvento";
     const $pays = document.createElement('div');
-    $pays.appendChild(drawPayments(data,pagos));
+    $pays.classList.add('pays-cheese');
+    $pays.appendChild(drawPayments(data, pagos));
 
     $divContainer.appendChild($details);
     $divContainer.appendChild($pays);
@@ -97,12 +98,8 @@ document.addEventListener('click', async e => {
         document.getElementById('root').appendChild(modalConfirm('¿Estas seguro de eliminar?', e.target.dataset.id));
 
     }
-    if(e.target.matches('#btn-print-Details'))
-    {
-        console.log("click details")
-        const $conteiner = document.createElement('div');
-        $conteiner.appendChild(document.getElementById('IdDetallesEvento'));
-        imprimirEvent($conteiner);
+    if (e.target.matches('#btn-print-Details')) {
+        imprimirEvent(document.querySelector('html'));
     }
 })
 
@@ -128,11 +125,10 @@ async function fetchRemoveEvent(id) {
     }
 }
 
-function drawDetails(data)
-{
+function drawDetails(data) {
     const $content = document.createElement('div');
     $content.classList.add('container');
-    
+
     const $h2 = document.createElement('h2');
     $h2.innerHTML = 'DETALLES EVENTO';
     $h2.classList.add('h2');
@@ -148,7 +144,7 @@ function drawDetails(data)
     const $btn_printDetails = document.createElement('button');
     $btn_printDetails.innerHTML = 'Imprimir Detalles';
     $btn_printDetails.classList.add('btn_add-event')
-    $btn_printDetails.id="btn-print-Details"
+    $btn_printDetails.id = "btn-print-Details"
 
     $event_details_head.appendChild($btn_printAll);
     $event_details_head.appendChild($btn_printDetails);
@@ -165,18 +161,18 @@ function drawDetails(data)
     const $details1 = document.createElement('div');
     $details1.classList.add('details');
 
-        /*Dando formato a los campos*/
-        let fechaEvento = new Date(data.FechaEvento);
-        fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
-    
-        let sesion = new Date(data.Sesion);
-        sesion = sesion.getDate() + " de " + GetTxtMonth(sesion.getMonth() + 1) +
-            " de " + sesion.getFullYear() + " a las " + sesion.getHours() + ":" + sesion.getMinutes();
-    
-        let hora = data.HoraInicio.substring(0, 5);
-        let horacena = data.HoraCena.substring(0, 5);
-        /*Fin de los formatos*/
-        $details1.innerHTML = `
+    /*Dando formato a los campos*/
+    let fechaEvento = new Date(data.FechaEvento);
+    fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
+
+    let sesion = new Date(data.Sesion);
+    sesion = sesion.getDate() + " de " + GetTxtMonth(sesion.getMonth() + 1) +
+        " de " + sesion.getFullYear() + " a las " + sesion.getHours() + ":" + sesion.getMinutes();
+
+    let hora = data.HoraInicio.substring(0, 5);
+    let horacena = data.HoraCena.substring(0, 5);
+    /*Fin de los formatos*/
+    $details1.innerHTML = `
         <label class="lbldetail" >Fecha</label>
         <p class="eventdata">${fechaEvento}</p>
         <label class="lbldetail" >Ubicacion</label>
@@ -196,10 +192,10 @@ function drawDetails(data)
         <label class="lbldetail" >Mantel</label>
         <p class="eventdata">${data.Mantel}</p>
         `
-        const $details2 = document.createElement('div');
-        $details2.classList.add('details');
-    
-        $details2.innerHTML = `
+    const $details2 = document.createElement('div');
+    $details2.classList.add('details');
+
+    $details2.innerHTML = `
         <label class="lbldetail" >Sesion</label>
         <p class="eventdata">${sesion}</p>
         <label class="lbldetail" >Evento</label>
@@ -219,16 +215,16 @@ function drawDetails(data)
         <label class="lbldetail" >Servilleta</label>
         <p class="eventdata">${data.Servilleta}</p>
         `
-        const $croquis = document.createElement('div');
-        $croquis.classList.add('croquis');
-        $croquis.innerHTML = `
+    const $croquis = document.createElement('div');
+    $croquis.classList.add('croquis');
+    $croquis.innerHTML = `
         <label class="lbldetail" >Croquis </label>
         <p class="eventdata">${data.Croquis}</p>
         <img src="${data.Croquis}" alt="Croquis del evento" class="img_croquis">
         `
-        const $casosEspeciales = document.createElement('div');
-        $casosEspeciales.classList.add('casosEspeciales');
-        $casosEspeciales.innerHTML = `
+    const $casosEspeciales = document.createElement('div');
+    $casosEspeciales.classList.add('casosEspeciales');
+    $casosEspeciales.innerHTML = `
         <label class="lbldetail" >Casos especiales </label>
         <p class="eventdata">${data.CasoEspecial}</p>
         `
@@ -241,8 +237,7 @@ function drawDetails(data)
     return $content;
 }
 
-function drawPayments(data,pagos)
-{
+function drawPayments(data, pagos) {
     const $content = document.createElement('div');
     const $PagosH3 = document.createElement('h3');
     $PagosH3.innerHTML = `Pagos`;
@@ -299,4 +294,3 @@ function drawPayments(data,pagos)
 
     return $content;
 }
-
