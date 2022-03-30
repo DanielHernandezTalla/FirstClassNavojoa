@@ -112,7 +112,7 @@ export default async function sectionDetailsEvent(id) {
     $croquis.innerHTML = `
     <label class="lbldetail" >Croquis </label>
     <p class="eventdata">21-05-2022</p>
-    <img class="img_croquis">
+    <img src="${data.Croquis}" alt="Croquis del evento" class="img_croquis">
     `
     const $casosEspeciales = document.createElement('div');
     $casosEspeciales.classList.add('casosEspeciales');
@@ -262,25 +262,3 @@ document.addEventListener('click', async e => {
 
     }
 })
-
-async function fetchRemoveEvent(id) {
-    try {
-        let res = await fetch('http://localhost:3000/eventos/' + id, {
-            method: 'DELETE',
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
-
-        if (!res.ok)
-            throw (res);
-
-        return true;
-
-    } catch (e) {
-        // console.log(e)
-        const $root = document.getElementById("root");
-        $root.appendChild(await modalError(e));
-        return null;
-    }
-}

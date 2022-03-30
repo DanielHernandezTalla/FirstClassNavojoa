@@ -199,9 +199,9 @@ export default async function sectionDocument(option) {
     if (data)
         loadData(data, $main);
 
-    setTimeout(() => {
-        calcTotal()
-    }, 100)
+
+    // setTimeout(() => {
+    // }, 100)
 
     return $main;
 }
@@ -479,28 +479,17 @@ function loadData(data, $main) {
                     item.personas.forEach(async persona => {
                         let node = element.parentNode.querySelector('div');
 
-                        await addGroupRow(node, persona.Nombre, persona.Salario);
+                        await addGroupRow(node.previousSibling, persona.Nombre, persona.Salario);
 
                         let arr = node.parentNode.querySelectorAll('spam');
                         for (let i = 0; i < arr.length - 1; i++) {
                             arr[i].querySelector('i').classList.replace('bi-plus-lg', "bi-dash-lg");
                         }
+                        calcTotal()
                     })
                 }
             }
     })
-
-    setTimeout(() => {
-        let divs = $main.querySelectorAll('.form__group-document');
-
-        for (let i = 0; i < divs.length - 3; i++) {
-
-            divs[i].querySelector('div').outerHTML = null;
-            if (!divs[i].querySelector('div'))
-                divs[i].outerHTML = null
-        }
-
-    }, 500);
 }
 
 function calcTotal() {

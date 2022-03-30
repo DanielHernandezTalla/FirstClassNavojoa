@@ -1,5 +1,6 @@
 'use strict'
 const express = require('express')
+const path = require('path');
 
 // Creamos la app con electron
 const {
@@ -26,6 +27,9 @@ server.use(express.json());
 
 // Agregamos las rutas al servidor express
 router(server)
+
+// Agregamos carpeta public
+server.use('/public', express.static(path.join(__dirname, '/uploads')))
 
 // Hacemos correr el servidor express
 server.listen(3000, () => {

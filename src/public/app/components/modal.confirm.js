@@ -66,6 +66,11 @@ document.addEventListener('click', async e => {
             // -- Primero obtenemos los datos de la nueva tabla, para evitar que demore en cargar por la consulta
             let $section = null;
 
+            if (id === -1) {
+                console.log('salir');
+                return;
+            }
+
             // Para confirmar que quieres agregar un pago
             if (!id) {
                 const $pago = {

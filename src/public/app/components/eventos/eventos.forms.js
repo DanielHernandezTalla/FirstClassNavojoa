@@ -63,6 +63,7 @@ export default async function eventAdd(id = -1, table = null, action = null, sec
     // $form.dataset.id = id;
     $form.classList.add('form');
     $form.setAttribute('id', 'form-event-add');
+    $form.setAttribute('action', selectClass);
 
     $sectionEvent = createEvent(data);
     $sectionGeneral = createGeneral(data);
@@ -97,6 +98,10 @@ export default async function eventAdd(id = -1, table = null, action = null, sec
     $main.appendChild($divContainer)
     return $main;
 }
+
+document.addEventListener('submit', async e => {
+    e.preventDefault()
+})
 
 document.addEventListener('click', async e => {
 
@@ -280,6 +285,12 @@ document.addEventListener('click', async e => {
     }
 })
 
+const stopReload = async e => {
+
+    e.preventDefault();
+    e.returnValue = '';
+}
+
 document.addEventListener('change', async e => {
     if (e.target.matches('#form-event-input-totalPago')) {
         calcularTotalAbono();
@@ -297,6 +308,31 @@ document.addEventListener('change', async e => {
             $root.appendChild(await modalError("Dia ocupado."));
             e.target.value = null;
         }
+    }
+
+    if (e.target.matches('#form-event-input-croquis')) {
+
+        if (e.target.dataset.url) {
+            let urlOld = e.target.dataset.url;
+            console.log(urlOld)
+            e.target.dataset.url = "";
+
+            urlOld = urlOld.split(`\\`).pop();
+
+            await removeImage(urlOld);
+        }
+
+        if (e.target.files[0]) {
+            let url = await addImage(e.target.files[0].path);
+            e.target.dataset.url = url;
+        }
+
+        window.addEventListener('beforeunload', stopReload)
+
+
+        setTimeout(() => {
+            window.removeEventListener('beforeunload', stopReload);
+        }, 400)
     }
 })
 
@@ -459,7 +495,7 @@ function createGeneral(data = null) {
 
         <div class="form__group-grid">
             <label for="form-event-input-croquis">Croquis</label>
-            <input id="form-event-input-croquis" type="file" name="croquis" title="Agrega la imagen del croquis.">
+            <input id="form-event-input-croquis" type="file" name="croquis" title="Agrega la imagen del croquis." data-url="${data?data[0].Croquis:""}">
             <small class="form-error opacity">Error: Agrega la imagen del croquis.</small>
         </div>
 
@@ -945,6 +981,19 @@ function GetTxtMonth(mes) {
 }
 
 async function cancel() {
+
+    console.log(document.querySelector('form'))
+
+    if (document.querySelector('form').dataset.action === 'btn-event-add') {
+        let url = document.querySelector('#form-event-input-croquis').dataset.url;
+        if (url) {
+            urlOld = urlOld.split(`\\`).pop();
+
+            await removeImage(urlOld);
+        }
+    }
+
+
     $sectionEvent = "";
     $sectionGeneral = "";
     $sectionPagos = "";
@@ -990,7 +1039,7 @@ async function saveEvent(e, saveOnpagos = false) {
         HoraCena: $sectionGeneral.querySelector('#form-event-input-horaCena').value,
         Platillo: $sectionGeneral.querySelector('#form-event-input-platillo').value,
         Alcohol: $sectionGeneral.querySelector('#form-event-input-alcohol').value,
-        Croquis: $sectionGeneral.querySelector('#form-event-input-croquis').value,
+        Croquis: $sectionGeneral.querySelector('#form-event-input-croquis').dataset.url,
         Mantel: $sectionGeneral.querySelector('#form-event-input-mantel').value,
         Servilleta: $sectionGeneral.querySelector('#form-event-input-servilleta').value,
         Cristaleria: $sectionGeneral.querySelector('#form-event-input-cristaleria').value,
@@ -1118,6 +1167,58 @@ async function addPagos(pago) {
             headers: {
                 'Content-type': 'application/json'
             }
+        })
+
+        if (!res.ok)
+            throw (res);
+        let data = await res.json();
+
+        console.log(data);
+
+        return data.body;
+    } catch (e) {
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}
+
+async function addImage(URL) {
+    try {
+        // const formData = new FormData()
+        // formData.set('file', file)
+
+        let res = await fetch('http://localhost:3000/eventos/savaImage', {
+            method: 'POST',
+            body: JSON.stringify({
+                url: URL
+            }),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        })
+
+        if (!res.ok)
+            throw (res);
+        let data = await res.json();
+
+        console.log(data);
+
+        return data.body;
+    } catch (e) {
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}
+
+async function removeImage(name) {
+
+    console.log(name)
+
+    try {
+        let res = await fetch('http://localhost:3000/eventos/removeImage/' + name, {
+            method: 'DELETE'
         })
 
         if (!res.ok)
