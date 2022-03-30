@@ -223,8 +223,8 @@ function drawDetails(data)
         $croquis.classList.add('croquis');
         $croquis.innerHTML = `
         <label class="lbldetail" >Croquis </label>
-        <p class="eventdata">21-05-2022</p>
-        <img class="img_croquis">
+        <p class="eventdata">${data.Croquis}</p>
+        <img src="${data.Croquis}" alt="Croquis del evento" class="img_croquis">
         `
         const $casosEspeciales = document.createElement('div');
         $casosEspeciales.classList.add('casosEspeciales');
@@ -299,3 +299,4 @@ function drawPayments(data,pagos)
 
     return $content;
 }
+

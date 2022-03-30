@@ -1,5 +1,6 @@
 'use strict';
 const getConnection = require('../../database');
+const path = require('path');
 
 async function get() {
     return new Promise(async function (resolve, reject) {
@@ -32,6 +33,8 @@ async function getbyid(id) {
 async function add(body) {
     return new Promise(async function (resolve, reject) {
 
+        body.Croquis = body.Croquis.split('\\').join('\\\\');
+
         try {
             const conn = await getConnection();
             const eventos = await conn.query('CALL spEvento(3, NULL,"' + body.Cliente + '","' + body.TipoEvento + '","' + body.Ubicacion + '","' + body.FechaEvento + '","' + body.Telefono + '","' + body.Sesion + '","' + body.CeremoniaCivil + '","' + body.CasoEspecial + '",' + body.NoPersonas + ',"' + body.HoraInicio + '","' + body.HoraCena + '","' + body.Platillo + '","' + body.Alcohol + '","' + body.Croquis + '","' + body.TipoMesa + '","' + body.TipoSilla + '","' + body.Mantel + '",' + body.CostoTotal + ',' + body.AbonoTotal + ',"' + body.Cristaleria + '",' + body.NoMeseros + ',"' + body.Servilleta + '")');
@@ -49,13 +52,15 @@ async function add(body) {
             console.log(e)
             reject(e);
         }
-
     })
 }
 
 async function update(id, body) {
     return new Promise(async function (resolve, reject) {
         try {
+
+            body.Croquis = body.Croquis.split('\\').join('\\\\');
+
             const conn = await getConnection();
             const eventos = await conn.query('CALL spEvento(2,' + id + ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)');
 
@@ -63,6 +68,7 @@ async function update(id, body) {
                 ...eventos[0][0],
                 ...body
             }
+
             const res = await conn.query('CALL spEvento(4, ' + id + ',"' + newBody.Cliente + '","' + newBody.TipoEvento + '","' + newBody.Ubicacion + '","' + newBody.FechaEvento + '","' + newBody.Telefono + '","' + newBody.Sesion + '","' + newBody.CeremoniaCivil + '","' + newBody.CasoEspecial + '",' + newBody.NoPersonas + ',"' + newBody.HoraInicio + '","' + newBody.HoraCena + '","' + newBody.Platillo + '","' + newBody.Alcohol + '","' + newBody.Croquis + '","' + newBody.TipoMesa + '","' + newBody.TipoSilla + '","' + newBody.Mantel + '",' + newBody.CostoTotal + ',' + newBody.AbonoTotal + ',"' + newBody.Cristaleria + '",' + newBody.NoMeseros + ',"' + newBody.Servilleta + '")');
             resolve({
                 affectedRows: res["affectedRows"]

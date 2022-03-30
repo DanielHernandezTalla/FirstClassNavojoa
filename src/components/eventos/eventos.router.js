@@ -1,4 +1,8 @@
 const express = require('express');
+const multer = require('multer')
+const fs = require('fs');
+const fsExtra = require('fs-extra');
+const path = require('path');
 
 const mySchema = require('./eventos.schema');
 const controller = require('./eventos.controller');
@@ -6,6 +10,10 @@ const validate = require('../../middlewares/validator');
 const response = require('../../middlewares/response');
 
 const router = express.Router();
+
+const upload = multer({
+    dest: 'src/uploads'
+})
 
 router.get('/', (req, res) => {
     controller.get()
@@ -87,6 +95,42 @@ router.get('/getAvailableDays/:day', (req, res) => {
             response.error(req, res, "No se pudo acceder al recurso", 500, err);
         });
 
+});
+
+router.post('/savaImage', (req, res) => {
+
+    let src = req.body.url;
+
+    let newname = new Date();
+    let extension = path.parse(req.body.url).ext;
+
+    let newPath = path.join(__dirname, '../../', 'uploads', newname.getTime().toString() + extension);
+
+    fsExtra.move(src, newPath, (err) => {
+        if (err) {
+            response.error(req, res, err);
+        };
+
+        response.success(req, res, newPath);
+    });
+});
+
+router.delete('/removeImage/:name', (req, res) => {
+
+    let filename = req.params.name
+
+    let url = path.join(__dirname, '../../', 'uploads', filename)
+
+    console.log(url)
+
+    try {
+
+        let resul = fs.unlinkSync(url)
+        response.success(req, res);
+
+    } catch (err) {
+        response.error(req, res, "Error al eliminar el recurso");
+    }
 });
 
 module.exports = router;
