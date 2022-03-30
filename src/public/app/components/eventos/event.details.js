@@ -9,9 +9,11 @@ import {
 } from './calendar.js';
 import imprimirEvent from './event.pdf.js';
 
+let EventId;
 
 export default async function sectionDetailsEvent(id) {
 
+    EventId = id;
     let data = await getById(id);
     data = data[0];
     // console.log(data);
@@ -98,8 +100,18 @@ document.addEventListener('click', async e => {
         document.getElementById('root').appendChild(modalConfirm('¿Estas seguro de eliminar?', e.target.dataset.id));
 
     }
+<<<<<<< HEAD
     if (e.target.matches('#btn-print-Details')) {
         imprimirEvent(document.querySelector('html'));
+=======
+    if(e.target.matches('#btn-print-Details'))
+    {
+        console.log("click details")
+        const $conteiner = document.createElement('div');
+        $conteiner.appendChild(drawDetails(getById(EventId)));
+        $conteiner.appendChild(drawPayments(getPagosById(EventId)));
+        imprimirEvent($conteiner);
+>>>>>>> f8e5d725bedfde30fed56d677de1f815eb4d23f6
     }
 })
 
@@ -161,6 +173,7 @@ function drawDetails(data) {
     const $details1 = document.createElement('div');
     $details1.classList.add('details');
 
+<<<<<<< HEAD
     /*Dando formato a los campos*/
     let fechaEvento = new Date(data.FechaEvento);
     fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
@@ -173,6 +186,49 @@ function drawDetails(data) {
     let horacena = data.HoraCena.substring(0, 5);
     /*Fin de los formatos*/
     $details1.innerHTML = `
+=======
+        /*Dando formato a los campos*/
+        let fechaEvento = new Date(data.FechaEvento);
+        fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
+    
+        let sesion = new Date(data.Sesion);
+        if(sesion.getFullYear()==1999)
+        {
+            sesion = "";
+        }
+        else{
+            let hour="";
+            let minute="";
+            if(sesion.getHours().toString().length<2) {hour=0+""+sesion.getHours();}
+            else{hour=sesion.getHours();}
+            if(sesion.getMinutes().toString().length<2) {minute=0+""+sesion.getMinutes();}
+            else{minute=sesion.getMinutes();}
+        sesion = sesion.getDate() + " de " + GetTxtMonth(sesion.getMonth() + 1) +
+            " de " + sesion.getFullYear() + " a las " + hour + ":" + minute;
+        }
+        let hora = data.HoraInicio.substring(0, 5);
+        let horacena = data.HoraCena.substring(0, 5);
+
+        let NumPersonas;
+        if(data.NoPersonas==null)
+        {
+            NumPersonas = "";
+        }
+        else{
+            NumPersonas=data.NoPersonas;
+        }
+
+        let NumMeseros;
+        if(data.NoMeseros==null)
+        {
+            NumMeseros = "";
+        }
+        else{
+            NumMeseros=data.NoMeseros;
+        }
+        /*Fin de los formatos*/
+        $details1.innerHTML = `
+>>>>>>> f8e5d725bedfde30fed56d677de1f815eb4d23f6
         <label class="lbldetail" >Fecha</label>
         <p class="eventdata">${fechaEvento}</p>
         <label class="lbldetail" >Ubicacion</label>
@@ -186,7 +242,7 @@ function drawDetails(data) {
         <label class="lbldetail" >Platillo</label>
         <p class="eventdata">${data.Platillo}</p>
         <label class="lbldetail" >NoPersonas</label>
-        <p class="eventdata">${data.NoPersonas}</p>
+        <p class="eventdata">${NumPersonas}</p>
         <label class="lbldetail" >Tipo de mesa</label>
         <p class="eventdata">${data.TipoMesa}</p>
         <label class="lbldetail" >Mantel</label>
@@ -207,7 +263,7 @@ function drawDetails(data) {
         <label class="lbldetail" >Alcohol</label>
         <p class="eventdata">${data.Alcohol}</p>
         <label class="lbldetail" >NoMeseros</label>
-        <p class="eventdata">${data.NoMeseros}</p>
+        <p class="eventdata">${NumMeseros}</p>
         <label class="lbldetail" >Tipo silla</label>
         <p class="eventdata">${data.TipoSilla}</p>
         <label class="lbldetail" >Cristaleria</label>

@@ -41,7 +41,9 @@ export default async function imprimirEvent($content) {
     htmlPDF.querySelector('.pays-cheese').outerHTML = "";
 
     // // Editamos los links css
+
     // htmlPDF.querySelectorAll('link')[5].setAttribute('href', '../../../../css/main.css');
+
     //htmlPDF.querySelectorAll('link')[5].setAttribute('href', './css/main.css');
     // htmlPDF.querySelectorAll('link').outerHTML = ''
     // htmlPDF.querySelectorAll('link').outerHTML = ''
