@@ -9,9 +9,11 @@ import {
 } from './calendar.js';
 import imprimirEvent from './event.pdf.js';
 
+let EventId;
 
 export default async function sectionDetailsEvent(id) {
 
+    EventId = id;
     let data = await getById(id);
     data = data[0];
     // console.log(data);
@@ -101,7 +103,8 @@ document.addEventListener('click', async e => {
     {
         console.log("click details")
         const $conteiner = document.createElement('div');
-        $conteiner.appendChild(document.getElementById('IdDetallesEvento'));
+        $conteiner.appendChild(drawDetails(getById(EventId)));
+        $conteiner.appendChild(drawPayments(getPagosById(EventId)));
         imprimirEvent($conteiner);
     }
 })
@@ -170,11 +173,40 @@ function drawDetails(data)
         fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
     
         let sesion = new Date(data.Sesion);
+        if(sesion.getFullYear()==1999)
+        {
+            sesion = "";
+        }
+        else{
+            let hour="";
+            let minute="";
+            if(sesion.getHours().toString().length<2) {hour=0+""+sesion.getHours();}
+            else{hour=sesion.getHours();}
+            if(sesion.getMinutes().toString().length<2) {minute=0+""+sesion.getMinutes();}
+            else{minute=sesion.getMinutes();}
         sesion = sesion.getDate() + " de " + GetTxtMonth(sesion.getMonth() + 1) +
-            " de " + sesion.getFullYear() + " a las " + sesion.getHours() + ":" + sesion.getMinutes();
-    
+            " de " + sesion.getFullYear() + " a las " + hour + ":" + minute;
+        }
         let hora = data.HoraInicio.substring(0, 5);
         let horacena = data.HoraCena.substring(0, 5);
+
+        let NumPersonas;
+        if(data.NoPersonas==null)
+        {
+            NumPersonas = "";
+        }
+        else{
+            NumPersonas=data.NoPersonas;
+        }
+
+        let NumMeseros;
+        if(data.NoMeseros==null)
+        {
+            NumMeseros = "";
+        }
+        else{
+            NumMeseros=data.NoMeseros;
+        }
         /*Fin de los formatos*/
         $details1.innerHTML = `
         <label class="lbldetail" >Fecha</label>
@@ -190,7 +222,7 @@ function drawDetails(data)
         <label class="lbldetail" >Platillo</label>
         <p class="eventdata">${data.Platillo}</p>
         <label class="lbldetail" >NoPersonas</label>
-        <p class="eventdata">${data.NoPersonas}</p>
+        <p class="eventdata">${NumPersonas}</p>
         <label class="lbldetail" >Tipo de mesa</label>
         <p class="eventdata">${data.TipoMesa}</p>
         <label class="lbldetail" >Mantel</label>
@@ -211,7 +243,7 @@ function drawDetails(data)
         <label class="lbldetail" >Alcohol</label>
         <p class="eventdata">${data.Alcohol}</p>
         <label class="lbldetail" >NoMeseros</label>
-        <p class="eventdata">${data.NoMeseros}</p>
+        <p class="eventdata">${NumMeseros}</p>
         <label class="lbldetail" >Tipo silla</label>
         <p class="eventdata">${data.TipoSilla}</p>
         <label class="lbldetail" >Cristaleria</label>
