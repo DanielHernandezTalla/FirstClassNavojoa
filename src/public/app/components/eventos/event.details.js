@@ -100,18 +100,9 @@ document.addEventListener('click', async e => {
         document.getElementById('root').appendChild(modalConfirm('¿Estas seguro de eliminar?', e.target.dataset.id));
 
     }
-<<<<<<< HEAD
     if (e.target.matches('#btn-print-Details')) {
         imprimirEvent(document.querySelector('html'));
-=======
-    if(e.target.matches('#btn-print-Details'))
-    {
-        console.log("click details")
-        const $conteiner = document.createElement('div');
-        $conteiner.appendChild(drawDetails(getById(EventId)));
-        $conteiner.appendChild(drawPayments(getPagosById(EventId)));
-        imprimirEvent($conteiner);
->>>>>>> f8e5d725bedfde30fed56d677de1f815eb4d23f6
+
     }
 })
 
@@ -173,20 +164,6 @@ function drawDetails(data) {
     const $details1 = document.createElement('div');
     $details1.classList.add('details');
 
-<<<<<<< HEAD
-    /*Dando formato a los campos*/
-    let fechaEvento = new Date(data.FechaEvento);
-    fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
-
-    let sesion = new Date(data.Sesion);
-    sesion = sesion.getDate() + " de " + GetTxtMonth(sesion.getMonth() + 1) +
-        " de " + sesion.getFullYear() + " a las " + sesion.getHours() + ":" + sesion.getMinutes();
-
-    let hora = data.HoraInicio.substring(0, 5);
-    let horacena = data.HoraCena.substring(0, 5);
-    /*Fin de los formatos*/
-    $details1.innerHTML = `
-=======
         /*Dando formato a los campos*/
         let fechaEvento = new Date(data.FechaEvento);
         fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
@@ -227,8 +204,8 @@ function drawDetails(data) {
             NumMeseros=data.NoMeseros;
         }
         /*Fin de los formatos*/
+
         $details1.innerHTML = `
->>>>>>> f8e5d725bedfde30fed56d677de1f815eb4d23f6
         <label class="lbldetail" >Fecha</label>
         <p class="eventdata">${fechaEvento}</p>
         <label class="lbldetail" >Ubicacion</label>
