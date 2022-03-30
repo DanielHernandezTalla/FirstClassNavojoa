@@ -1,4 +1,6 @@
 'use strict';
+const path = require('path');
+
 import nav from '../nav.js';
 import modalError from '../modal.error.js';
 import modalConfirm from '../modal.confirm.js';
@@ -312,15 +314,15 @@ document.addEventListener('change', async e => {
 
     if (e.target.matches('#form-event-input-croquis')) {
 
-        if (e.target.dataset.url) {
-            let urlOld = e.target.dataset.url;
-            console.log(urlOld)
-            e.target.dataset.url = "";
+        // if (e.target.dataset.url) {
+        //     let urlOld = e.target.dataset.url;
+        //     console.log(urlOld)
+        //     e.target.dataset.url = "";
 
-            urlOld = urlOld.split(`\\`).pop();
+        //     urlOld = urlOld.split(`\\`).pop();
 
-            await removeImage(urlOld);
-        }
+        //     await removeImage(urlOld);
+        // }
 
         if (e.target.files[0]) {
             let url = await addImage(e.target.files[0].path);
@@ -439,13 +441,18 @@ function createGeneral(data = null) {
 
     let horaInicio = "";
     let horaCena = "";
+    let croquis = "";
 
     if (data) {
         if (data[0].HoraInicio)
             horaInicio = `${data[0].HoraInicio.substring(0, 2)}:${data[0].HoraInicio.substring(3, 5)}:${data[0].HoraInicio.substring(6, 8)}`;
         if (data[0].HoraCena)
             horaCena = `${data[0].HoraCena.substring(0, 2)}:${data[0].HoraCena.substring(3, 5)}:${data[0].HoraCena.substring(6, 8)}`;
+        if (data[0].Croquis)
+            croquis = `${data[0].Croquis.split('\\').pop()}`;
     }
+
+    croquis = path.join(__dirname, '../', 'uploads', croquis);
 
     const $formSection = document.createElement('div');
     $formSection.classList.add('form-section-event');
@@ -495,7 +502,7 @@ function createGeneral(data = null) {
 
         <div class="form__group-grid">
             <label for="form-event-input-croquis">Croquis</label>
-            <input id="form-event-input-croquis" type="file" name="croquis" title="Agrega la imagen del croquis." data-url="${data?data[0].Croquis:""}">
+            <input id="form-event-input-croquis" type="file" name="croquis" title="Agrega la imagen del croquis." data-url="${croquis}">
             <small class="form-error opacity">Error: Agrega la imagen del croquis.</small>
         </div>
 
@@ -982,7 +989,7 @@ function GetTxtMonth(mes) {
 
 async function cancel() {
 
-    console.log(document.querySelector('form'))
+    // console.log(document.querySelector('form'))
 
     if (document.querySelector('form').dataset.action === 'btn-event-add') {
         let url = document.querySelector('#form-event-input-croquis').dataset.url;

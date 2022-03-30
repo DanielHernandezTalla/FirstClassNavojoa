@@ -13,12 +13,10 @@ export default function login() {
                     <div class="form__group">
                         <label for="user">Usuario</label>
                         <input type="text" name="user">
-                        <small class="opacity">Error: Agrega un usuario correcto</small>
                     </div>
                     <div class="form__group">
                         <label for="password">Contraseña</label>
                         <input type="password" name="password">
-                        <small class="opacity">Error: Agrega una contraseña correcta</small>
                     </div>
                     <button class="btn btn-primary-lg" type="submit">Ingresar</button>
                 </form>
@@ -27,6 +25,7 @@ export default function login() {
     `;
     return $main;
 }
+
 document.addEventListener('submit', e => {
     const $root = document.getElementById("root");
     if (e.target.matches("#form-login")) {

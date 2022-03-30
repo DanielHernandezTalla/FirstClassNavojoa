@@ -6,7 +6,7 @@ import modalError from '../modal.error.js';
 
 export default async function sectionDocument(option) {
 
-    console.log(option);
+    // console.log(option);
 
     // -- Obtenemos los puestos que llevara por defecto
     let puestosSections = getOptions(option);
@@ -179,7 +179,8 @@ export default async function sectionDocument(option) {
             <input id="form-document-total" name="total" placeholder="$0.00" type="number" value="${data!=null?data.total:""}">
         </div>
         <div class="form__group-document flex-right">
-            <button class="btn btn-cancel btn-document-cancel">Cancelar</button>
+            <button class="btn btn-cancel btn-document-cancel">Salir</button>
+            <button class="btn btn-cancel btn-document-cancel-save">Salir y guardar</button>
             <button class="btn btn-primary" type="submit">Generar Reporte</button>
         </div>
     `;
@@ -203,7 +204,7 @@ export default async function sectionDocument(option) {
 }
 
 document.addEventListener('click', async e => {
-    if (e.target.matches('.btn-document-cancel') || e.target.matches('.btn-document-cancel *')) {
+    if (e.target.matches('.btn-document-cancel-save') || e.target.matches('.btn-document-cancel-save *')) {
         e.preventDefault();
 
         saveInCancel(document.querySelector('form'));
@@ -332,7 +333,7 @@ document.addEventListener('submit', async e => {
             puestos: arrPuestoPeople
         }
 
-        console.log(newFormat)
+        // console.log(newFormat)
 
         if (newFormat.lugar.salon && newFormat.lugar.jardin) {
             localStorage.setItem('salon', JSON.stringify(newFormat))
@@ -406,9 +407,6 @@ function saveInCancel($form) {
     let total = $form.total
     let puestos = $form.querySelectorAll('.form__group-document')
 
-    // console.log(tipoEvento.value)
-    // console.log(cantidadPersonas.value)
-
     let arrPuestoPeople = [];
 
     puestos.forEach(item => {
@@ -455,8 +453,6 @@ function saveInCancel($form) {
         puestos: arrPuestoPeople
     }
 
-    // console.log(newFormat)
-
     if (newFormat.lugar.salon && newFormat.lugar.jardin) {
         localStorage.setItem('salon', JSON.stringify(newFormat))
         localStorage.setItem('jardin', JSON.stringify(newFormat))
@@ -475,8 +471,8 @@ function loadData(data, $main) {
                     item.personas.forEach(async persona => {
                         let node = element.parentNode.querySelector('div');
 
-                       // await addGroupRow(node, persona.Nombre, persona.Salario);
-                       await addGroupRow(node.previousSibling, persona.Nombre, persona.Salario);
+                        // await addGroupRow(node, persona.Nombre, persona.Salario);
+                        await addGroupRow(node.previousSibling, persona.Nombre, persona.Salario);
 
 
                         let arr = node.parentNode.querySelectorAll('spam');

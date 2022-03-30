@@ -1,5 +1,7 @@
 //import evento from './event.details.js';
 const electron = require('electron')
+const path = require('path');
+
 const {
     remote
 } = require('electron')
@@ -11,26 +13,29 @@ const fs = require('fs')
 //import contenido from './documentos.pdf.js';
 // Importing BrowserWindow from Main
 
-export default async function imprimirEvent($content) {
+export default async function imprimirEvent($content, iscomplete = false) {
 
     const htmlPDF = $content.cloneNode(true);
 
-    console.log(htmlPDF);
+    // console.log(htmlPDF);
 
     htmlPDF.querySelector('.container').style.margin = "0px";
     htmlPDF.querySelectorAll('.container')[1].style.margin = "0px";
     htmlPDF.querySelector('.container').style.padding = "0px";
     htmlPDF.querySelectorAll('.container')[1].style.padding = "0px";
 
+    htmlPDF.querySelector('.details_section').classList.add('details_section-pdf');
+
     htmlPDF.querySelectorAll('label').forEach(label => {
         label.style.color = "black";
     })
 
     htmlPDF.querySelectorAll('p').forEach(p => {
-        p.style.color = "black";
+        // p.classList.add('eventdata');
+        p.classList.add('black');
     })
 
-    htmlPDF.querySelectorAll('link')[5].setAttribute('href', '../../../css/main.css');
+    htmlPDF.querySelectorAll('link')[5].setAttribute('href', 'http://localhost:3000/public/main.css');
 
     htmlPDF.querySelector('nav').outerHTML = ''
 
@@ -38,20 +43,8 @@ export default async function imprimirEvent($content) {
         btn.outerHTML = ''
     })
 
-    htmlPDF.querySelector('.pays-cheese').outerHTML = "";
-
-    // // Editamos los links css
-
-    // htmlPDF.querySelectorAll('link')[5].setAttribute('href', '../../../../css/main.css');
-
-    //htmlPDF.querySelectorAll('link')[5].setAttribute('href', './css/main.css');
-    // htmlPDF.querySelectorAll('link').outerHTML = ''
-    // htmlPDF.querySelectorAll('link').outerHTML = ''
-
-    //htmlPDF.querySelector('.btn-document-pdf-print').outerHTML = '';
-    //htmlPDF.querySelector('.btn-document-pdf-cancel').outerHTML = '';
-    //htmlPDF.querySelector('script').outerHTML = '';
-
+    if (!iscomplete)
+        htmlPDF.querySelector('.pays-cheese').outerHTML = "";
 
     let content = htmlPDF.innerHTML;
     // console.log(content)
@@ -75,7 +68,7 @@ function createWindow() {
     var options = {
         silent: false,
         printBackground: true,
-        color: false,
+        color: true,
         margin: {
             marginType: 'printableArea'
         },
@@ -89,13 +82,15 @@ function createWindow() {
 
     // console.log('window creadop ')
     win = new BrowserWindow({
-        show: true,
+        show: false,
         webPreferences: {
             nodeIntegration: true
         }
     });
 
-    win.loadFile('src/public/app/components/eventos/docevento.html');
+    let URL = path.join(__dirname, '../../../', 'evento.html');
+
+    win.loadFile(URL);
     win.once('ready-to-show', () => {
         // win.show()
     })
@@ -104,16 +99,15 @@ function createWindow() {
         win.webContents.print(options, async (success, failureReason) => {
             if (!success) console.log(failureReason);
             // console.log('Print Initiated');
-            await fs.unlinkSync('src/public/app/components/eventos/docevento.html');
+            await fs.unlinkSync(URL);
         });
     });
 }
 
 async function save(content) {
     try {
-        // console.log("before save")
-        await fs.writeFileSync('src/public/app/components/eventos/docevento.html', content);
-        // console.log("after save")
+        let URL = path.join(__dirname, '../../../', 'evento.html');
+        await fs.writeFileSync(URL, content);
 
         return true;
     } catch (e) {

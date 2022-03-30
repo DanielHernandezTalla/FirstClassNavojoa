@@ -1,4 +1,6 @@
 const electron = require('electron')
+const path = require('path');
+
 const {
     remote
 } = require('electron')
@@ -15,9 +17,12 @@ export default async function imprimir(data) {
     const htmlPDF = data.cloneNode(true);
 
     // // Editamos los links css
-    htmlPDF.querySelectorAll('link')[5].setAttribute('href', '../../../css/main.css');
-    // htmlPDF.querySelectorAll('link').outerHTML = ''
-    // htmlPDF.querySelectorAll('link').outerHTML = ''
+    htmlPDF.querySelectorAll('link').forEach((link, index) => {
+        if (index === 7 || index === 8)
+            link.outerHTML = '';
+        if (index === 9)
+            link.setAttribute('href', 'http://localhost:3000/public/main.css');
+    })
 
     htmlPDF.querySelector('.btn-document-pdf-print').outerHTML = '';
     htmlPDF.querySelector('.btn-document-pdf-cancel').outerHTML = '';
@@ -25,17 +30,12 @@ export default async function imprimir(data) {
 
 
     let content = htmlPDF.innerHTML;
-    // console.log(content)
 
-    // await setTimeout(() => {
     if (await save(content))
-        // }, 1500);
-        // await main.saveFile(content)
-
         createWindow();
-    else {
+    else
         console.log("no guardado")
-    }
+
 }
 
 let win;
@@ -60,13 +60,15 @@ function createWindow() {
 
     // console.log('window creadop ')
     win = new BrowserWindow({
-        show: false,
+        show: true,
         webPreferences: {
             nodeIntegration: true
         }
     });
 
-    win.loadFile('src/public/app/components/documentos/docdumento.html');
+    let URL = path.join(__dirname, '../../../', 'docdumento.html');
+
+    win.loadFile(URL);
     win.once('ready-to-show', () => {
         // win.show()
     })
@@ -75,15 +77,19 @@ function createWindow() {
         win.webContents.print(options, async (success, failureReason) => {
             if (!success) console.log(failureReason);
             // console.log('Print Initiated');
-            await fs.unlinkSync('src/public/app/components/documentos/docdumento.html');
+            await fs.unlinkSync(URL);
         });
     });
 }
 
 async function save(content) {
     try {
-        // console.log("before save")
-        await fs.writeFileSync('src/public/app/components/documentos/docdumento.html', content);
+        let URL = path.join(__dirname, '../../../', 'docdumento.html');
+
+        console.log('==================')
+        console.log(__dirname)
+        console.log(URL)
+        await fs.writeFileSync(URL, content);
         // console.log("after save")
 
         return true;

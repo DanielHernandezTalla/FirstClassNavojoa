@@ -16,11 +16,12 @@ import sectionEventos from './components/eventos/calendar.js';
 export async function App() {
 
     const $root = document.getElementById("root");
-    let idPerfil = 1;
+    let idPerfil = 0;
+    const dataUser = await getById(idPerfil);
 
     $root.innerHTML = ``;
-
-    // $root.appendChild(login());
+    nav(idPerfil, dataUser);
+    $root.appendChild(login());
 
     let newFormat = {
         tipoEvento: "XV",
@@ -96,9 +97,9 @@ export async function App() {
     // $root.appendChild(nav());
     // const $sectionDocument = await sectionDocument('Basico');
 
-    $root.appendChild(nav(idPerfil));
-    const $sectionEventos = await sectionEventos();
-    $root.appendChild($sectionEventos);
+
+    // const $sectionEventos = await sectionEventos();
+    // $root.appendChild($sectionEventos);
 
     // const $sectionEventos = await eventAdd();
     // $root.appendChild($sectionEventos);
@@ -194,7 +195,7 @@ document.addEventListener('click', async e => {
     }
 
     // console.log(e.target)
-    if (e.target.matches('.btn-cancel-home') || e.target.matches('.btn-document-cancel') || e.target.matches('.btn-document-cancel *')) {
+    if (e.target.matches('.btn-cancel-home') || e.target.matches('.btn-document-cancel') || e.target.matches('.btn-document-cancel *') || e.target.matches('.btn-document-cancel-save') || e.target.matches('.btn-document-cancel-save *')) {
         $root.innerHTML = ``;
         $root.appendChild(nav());
         $root.appendChild(home());
@@ -225,3 +226,21 @@ document.addEventListener('contextmenu', e => {
         $modal.classList.remove('none');
     }
 })
+
+async function getById(id) {
+    try {
+        let res = await fetch('http://localhost:3000/personal/' + id);
+
+        if (!res.ok)
+            throw (res);
+
+        let data = await res.json()
+        return data.body[0];
+
+    } catch (e) {
+        // console.error(e);
+        const $root = document.getElementById("root");
+        $root.appendChild(await modalError(e));
+        return null;
+    }
+}

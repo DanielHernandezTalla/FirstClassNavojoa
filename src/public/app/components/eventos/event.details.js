@@ -1,4 +1,6 @@
 'use strict';
+const path = require('path');
+
 import nav from '../nav.js';
 import sectionEventos from './calendar.js';
 import eventAdd from './eventos.forms.js';
@@ -100,9 +102,12 @@ document.addEventListener('click', async e => {
         document.getElementById('root').appendChild(modalConfirm('¿Estas seguro de eliminar?', e.target.dataset.id));
 
     }
+    if (e.target.matches('#btn-print-all')) {
+        imprimirEvent(document.querySelector('html'), true);
+    }
+
     if (e.target.matches('#btn-print-Details')) {
         imprimirEvent(document.querySelector('html'));
-
     }
 })
 
@@ -143,6 +148,7 @@ function drawDetails(data) {
     const $btn_printAll = document.createElement('button');
     $btn_printAll.innerHTML = 'Imprimir completo';
     $btn_printAll.classList.add('btn_add-event')
+    $btn_printAll.id = "btn-print-all"
 
     const $btn_printDetails = document.createElement('button');
     $btn_printDetails.innerHTML = 'Imprimir Detalles';
@@ -164,48 +170,48 @@ function drawDetails(data) {
     const $details1 = document.createElement('div');
     $details1.classList.add('details');
 
-        /*Dando formato a los campos*/
-        let fechaEvento = new Date(data.FechaEvento);
-        fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
-    
-        let sesion = new Date(data.Sesion);
-        if(sesion.getFullYear()==1999)
-        {
-            sesion = "";
+    /*Dando formato a los campos*/
+    let fechaEvento = new Date(data.FechaEvento);
+    fechaEvento = fechaEvento.getDate() + " de " + GetTxtMonth(fechaEvento.getMonth() + 1) + " de " + fechaEvento.getFullYear();
+
+    let sesion = new Date(data.Sesion);
+    if (sesion.getFullYear() == 1999) {
+        sesion = "";
+    } else {
+        let hour = "";
+        let minute = "";
+        if (sesion.getHours().toString().length < 2) {
+            hour = 0 + "" + sesion.getHours();
+        } else {
+            hour = sesion.getHours();
         }
-        else{
-            let hour="";
-            let minute="";
-            if(sesion.getHours().toString().length<2) {hour=0+""+sesion.getHours();}
-            else{hour=sesion.getHours();}
-            if(sesion.getMinutes().toString().length<2) {minute=0+""+sesion.getMinutes();}
-            else{minute=sesion.getMinutes();}
+        if (sesion.getMinutes().toString().length < 2) {
+            minute = 0 + "" + sesion.getMinutes();
+        } else {
+            minute = sesion.getMinutes();
+        }
         sesion = sesion.getDate() + " de " + GetTxtMonth(sesion.getMonth() + 1) +
             " de " + sesion.getFullYear() + " a las " + hour + ":" + minute;
-        }
-        let hora = data.HoraInicio.substring(0, 5);
-        let horacena = data.HoraCena.substring(0, 5);
+    }
+    let hora = data.HoraInicio.substring(0, 5);
+    let horacena = data.HoraCena.substring(0, 5);
 
-        let NumPersonas;
-        if(data.NoPersonas==null)
-        {
-            NumPersonas = "";
-        }
-        else{
-            NumPersonas=data.NoPersonas;
-        }
+    let NumPersonas;
+    if (data.NoPersonas == null) {
+        NumPersonas = "";
+    } else {
+        NumPersonas = data.NoPersonas;
+    }
 
-        let NumMeseros;
-        if(data.NoMeseros==null)
-        {
-            NumMeseros = "";
-        }
-        else{
-            NumMeseros=data.NoMeseros;
-        }
-        /*Fin de los formatos*/
+    let NumMeseros;
+    if (data.NoMeseros == null) {
+        NumMeseros = "";
+    } else {
+        NumMeseros = data.NoMeseros;
+    }
+    /*Fin de los formatos*/
 
-        $details1.innerHTML = `
+    $details1.innerHTML = `
         <label class="lbldetail" >Fecha</label>
         <p class="eventdata">${fechaEvento}</p>
         <label class="lbldetail" >Ubicacion</label>
@@ -248,12 +254,21 @@ function drawDetails(data) {
         <label class="lbldetail" >Servilleta</label>
         <p class="eventdata">${data.Servilleta}</p>
         `
+
+    let croquis = "";
+    if (data.Croquis)
+        croquis = `${data.Croquis.split('\\').pop()}`;
+
+    croquis = path.join(__dirname, '../', 'uploads', croquis);
+
     const $croquis = document.createElement('div');
     $croquis.classList.add('croquis');
+
+
     $croquis.innerHTML = `
         <label class="lbldetail" >Croquis </label>
-        <p class="eventdata">${data.Croquis}</p>
-        <img src="${data.Croquis}" alt="Croquis del evento" class="img_croquis">
+        <p class="eventdata">${croquis}</p>
+        ${data.Croquis? '<img src="'+croquis+'" alt="Croquis del evento" class="img_croquis"></img>':""}
         `
     const $casosEspeciales = document.createElement('div');
     $casosEspeciales.classList.add('casosEspeciales');
