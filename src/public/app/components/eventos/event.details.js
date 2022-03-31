@@ -259,7 +259,7 @@ function drawDetails(data) {
     if (data.Croquis)
         croquis = `${data.Croquis.split('\\').pop()}`;
 
-    croquis = path.join(__dirname, '../', 'uploads', croquis);
+    croquis = path.join(__dirname, '../../../', 'uploads', croquis);
 
     const $croquis = document.createElement('div');
     $croquis.classList.add('croquis');

@@ -15,6 +15,21 @@ async function get() {
     })
 }
 
+async function login(user) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            const conn = await getConnection();
+            const usuarios = await conn.query(`CALL spLogin('${user.name}','${user.password}')`);
+            resolve(usuarios[0]);
+        } catch (e) {
+
+            console.log(e)
+            reject(e);
+        }
+    })
+}
+
+
 async function getbyid(id) {
     return new Promise(async function (resolve, reject) {
         try {
@@ -86,6 +101,7 @@ async function dlt(id) {
 
 module.exports = {
     get,
+    login,
     getbyid,
     add,
     update,

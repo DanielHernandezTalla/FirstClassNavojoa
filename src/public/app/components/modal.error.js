@@ -18,6 +18,7 @@ export default async function modalError(e) {
         // console.log(data)
         errorMessage = data.error.body;
         console.group()
+        console.log("ERROR: ", data.error.body)
         console.log("ERROR DETAILS: ", data.error.details)
         console.error("ERROR CODE: ", data.error.details.code);
         console.error("ERROR NUMERO: ", data.error.details.errno);

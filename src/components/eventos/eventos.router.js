@@ -1,5 +1,4 @@
 const express = require('express');
-const multer = require('multer')
 const fs = require('fs');
 const fsExtra = require('fs-extra');
 const path = require('path');
@@ -10,10 +9,6 @@ const validate = require('../../middlewares/validator');
 const response = require('../../middlewares/response');
 
 const router = express.Router();
-
-const upload = multer({
-    dest: 'src/uploads'
-})
 
 router.get('/', (req, res) => {
     controller.get()
@@ -104,7 +99,7 @@ router.post('/savaImage', (req, res) => {
     let newname = new Date();
     let extension = path.parse(req.body.url).ext;
 
-    let newPath = path.join(__dirname, '../../', 'uploads', newname.getTime().toString() + extension);
+    let newPath = path.join(__dirname, '../../../../', 'uploads', newname.getTime().toString() + extension);
 
     fsExtra.move(src, newPath, (err) => {
         if (err) {
@@ -119,7 +114,7 @@ router.delete('/removeImage/:name', (req, res) => {
 
     let filename = req.params.name
 
-    let url = path.join(__dirname, '../../', 'uploads', filename)
+    let url = path.join(__dirname, '../../../../', 'uploads', filename)
 
     console.log(url)
 

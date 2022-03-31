@@ -17,17 +17,27 @@ router.get('/', (req, res) => {
         })
 })
 
-router.get('/:id', validate(mySchema, 'getById'),(req, res) => {
+router.get('/login', (req, res) => {
+    controller.login(req.query)
+        .then(data => {
+            response.success(req, res, data);
+        })
+        .catch(err => {
+            response.error(req, res, "No se pudo acceder al recurso", 500, err);
+        })
+})
+
+router.get('/:id', validate(mySchema, 'getById'), (req, res) => {
     controller.getbyid(req.params.id)
         .then(data => {
             response.success(req, res, data);
         })
         .catch(err => {
-            response.error(req, res, "No se pudo acceder al recurso",500, err);
+            response.error(req, res, "No se pudo acceder al recurso", 500, err);
         })
 })
 
-router.post('/', validate(mySchema, 'create'), (req, res)=> {
+router.post('/', validate(mySchema, 'create'), (req, res) => {
     controller.add(req.body)
         .then(data => {
             response.success(req, res, data, 201);
@@ -38,7 +48,7 @@ router.post('/', validate(mySchema, 'create'), (req, res)=> {
 
 });
 
-router.patch('/:id', validate(mySchema, 'edit'),(req, res) => {
+router.patch('/:id', validate(mySchema, 'edit'), (req, res) => {
     controller.update(req.params.id, req.body)
         .then(data => {
             response.success(req, res, data);
@@ -49,7 +59,7 @@ router.patch('/:id', validate(mySchema, 'edit'),(req, res) => {
 
 });
 
-router.delete('/:id', validate(mySchema, 'getById'),(req, res) => {
+router.delete('/:id', validate(mySchema, 'getById'), (req, res) => {
     controller.dlt(req.params.id)
         .then(data => {
             response.success(req, res, data);
@@ -59,6 +69,5 @@ router.delete('/:id', validate(mySchema, 'getById'),(req, res) => {
         });
 
 });
-
 
 module.exports = router;

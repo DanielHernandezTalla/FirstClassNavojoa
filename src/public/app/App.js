@@ -16,80 +16,77 @@ import sectionEventos from './components/eventos/calendar.js';
 export async function App() {
 
     const $root = document.getElementById("root");
-    let idPerfil = 0;
-    const dataUser = await getById(idPerfil);
 
     $root.innerHTML = ``;
-    nav(idPerfil, dataUser);
     $root.appendChild(login());
 
-    let newFormat = {
-        tipoEvento: "XV",
-        cantidadPersonas: "500",
-        lugar: "Salon",
-        total: 2400,
-        puestos: [{
-            puesto: 'Encargado',
-            personas: [{
-                Nombre: 'Daniel',
-                Salario: '400'
-            }, {
-                Nombre: 'Juan',
-                Salario: '400'
-            }, {
-                Nombre: 'Ramon',
-                Salario: '400'
-            }]
-        }, {
-            puesto: 'Baños',
-            personas: [{
-                Nombre: 'Daniel',
-                Salario: '500'
-            }, {
-                Nombre: 'Juan',
-                Salario: '500'
-            }, {
-                Nombre: 'Ramon',
-                Salario: '500'
-            }]
-        }, {
-            puesto: 'Puerta',
-            personas: [{
-                Nombre: 'Daniel',
-                Salario: '600'
-            }, {
-                Nombre: 'Juan',
-                Salario: '600'
-            }, {
-                Nombre: 'Ramon',
-                Salario: '600'
-            }]
-        }, {
-            puesto: 'Meseros',
-            personas: [{
-                Nombre: 'Daniel',
-                Salario: '700'
-            }, {
-                Nombre: 'Juan',
-                Salario: '700'
-            }, {
-                Nombre: 'Ramon',
-                Salario: '700'
-            }]
-        }, {
-            puesto: 'Estacionamiento',
-            personas: [{
-                Nombre: 'Daniel',
-                Salario: '800'
-            }, {
-                Nombre: 'Juan',
-                Salario: '800'
-            }, {
-                Nombre: 'Ramon',
-                Salario: '800'
-            }]
-        }, ]
-    }
+    // let newFormat = {
+    //     tipoEvento: "XV",
+    //     cantidadPersonas: "500",
+    //     lugar: "Salon",
+    //     total: 2400,
+    //     puestos: [{
+    //         puesto: 'Encargado',
+    //         personas: [{
+    //             Nombre: 'Daniel',
+    //             Salario: '400'
+    //         }, {
+    //             Nombre: 'Juan',
+    //             Salario: '400'
+    //         }, {
+    //             Nombre: 'Ramon',
+    //             Salario: '400'
+    //         }]
+    //     }, {
+    //         puesto: 'Baños',
+    //         personas: [{
+    //             Nombre: 'Daniel',
+    //             Salario: '500'
+    //         }, {
+    //             Nombre: 'Juan',
+    //             Salario: '500'
+    //         }, {
+    //             Nombre: 'Ramon',
+    //             Salario: '500'
+    //         }]
+    //     }, {
+    //         puesto: 'Puerta',
+    //         personas: [{
+    //             Nombre: 'Daniel',
+    //             Salario: '600'
+    //         }, {
+    //             Nombre: 'Juan',
+    //             Salario: '600'
+    //         }, {
+    //             Nombre: 'Ramon',
+    //             Salario: '600'
+    //         }]
+    //     }, {
+    //         puesto: 'Meseros',
+    //         personas: [{
+    //             Nombre: 'Daniel',
+    //             Salario: '700'
+    //         }, {
+    //             Nombre: 'Juan',
+    //             Salario: '700'
+    //         }, {
+    //             Nombre: 'Ramon',
+    //             Salario: '700'
+    //         }]
+    //     }, {
+    //         puesto: 'Estacionamiento',
+    //         personas: [{
+    //             Nombre: 'Daniel',
+    //             Salario: '800'
+    //         }, {
+    //             Nombre: 'Juan',
+    //             Salario: '800'
+    //         }, {
+    //             Nombre: 'Ramon',
+    //             Salario: '800'
+    //         }]
+    //     }, ]
+    // }
 
     // $root.appendChild(documentPDF(newFormat, ''));
 
@@ -226,21 +223,3 @@ document.addEventListener('contextmenu', e => {
         $modal.classList.remove('none');
     }
 })
-
-async function getById(id) {
-    try {
-        let res = await fetch('http://localhost:3000/personal/' + id);
-
-        if (!res.ok)
-            throw (res);
-
-        let data = await res.json()
-        return data.body[0];
-
-    } catch (e) {
-        // console.error(e);
-        const $root = document.getElementById("root");
-        $root.appendChild(await modalError(e));
-        return null;
-    }
-}
