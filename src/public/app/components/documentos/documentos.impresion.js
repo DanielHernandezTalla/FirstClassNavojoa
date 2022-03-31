@@ -60,7 +60,7 @@ function createWindow() {
 
     // console.log('window creadop ')
     win = new BrowserWindow({
-        show: true,
+        show: false,
         webPreferences: {
             nodeIntegration: true
         }

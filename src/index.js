@@ -29,7 +29,7 @@ server.use(express.json());
 router(server)
 
 // Agregamos carpeta public
-server.use('/public', express.static(path.join(__dirname, '/uploads')))
+server.use('/public', express.static(path.join(__dirname, '/css')))
 
 // Hacemos correr el servidor express
 server.listen(3000, () => {
