@@ -8,6 +8,7 @@ import modalError from '../modal.error.js';
 let FocusDate = new Date(Date.now());
 
 export default async function sectionEventos() {
+
     let eventos = await get();
 
     const $main = document.createElement('main');
@@ -136,14 +137,16 @@ function CreateCalendar(data, date) {
 }
 
 async function get() {
+
+    let month= FocusDate.getFullYear()+"-"+(FocusDate.getMonth()+1)+"-01";
     try {
-        let res = await fetch('http://localhost:3000/eventos')
+        let res = await fetch('http://localhost:3000/eventos/getMonth/'+month)
 
         if (!res.ok)
             throw (res);
 
         let data = await res.json()
-
+        console.log(data.body);
         return data.body;
     } catch (e) {
         const $root = document.getElementById("root");

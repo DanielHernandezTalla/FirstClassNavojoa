@@ -101,7 +101,7 @@ async function getMonth(date) {
     return new Promise(async function (resolve, reject) {
         try {
             const conn = await getConnection();
-            const eventos = await conn.query('CALL spEvento(6,NULL,NULL,NULL,NULL,"2022-04-01",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)');
+            const eventos = await conn.query('CALL spEvento(6,NULL,NULL,NULL,NULL,"'+date+'",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)');
             resolve(eventos[0]);
         } catch (e) {
 
