@@ -40,14 +40,15 @@ export default async function imprimir(data) {
     htmlPDF.querySelectorAll('.pdf-table').forEach(el => {
         el.classList.add('pdf-table-mt-0');
         let elemento = el.querySelector('b');
-        console.log(elemento);
+        // console.log(elemento);
 
         if (elemento) {
+            elemento.classList.add('pdf-table-section');
             let texto = el.querySelector('b').textContent;
-            console.log(texto);
-            if (texto === "Mesero") {
-                el.classList.add('pdf-table-break');
-            }
+            // console.log(texto);
+            // if (texto === "Mesero") {
+            //     el.classList.add('pdf-table-break');
+            // }
         }
 
     })

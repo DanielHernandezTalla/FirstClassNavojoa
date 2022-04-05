@@ -612,6 +612,13 @@ textarea {
     margin-top: 16px !important;
 }
 
+.pdf-table-section {
+    font-weight: 800;
+    font-size: 20px;
+    background-color: red;
+    /* border-bottom: 1px solid #000; */
+}
+
 .pdf-table-break {
     page-break-before: always;
 }
