@@ -1,5 +1,14 @@
 const electron = require('electron')
-const path = require('path');
+
+// const path = require('path');
+
+// const {
+//     BrowserWindow
+// } = require('electron')
+const fs = require('fs')
+const path = require('path')
+const os = require('os')
+
 
 const {
     remote
@@ -7,9 +16,10 @@ const {
 
 const main = remote.require('./main')
 
-const fs = require('fs')
+// const fs = require('fs')
 
 import contenido from './documentos.pdf.js';
+import modalConfirm from '../modal.confirm.js';
 // Importing BrowserWindow from Main
 
 export default async function imprimir(data) {
@@ -43,43 +53,88 @@ let win;
 function createWindow() {
     const BrowserWindow = electron.remote.BrowserWindow;
 
+    // var options = {
+    //     silent: false,
+    //     printBackground: true,
+    //     color: false,
+    //     margin: {
+    //         marginType: 'printableArea'
+    //     },
+    //     landscape: false,
+    //     pagesPerSheet: 1,
+    //     collate: false,
+    //     copies: 1,
+    //     header: 'Header of the Page',
+    //     footer: 'Footer of the Page',
+    //     printBackground: true
+    // }
     var options = {
-        silent: false,
-        printBackground: true,
-        color: false,
-        margin: {
-            marginType: 'printableArea'
-        },
-        landscape: false,
-        pagesPerSheet: 1,
-        collate: false,
-        copies: 1,
-        header: 'Header of the Page',
-        footer: 'Footer of the Page'
+        //     marginsType: 2,
+        //     printBackground: true,
+        //     printSelectionOnly: false,
+        //     landscape: true,
+        //     pageSize: 'A4',
+        //     scaleFactor: 80
     }
 
+    // const options = {
+    //     silent: true,
+    //     deviceName: 'My-Printer',
+    //     pageRanges: [{
+    //         from: 0,
+    //         to: 1
+    //     }]
+    // }
+
     // console.log('window creadop ')
-    win = new BrowserWindow({
-        show: false,
-        webPreferences: {
-            nodeIntegration: true
-        }
-    });
+    // win = new BrowserWindow({
+    //     show: false,
+    // webPreferences: {
+    //     nodeIntegration: true
+    // }
+    // });
 
     let URL = path.join(__dirname, '../../../', 'docdumento.html');
 
-    win.loadFile(URL);
-    win.once('ready-to-show', () => {
-        // win.show()
+    // win.loadFile(URL);
+    // win.once('ready-to-show', () => {
+    //     // win.show()
+    // })
+
+    // win.webContents.on('did-finish-load', () => {
+    //     win.webContents.print(options, async (success, failureReason) => {
+    //         if (!success) console.log(failureReason);
+    //         // console.log('Print Initiated');
+    //         await fs.unlinkSync(URL);
+    //     });
+    // });
+    const win = new BrowserWindow({
+        show: false,
+        width: 800,
+        height: 600
     })
+    win.loadURL(URL)
 
     win.webContents.on('did-finish-load', () => {
-        win.webContents.print(options, async (success, failureReason) => {
-            if (!success) console.log(failureReason);
-            // console.log('Print Initiated');
-            await fs.unlinkSync(URL);
-        });
-    });
+        // Use default printing options
+        const pdfPath = path.join(os.homedir(), 'Desktop', 'formatoPersonal.pdf')
+        win.webContents.print({
+            marginsType: 2,
+            printBackground: true,
+            printSelectionOnly: false,
+            landscape: false,
+            pageSize: 'A4',
+            scaleFactor: 100
+        }).then(data => {
+            fs.writeFile(pdfPath, data, (error) => {
+                if (error) throw error
+                console.log(`Wrote PDF successfully to ${pdfPath}`)
+                fs.unlinkSync(URL);
+            })
+        }).catch(error => {
+            console.log(`Failed to write PDF to ${pdfPath}: `, error)
+        })
+    })
 }
 
 async function save(content) {
