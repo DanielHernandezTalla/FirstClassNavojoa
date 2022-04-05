@@ -585,7 +585,8 @@ textarea {
 
 .pdf__logo {
     height: inherit;
-    width: 150px;
+    width: 100px;
+    filter: grayscale(100%);
 }
 
 .pdf-header div:last-child {
