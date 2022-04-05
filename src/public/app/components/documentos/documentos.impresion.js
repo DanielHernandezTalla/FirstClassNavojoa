@@ -36,6 +36,21 @@ export default async function imprimir(data) {
 
     htmlPDF.querySelector('.btn-document-pdf-print').outerHTML = '';
     htmlPDF.querySelector('.btn-document-pdf-cancel').outerHTML = '';
+
+    htmlPDF.querySelectorAll('.pdf-table').forEach(el => {
+        el.classList.add('pdf-table-mt-0');
+        let elemento = el.querySelector('b');
+        console.log(elemento);
+
+        if (elemento) {
+            let texto = el.querySelector('b').textContent;
+            console.log(texto);
+            if (texto === "Mesero") {
+                el.classList.add('pdf-table-break');
+            }
+        }
+
+    })
     htmlPDF.querySelector('script').outerHTML = '';
 
 

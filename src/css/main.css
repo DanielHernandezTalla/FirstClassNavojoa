@@ -607,6 +607,14 @@ textarea {
     color: #777;
 }
 
+.pdf-table-mt-0 {
+    margin-top: 16px !important;
+}
+
+.pdf-table-break {
+    page-break-before: always;
+}
+
 .pdf-table:last-child {
     margin-top: 0;
     padding-bottom: 32px;

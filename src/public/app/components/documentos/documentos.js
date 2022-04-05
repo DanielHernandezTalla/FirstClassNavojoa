@@ -534,10 +534,10 @@ function getDatalist(personal, nameDefault = null) {
 
 function getOptions(option) {
     if (option === 'Basico') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
-    if (option === 'Boda') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
-    if (option === 'Quince años') return ['Encargado', 'Capitan', 'Mesero', 'Cristaleria', 'Puerta', 'Barrista', 'Baños'];
-    if (option === 'Bautizo' || option === 'Shower') return ['Encargado', 'Mesero', 'Cristaleria', 'Baños'];
-    if (option === 'Piñata') return ['Encargado', 'Mesero', 'Baños'];
+    if (option === 'Boda') return ['Encargado', 'Capitan', 'Puerta', 'Barrista', 'Baños', 'Mesero', 'Cristaleria', 'Limpieza', 'Estacionamiento'];
+    if (option === 'Quince años') return ['Encargado', 'Capitan', 'Puerta', 'Barrista', 'Baños', 'Mesero', 'Cristaleria', 'Limpieza', 'Estacionamiento'];
+    if (option === 'Bautizo' || option === 'Shower') return ['Encargado', 'Puerta', 'Baños', 'Cristaleria', 'Mesero'];
+    if (option === 'Piñata') return ['Encargado', 'Puerta', 'Baños', 'Cristaleria', 'Mesero'];
     else return [];
 }
 

@@ -607,6 +607,10 @@ textarea {
     color: #777;
 }
 
+.pdf-table-mt-0 {
+    margin-top: 0px !important;
+}
+
 .pdf-table:last-child {
     margin-top: 0;
     padding-bottom: 32px;
