@@ -546,11 +546,11 @@ function getDatalist(personal, nameDefault = null) {
 }
 
 function getOptions(option) {
-    if (option === 'Básico') return ['Encargado', 'Cristalería', 'Baños', 'Mesero'];
-    if (option === 'Boda') return ['Encargado', 'Capitán', 'Puerta', 'Barrista', 'Baños', 'Limpieza', 'Estacionamiento', 'Cristalería', 'Mesero'];
-    if (option === 'Quince años') return ['Encargado', 'Capitán', 'Puerta', 'Barrista', 'Baños', 'Limpieza', 'Estacionamiento', 'Cristalería', 'Mesero'];
-    if (option === 'Bautizo' || option === 'Shower') return ['Encargado', 'Puerta', 'Baños', 'Cristalería', 'Mesero'];
-    if (option === 'Piñata') return ['Encargado', 'Puerta', 'Baños', 'Cristalería', 'Mesero'];
+    if (option === 'Básico') return ['Encargada', 'Cristalería', 'Baños', 'Mesero'];
+    if (option === 'Boda') return ['Encargada', 'Capitán', 'Puerta', 'Barrista', 'Baños', 'Limpieza', 'Estacionamiento', 'Cristalería', 'Mesero'];
+    if (option === 'Quince años') return ['Encargada', 'Capitán', 'Puerta', 'Barrista', 'Baños', 'Limpieza', 'Estacionamiento', 'Cristalería', 'Mesero'];
+    if (option === 'Bautizo' || option === 'Shower') return ['Encargada', 'Puerta', 'Baños', 'Cristalería', 'Mesero'];
+    if (option === 'Piñata') return ['Encargada', 'Puerta', 'Baños', 'Cristalería', 'Mesero'];
     else return [];
 }
 
@@ -620,7 +620,7 @@ async function addGroupPuesto(node) {
     calcTotal()
 }
 
-function createSelected(puestos, item = 'Encargado') {
+function createSelected(puestos, item = 'Encargada') {
 
     const $select = document.createElement('select');
     $select.classList.add('select-puesto-document');
