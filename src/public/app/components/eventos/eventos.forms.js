@@ -233,8 +233,16 @@ document.addEventListener('click', async e => {
         document.querySelector('.form').appendChild($sectionAddPagos);
     }
     if (e.target.matches('#btn-pagos-cancel')) {
+        if (document.querySelector('#btn-pagos-create')) {
+
+        }
+
         let idEvento = document.querySelector('.btn-primary').dataset.idevento
+
+        console.log(idEvento)
+
         let data = await getById(idEvento);
+        console.log(data)
         $sectionPagos = await createPagos(data);
         $sectionAddPagos = agregarPagos(data);
         document.querySelector('.form-section-event').outerHTML = '';
@@ -383,7 +391,7 @@ function createEvent(data = null) {
             <small class="form-error opacity">Error: Ingresa la fecha del evento.</small>
         </div>
         <div class="form__group-grid">
-            <label for="form-event-input-sesion">Sesion</label>
+            <label for="form-event-input-sesion">Sesión</label>
             <input id="form-event-input-sesion" type="datetime-local" name="sesion" value="${sesion}" title="Ingresa la fecha y hora de sesion.">
             <small class="form-error opacity">Error: Ingresa la fecha y hora de sesion.</small>
         </div>
@@ -392,11 +400,11 @@ function createEvent(data = null) {
             <div class="flex">
                 <div>
                     <input id="eventPlaceSalon" type="checkbox" name="eventPlaceSalon" ${salon? "checked": ""}>
-                    <label for="eventPlaceSalon">Salon</label>
+                    <label for="eventPlaceSalon">Salón</label>
                 </div>
                 <div>
                     <input id="eventPlaceJardin" type="checkbox" name="eventPlaceJardin" ${jardin? "checked": ""}>
-                    <label for="eventPlaceJardin">Jardin</label>
+                    <label for="eventPlaceJardin">Jardín</label>
                 </div>
             </div>
             <small id="eventPlaceError" class="form-error opacity">Error: Ingresa el lugar del evento.</small>
@@ -412,9 +420,9 @@ function createEvent(data = null) {
             <small class="form-error opacity">Error: Ingresa el nombre del cliente.</small>
         </div>
         <div class="form__group-grid  form__group-grid-2">
-            <label for="form-event-input-telefono">Telefono</label>
+            <label for="form-event-input-telefono">Teléfono</label>
             <input id="form-event-input-telefono" type="number" name="phone" value="${data?data[0].Telefono:""}">
-            <small class="form-error opacity">Error: Agrega un telefono correcto</small>
+            <small class="form-error opacity">Error: Agrega un teléfono correcto</small>
         </div>
         <div class="form__group-grid form__group-grid-2 form__group-grid-large">
             <label for="form-event-input-ceremonia">Ceremonia Civil</label>
@@ -579,7 +587,7 @@ async function createPagos(dataForm = null) {
     $sectionTable.innerHTML += `
 
     <p>No Pago</p>
-    <p>Metodo de pago</p>
+    <p>Método de pago</p>
     <p>Fecha</p>
     <p class="text-align-right">Cantidad</p>`;
 
@@ -666,7 +674,7 @@ function agregarPagos(data) {
 
         <div class="form__group-grid form__group-grid-large">
 
-            <label for="form-pago-input-tipoPago">Metodo de pago</label>
+            <label for="form-pago-input-tipoPago">Método de pago</label>
 
             <select name="tipoPago" id="form-pago-input-tipoPago" title="Ingresa el tipo de pago." data-required>
             <option value="Efectivo">Efectivo</option>
@@ -1134,6 +1142,7 @@ async function fetchUpdateEvent(event) {
 }
 
 async function getById(id) {
+    if (!id) return;
     try {
         let res = await fetch('http://localhost:3000/eventos/' + id + '/');
 

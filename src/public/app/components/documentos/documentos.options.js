@@ -6,22 +6,22 @@ export default async function sectionDocumentOptions() {
     let options = [{
             //icon: '<i class="bi bi-file-earmark"></i>',
             img: 'app/assets/icon_empty.png',
-            value: 'Vacio'
+            value: 'Vacío'
         },
         {
             //icon: '<i class="bi bi-file-earmark-arrow-up"></i>',
             img: 'app/assets/icon_basic.png',
-            value: 'Basico'
+            value: 'Básico'
         },
         {
             //icon: '<i class="bi bi-file-earmark-excel"></i>',
             img: 'app/assets/icon_salon.png',
-            value: 'Anterior salon'
+            value: 'Anterior Salón'
         },
         {
             //icon: '<i class="bi bi-file-earmark-excel"></i>',
             img: 'app/assets/icon_garden.png',
-            value: 'Anterior Jardin'
+            value: 'Anterior Jardín'
         },
         {
             //icon: '<i class="bi bi-file-earmark-lock"></i>',
@@ -48,7 +48,7 @@ export default async function sectionDocumentOptions() {
             img: 'app/assets/icon_party.png',
             value: 'Piñata'
         },
-      
+
     ]
 
     // -- Main

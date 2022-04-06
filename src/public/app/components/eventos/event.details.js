@@ -214,11 +214,11 @@ function drawDetails(data) {
     $details1.innerHTML = `
         <label class="lbldetail" >Fecha</label>
         <p class="eventdata">${fechaEvento}</p>
-        <label class="lbldetail" >Ubicacion</label>
+        <label class="lbldetail" >Ubicación</label>
         <p class="eventdata">${data.Ubicacion}</p>
         <label class="lbldetail" >Cliente</label>
         <p class="eventdata">${data.Cliente}</p>
-        <label class="lbldetail" >Telefono</label>
+        <label class="lbldetail" >Teléfono</label>
         <p class="eventdata">${data.Telefono}</p>
         <label class="lbldetail" >Hora</label>
         <p class="eventdata">${hora}</p>
@@ -235,7 +235,7 @@ function drawDetails(data) {
     $details2.classList.add('details');
 
     $details2.innerHTML = `
-        <label class="lbldetail" >Sesion</label>
+        <label class="lbldetail" >Sesión</label>
         <p class="eventdata">${sesion}</p>
         <label class="lbldetail" >Evento</label>
         <p class="eventdata">${data.TipoEvento}</p>
@@ -249,7 +249,7 @@ function drawDetails(data) {
         <p class="eventdata">${NumMeseros}</p>
         <label class="lbldetail" >Tipo silla</label>
         <p class="eventdata">${data.TipoSilla}</p>
-        <label class="lbldetail" >Cristaleria</label>
+        <label class="lbldetail" >Cristalería</label>
         <p class="eventdata">${data.Cristaleria}</p>
         <label class="lbldetail" >Servilleta</label>
         <p class="eventdata">${data.Servilleta}</p>

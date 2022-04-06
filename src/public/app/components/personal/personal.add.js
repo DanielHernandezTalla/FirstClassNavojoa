@@ -68,9 +68,9 @@ export default async function personalAdd(id = -1, table = null, action = null) 
             <small class="form-error opacity">Error: Agrega un usuario correcto</small>
         </div>
         <div class="form__group-grid">
-            <label for="form-persanal-input-password">Telefono</label>
+            <label for="form-persanal-input-password">Teléfono</label>
             <input id="form-persanal-input-password" type="number" name="phone" value="${data? data.Telefono: ""}">
-            <small class="form-error opacity">Error: Agrega una contraseña correcta</small>
+            <small class="form-error opacity">Error: Agrega un teléfono correcto</small>
         </div>
         <button id="${selectClass}" class="btn btn-primary" type="submit">${action === 'edit'? "Editar": "Ingresar"}</button>
         <button id="btn-personal-cancel" class="btn btn-cancel" type="submit">Cancelar</button>

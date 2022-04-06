@@ -29,7 +29,7 @@ export default async function sectionUsuarios() {
     $divRow.innerHTML = `
         <p><b>Id</b></p>
         <p><b>Nombre</b></p>
-        <p><b>Telefono</b></p>
+        <p><b>Teléfono</b></p>
     `;
 
     $sectionTable.appendChild($divRow.cloneNode(true));

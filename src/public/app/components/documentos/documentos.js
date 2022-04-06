@@ -1,7 +1,9 @@
 'use strict';
 import documentPDF from './documentos.pdf.js';
+import nav from '../nav.js';
 import imprimir from './documentos.impresion.js';
 import modalError from '../modal.error.js';
+import sectionDocumentOptions from './documentos.options.js'
 //import startWindow from './documentos.window.js';
 
 export default async function sectionDocument(option) {
@@ -12,10 +14,10 @@ export default async function sectionDocument(option) {
     let puestosSections = getOptions(option);
     let data = null;
 
-    if (option == "Anterior Jardin")
+    if (option == "Anterior Jardín")
         data = JSON.parse(localStorage.getItem('jardin'));
 
-    if (option == "Anterior salon")
+    if (option == "Anterior Salón")
         data = JSON.parse(localStorage.getItem('salon'));
 
     // console.log(data);
@@ -71,11 +73,11 @@ export default async function sectionDocument(option) {
             <div class="flex">
                 <div>
                     <input id="documentPlaceSalon" type="checkbox" name="documentPlaceSalon" ${salon}>
-                    <label for="documentPlaceSalon">Salon</label>
+                    <label for="documentPlaceSalon">Salón</label>
                 </div>
                 <div>
                     <input id="documentPlaceJardin" type="checkbox" name="documentPlaceJardin" ${jardin}>
-                    <label for="documentPlaceJardin">Jardin</label>
+                    <label for="documentPlaceJardin">Jardín</label>
                 </div>
             </div>
         </div>
@@ -180,7 +182,7 @@ export default async function sectionDocument(option) {
         </div>
         <div class="form__group-document flex-right">
             <button class="btn btn-cancel btn-document-cancel">Salir</button>
-            <button class="btn btn-cancel btn-document-cancel-save">Salir y guardar</button>
+            <button class="btn btn-cancel btn-document-cancel btn-document-cancel-save">Salir y guardar</button>
             <button class="btn btn-primary" type="submit">Generar Reporte</button>
         </div>
     `;
@@ -208,6 +210,17 @@ document.addEventListener('click', async e => {
         e.preventDefault();
 
         saveInCancel(document.querySelector('form'));
+    }
+
+    if (e.target.matches('.btn-document-cancel') || e.target.matches('.btn-document-cancel *')) {
+        e.preventDefault();
+
+        const $root = document.getElementById("root");
+
+        $root.innerHTML = ``;
+        $root.appendChild(nav());
+        let $sectionDocumentOptions = await sectionDocumentOptions();
+        $root.appendChild($sectionDocumentOptions);
     }
 
     if (e.target.matches('.button-document') || e.target.matches('.button-document *')) {
@@ -533,11 +546,11 @@ function getDatalist(personal, nameDefault = null) {
 }
 
 function getOptions(option) {
-    if (option === 'Basico') return ['Encargado', 'Cristaleria', 'Baños', 'Mesero'];
-    if (option === 'Boda') return ['Encargado', 'Capitan', 'Puerta', 'Barrista', 'Baños', 'Limpieza', 'Estacionamiento', 'Cristaleria', 'Mesero'];
-    if (option === 'Quince años') return ['Encargado', 'Capitan', 'Puerta', 'Barrista', 'Baños', 'Limpieza', 'Estacionamiento', 'Cristaleria', 'Mesero'];
-    if (option === 'Bautizo' || option === 'Shower') return ['Encargado', 'Puerta', 'Baños', 'Cristaleria', 'Mesero'];
-    if (option === 'Piñata') return ['Encargado', 'Puerta', 'Baños', 'Cristaleria', 'Mesero'];
+    if (option === 'Básico') return ['Encargado', 'Cristalería', 'Baños', 'Mesero'];
+    if (option === 'Boda') return ['Encargado', 'Capitán', 'Puerta', 'Barrista', 'Baños', 'Limpieza', 'Estacionamiento', 'Cristalería', 'Mesero'];
+    if (option === 'Quince años') return ['Encargado', 'Capitán', 'Puerta', 'Barrista', 'Baños', 'Limpieza', 'Estacionamiento', 'Cristalería', 'Mesero'];
+    if (option === 'Bautizo' || option === 'Shower') return ['Encargado', 'Puerta', 'Baños', 'Cristalería', 'Mesero'];
+    if (option === 'Piñata') return ['Encargado', 'Puerta', 'Baños', 'Cristalería', 'Mesero'];
     else return [];
 }
 

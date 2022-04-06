@@ -1,4 +1,9 @@
 let navPerfil;
+
+export function clearNav() {
+    navPerfil = null;
+}
+
 export default function nav(id = null, data = null) {
 
     if (!navPerfil)
@@ -8,6 +13,10 @@ export default function nav(id = null, data = null) {
 }
 
 function createNav(id = null, data = null) {
+
+    // console.log('+++++++++++++++++++');
+    // console.log(data);
+
     const $nav = document.createElement('nav');
 
     $nav.innerHTML = `
@@ -20,7 +29,7 @@ function createNav(id = null, data = null) {
                 <ul id="nav-list" class="nav__list none">
                     <li id="btn-home-usuario">Usuarios</li>
                     <li id="btn-home-perfil" data-idPerfil="${id}">Ver Perfil</li>
-                    <li id="btn-logout">Cerrar Sesion</li>
+                    <li id="btn-logout">Cerrar Sesión</li>
                 </ul>
             </div>
         </div>

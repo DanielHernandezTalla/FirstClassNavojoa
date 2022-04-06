@@ -78,13 +78,13 @@ function CreateCalendar(data, date) {
     const $martes = document.createElement('label');
     $martes.innerHTML = 'Martes';
     const $miercoles = document.createElement('label');
-    $miercoles.innerHTML = 'Miercoles';
+    $miercoles.innerHTML = 'Miércoles';
     const $jueves = document.createElement('label');
     $jueves.innerHTML = 'Jueves';
     const $viernes = document.createElement('label');
     $viernes.innerHTML = 'Viernes';
     const $sabado = document.createElement('label');
-    $sabado.innerHTML = 'Sabado';
+    $sabado.innerHTML = 'Sábado';
 
     $sectionCalendar.appendChild($domingo.cloneNode(true));
     $sectionCalendar.appendChild($lunes.cloneNode(true));
@@ -138,9 +138,9 @@ function CreateCalendar(data, date) {
 
 async function get() {
 
-    let month= FocusDate.getFullYear()+"-"+(FocusDate.getMonth()+1)+"-01";
+    let month = FocusDate.getFullYear() + "-" + (FocusDate.getMonth() + 1) + "-01";
     try {
-        let res = await fetch('http://localhost:3000/eventos/getMonth/'+month)
+        let res = await fetch('http://localhost:3000/eventos/getMonth/' + month)
 
         if (!res.ok)
             throw (res);

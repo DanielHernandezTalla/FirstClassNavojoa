@@ -1,5 +1,7 @@
 'use strict';
-import nav from './nav.js';
+import nav, {
+    clearNav
+} from './nav.js';
 import home from './home.js';
 import modalError from './modal.error.js';
 
@@ -57,7 +59,9 @@ document.addEventListener('submit', async e => {
 
         } else {
             let user = await getById(res.result)
+            // console.log(user)
             $root.innerHTML = ``
+            clearNav();
             $root.appendChild(nav(res.result, user));
             $root.appendChild(home());
         }
@@ -97,7 +101,7 @@ async function loginFetch(user) {
 
 async function getById(id) {
     try {
-        let res = await fetch('http://localhost:3000/personal/' + id);
+        let res = await fetch('http://localhost:3000/usuarios/' + id);
 
         if (!res.ok)
             throw (res);

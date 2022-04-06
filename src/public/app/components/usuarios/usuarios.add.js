@@ -68,14 +68,14 @@ export default async function usuarioAdd(id = -1, table = null, action = null) {
             <small class="form-error opacity">Error: Agrega un usuario correcto</small>
         </div>
         <div class="form__group-grid">
-            <label for="form-usuario-input-telefono">Telefono</label>
+            <label for="form-usuario-input-telefono">Teléfono</label>
             <input id="form-usuario-input-telefono" type="number" name="phone" value="${data? data.Telefono: ""}">
-            <small class="form-error opacity">Error: Agrega una contraseña correcta</small>
+            <small class="form-error opacity">Error: Agrega un teléfono correcto</small>
         </div>
         <div class="form__group-grid">
             <label for="form-usuario-input-password">Contraseña</label>
             <input id="form-usuario-input-password" type="password" name="password" value="">
-            <small class="form-error opacity">Error: Agrega un usuario correcto</small>
+            <small class="form-error opacity">Error: Agrega una contraseña correcta</small>
         </div>
         <div class="form__group-grid form__group-grid-large">
             <label for="form-usuario-input-password-com">Confirmar Contraseña</label>

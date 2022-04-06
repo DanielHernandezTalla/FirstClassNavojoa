@@ -765,7 +765,7 @@ textarea {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr;
     grid-auto-rows: auto;
-    font-family: "Raleway"cursive;
+    font-family: "Raleway", cursive;
     /* grid-template-areas:
     "typeEvent typeEvent"
     "details details"
