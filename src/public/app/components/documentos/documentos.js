@@ -14,11 +14,14 @@ export default async function sectionDocument(option) {
     let puestosSections = getOptions(option);
     let data = null;
 
-    if (option == "Anterior Jardín")
+    if (option == "Anterior Jardín") {
         data = JSON.parse(localStorage.getItem('jardin'));
-
-    if (option == "Anterior Salón")
+        option = 'Jardín';
+    }
+    if (option == "Anterior Salón") {
         data = JSON.parse(localStorage.getItem('salon'));
+        option = 'Salón';
+    }
 
     // console.log(data);
 

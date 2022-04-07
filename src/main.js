@@ -16,7 +16,7 @@ function createWindow(app) {
     });
 
     // -- Para quitar el menu
-    // window.setMenu(null);
+    window.setMenu(null);
     window.on('closed', () => {
         app.quit();
     });

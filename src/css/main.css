@@ -620,7 +620,7 @@ textarea {
 }
 
 .pdf-table-break {
-    page-break-before: always;
+    page-break-before: always !important;
 }
 
 .pdf-table:last-child {

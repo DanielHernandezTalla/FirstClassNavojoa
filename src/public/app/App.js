@@ -192,7 +192,7 @@ document.addEventListener('click', async e => {
     }
 
     // console.log(e.target)
-    if (e.target.matches('.btn-cancel-home')) {
+    if (e.target.matches('.btn-cancel-home') || e.target.matches('.btn-cancel-home *')) {
         $root.innerHTML = ``;
         $root.appendChild(nav());
         $root.appendChild(home());

@@ -709,9 +709,22 @@ textarea {
     background: transparent;
     cursor: pointer;
     transition: all 0.3s ease;
+    padding: 4px 5px;
+    border: 1px solid #666;
+    border-radius: 20px;
     /* text-decoration: underline; */
     font-weight: bold;
     margin-right: 1rem;
+    transition: all 0.3s ease;
+    line-height: 100%;
+}
+
+.btn_add-event:hover {
+    background: #ddd;
+}
+
+.btn_add-event:active {
+    transform: scale(1.1);
 }
 
 .img__lupa {
@@ -846,4 +859,18 @@ textarea {
 .black {
     color: black !important;
     font-family: 'Open Sans', sans-serif !important;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.btn-cancel-home {
+    cursor: pointer;
+}
+
+.pdf-table-break {
+    page-break-before: always !important;
 }

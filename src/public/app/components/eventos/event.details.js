@@ -41,7 +41,7 @@ export default async function sectionDetailsEvent(id) {
     $divContainer.innerHTML += `
     <button id="btn-event-editar" data-id=${id} class="btn btn-primary">Editar</button>
     <button id="btn-event-remover" data-id=${id} class="btn btn-danger">Eliminar</button>
-    <button class="btn btn-cancel btn-cancel-event" type="submit">Cancelar</button>
+    <button class="btn btn-cancel btn-cancel-event" type="submit">Regresar</button>
 `;
     $main.appendChild($divContainer);
     return $main;
@@ -263,6 +263,7 @@ function drawDetails(data) {
 
     const $croquis = document.createElement('div');
     $croquis.classList.add('croquis');
+    $croquis.classList.add('pdf-table-break');
 
 
     $croquis.innerHTML = `

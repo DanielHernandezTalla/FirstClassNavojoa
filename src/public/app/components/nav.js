@@ -21,7 +21,7 @@ function createNav(id = null, data = null) {
 
     $nav.innerHTML = `
         <div class="nav__container">
-            <div class="nav__logo">
+            <div class="nav__logo btn-cancel-home">
                 <span>First</span> Class
             </div>
             <div class="nav__details">

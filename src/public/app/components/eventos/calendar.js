@@ -19,7 +19,7 @@ export default async function sectionEventos() {
     $calendar_head.classList.add('calendar__head');
 
     const $btn_addEvento = document.createElement('button');
-    $btn_addEvento.innerHTML = 'Agregar';
+    $btn_addEvento.innerHTML = 'Agregar Evento';
     $btn_addEvento.classList.add('btn_add-event')
     $btn_addEvento.setAttribute('id', 'btn_add-event');
     const $input_mes = document.createElement('input');
@@ -59,7 +59,7 @@ export default async function sectionEventos() {
     $divContainer.appendChild(CreateCalendar(eventos, FocusDate).cloneNode(true));
 
     $divContainer.innerHTML += `
-        <button class="btn btn-cancel btn-cancel-home" type="submit">Cancelar</button>
+        <button class="btn btn-cancel btn-cancel-home" type="submit">Regresar</button>
     `;
 
     $main.appendChild($divContainer);

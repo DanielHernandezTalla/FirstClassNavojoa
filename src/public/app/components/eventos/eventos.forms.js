@@ -641,7 +641,7 @@ async function createPagos(dataForm = null) {
 
     $formSection.appendChild($sectionRowOptions);
     $formSection.innerHTML += `
-    <button class="btn btn-right span-1-4"><b id="btn-add-pago">Agregar Pago</b></button>
+    <button class="btn btn-right span-1-4 btn_add-event"><b id="btn-add-pago">Agregar Pago</b></button>
     `;
     $formSection.appendChild($sectionTable);
     $formSection.innerHTML += buttons;

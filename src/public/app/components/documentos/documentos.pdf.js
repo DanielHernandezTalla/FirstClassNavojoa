@@ -118,7 +118,7 @@ export default function documentPDF(data, $mainDocument) {
 
     $pdfTable.innerHTML = `
         <button class="btn btn-primary btn-document-pdf-print">Imprimir</button>
-        <button class="btn btn-cancel btn-document-pdf-cancel">Cancelar</button>
+        <button class="btn btn-cancel btn-document-pdf-cancel">Regresar</button>
     `;
 
     $divContainer.appendChild($pdfTable);
