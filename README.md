@@ -8,6 +8,12 @@ Sistema First Class es un programa que ayuda a la administración de eventos y a
 
 Sistema First Class es un sistema no instalable, que se ejecuta después de la compilación del propio programa, todo esto con el uso de Electron como framework principal de construcción del proyecto. 
 
+```
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . SistemaFirstClass --overwrite --asar=true --platform=win32 --arch=ia32 --icon=./icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron Tutorial App\"",
+    "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+```
+
 ## Requerimientos 
 
 - Memoria RAM mínimo 4GB
